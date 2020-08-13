@@ -22,7 +22,7 @@ class Sp2dController extends Controller
     {
         try {
             $_q = ($request['q'] !== '') ? $request['q'] : '';
-            $sp2d = Sp2d::searchNomorSurat($_q)->orderBy('id', 'DESC')->paginate(10);
+            $sp2d = Sp2d::searchSp2d($_q)->orderBy('id', 'DESC')->paginate(10);
             return response()->json($sp2d, 200);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
@@ -39,15 +39,16 @@ class Sp2dController extends Controller
         $check = Sp2d::where('nomor_sp2d', $request->input('nomor_sp2d'))->count();
         if ($check == 0) {
             $sp2d = new Sp2d();
-            $sp2d->nota_dinas = $request->input('nota_dinas');
-            $sp2d->tgl_nota_dinas = $request->input('tgl_nota_dinas');
-            $sp2d->jumlah_pelimpahan = $request->input('jumlah_pelimpahan');
-            $sp2d->status = 0;
+            $sp2d->tahun_anggaran = $request->input('tahun_anggaran');
+            $sp2d->nomor_sp2d = $request->input('nomor_sp2d');
+            $sp2d->tgl_sp2d = $request->input('tgl_sp2d');
+            $sp2d->jumlah_sp2d = $request->input('jumlah_sp2d');
+            $sp2d->jenis_sp2d = $request->input('jenis_sp2d');
             $sp2d->created_at = date('Y-m-d H:i:s');
             if ($sp2d->save()) {
                 $payload = [
-                'page' => 'SP2D',
-                'message' => 'User dengan NIP '.$request->query('nip').' menambahkan data SP2D baru'
+                    'page' => 'SP2D',
+                    'message' => 'User dengan NIP '.$request->query('nip').' menambahkan data SP2D baru'
                 ];
                 $this->_common->generate_log($payload);
                 return response()->json(['status'=>'ok'], 200);
@@ -62,14 +63,15 @@ class Sp2dController extends Controller
     public function put_data(Request $request)
     {
         $sp2d = Sp2d::find($request['id']);
-        $sp2d->nota_dinas = $request->input('nota_dinas');
-        $sp2d->tgl_nota_dinas = $request->input('tgl_nota_dinas');
-        $sp2d->jumlah_pelimpahan = $request->input('jumlah_pelimpahan');
+        $sp2d->nomor_sp2d = $request->input('nomor_sp2d');
+        $sp2d->tgl_sp2d = $request->input('tgl_sp2d');
+        $sp2d->jumlah_sp2d = $request->input('jumlah_sp2d');
+        $sp2d->kategori_sp2d = $request->input('kategori_sp2d');
         $sp2d->updated_at = date('Y-m-d H:i:s');
         if ($sp2d->save()) {
             $payload = [
-            'page' => 'SP2D',
-            'message' => 'User dengan NIP '.$request->query('nip').' melakukan perubahan pada data SP2D'
+                'page' => 'SP2D',
+                'message' => 'User dengan NIP '.$request->query('nip').' melakukan perubahan pada data SP2D'
             ];
             $this->_common->generate_log($payload);
             return response()->json(['status' => 'ok'], 200);
@@ -83,8 +85,8 @@ class Sp2dController extends Controller
         $sp2d = SP2D::find($request['id']);
         if ($sp2d->delete()) {
             $payload = [
-            'page' => 'SP2D',
-            'message' => 'User dengan NIP '.$request->query('nip').' melakukan hapus data pada SP2D'
+                'page' => 'SP2D',
+                'message' => 'User dengan NIP '.$request->query('nip').' melakukan hapus data pada SP2D'
             ];
             $this->_common->generate_log($payload);
             return response()->json(['status' => 'ok'], 200);
@@ -142,89 +144,6 @@ class Sp2dController extends Controller
             return $view;
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
-        }
-    }
-
-    public function put_approval_data(Request $request)
-    {
-        $act = $request['act'];
-        $type = $request['type'];
-        $tab = $request['tab'];
-        $dinasbop_id = $request['id'];
-
-        if ($act == 'revision') {
-            $approvalbop = DinasBopApproval::where('dinasbop_id', $dinasbop_id)->where('tab', $tab)->first();
-            $column = $approvalbop[$type];
-            array_push($column['catatan'], [
-                'text'=>$request->input('catatan'),
-                'date' => date('Y-m-d H:i:s')
-            ]);
-
-            $primary_id = $approvalbop['id'];
-
-            $dinasboprevision = DinasBopApproval::find($primary_id);
-            $dinasboprevision->{$type} = $column;
-            $dinasboprevision->updated_at = date('Y-m-d H:i:s');
-
-            if ($dinasboprevision->save()) {
-                return response()->json(['status'=>'ok'], 200);
-            } else {
-                return response()->json(['status'=>'failed'], 500);
-            }
-        } elseif ($act == 'approve') {
-            $approvalbop = DinasBopApproval::where('dinasbop_id', $dinasbop_id)->where('tab', $tab)->first();
-            $column = $approvalbop[$type];
-            $column['approval'] = 1;
-            $primary_id = $approvalbop['id'];
-
-            $dinasbopapproval = DinasBopApproval::find($primary_id);
-            $dinasbopapproval->{$type} = $column;
-            $dinasbopapproval->updated_at = date('Y-m-d H:i:s');
-            if ($dinasbopapproval->save()) {
-                $dinasboplock = DinasBopApproval::find($primary_id);
-                $i = 0;
-                if ($dinasboplock->inspektur['approval'] == 1) {
-                    $i++;
-                }
-                if ($dinasboplock->sekretaris['approval'] == 1) {
-                    $i++;
-                }
-                if ($dinasboplock->kassubag['approval'] == 1) {
-                    $i++;
-                }
-
-                if ($i == 3) {
-                    $dinasboplock->lock = 1;
-                    if ($dinasboplock->save()) {
-                        $x = 0;
-                        $dinasboplockall = DinasBopApproval::where('dinasbop_id', $dinasbop_id)->get();
-                        foreach ($dinasboplockall as $y) {
-                            if ($y->lock == 1) {
-                                $x++;
-                            }
-                        }
-
-                        if ($x >= 8) {
-                            DinasBop::where('id', $dinasbop_id)->update(['status' => 1]);
-                        }
-                    }
-                }
-
-                return response()->json(['status'=>'ok'], 200);
-            } else {
-                return response()->json(['status'=>'failed'], 500);
-            }
-        }
-    }
-
-    public function put_lock_data(Request $request)
-    {
-        $dinasbop = DinasBop::find($request['id']);
-        $dinasbop->status = 1;
-        if ($dinasbop->save()) {
-            return response()->json(['status'=>'ok'], 200);
-        } else {
-            return response()->json(['status'=>'failed'], 500);
         }
     }
 }

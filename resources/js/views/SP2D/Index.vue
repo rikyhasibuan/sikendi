@@ -51,11 +51,11 @@
                                 <table class="table table-hover table-striped table-bordered" v-if="showTable == true">
                                     <thead>
                                         <tr>
-                                            <th style="width:10%;text-align:center;" rowspan="2">Nota Dinas</th>
-                                            <th style="width:5%;text-align:center;" rowspan="2">Tanggal</th>
-                                            <th style="width:10%;text-align:center;" colspan="4">Nilai Pelimpahan</th>
-                                            <th style="width:10%;text-align:center;" rowspan="2">Total Pelimpahan</th>
-                                            <th style="width:10%;text-align:center;" rowspan="2">Saldo Bank</th>
+                                            <th style="width:10%;text-align:center;" rowspan="2">Nomor SP2D</th>
+                                            <th style="width:10%;text-align:center;" rowspan="2">Tanggal SP2D</th>
+                                            <th style="width:10%;text-align:center;" colspan="4">Nilai SP2D</th>
+                                            <th style="width:10%;text-align:center;" rowspan="2">Total SP2D</th>
+                                            <th style="width:10%;text-align:center;" rowspan="2">Sisa Anggaran</th>
                                             <th style="width:12%;text-align:center;" rowspan="2">Action</th>
                                         </tr>
                                         <tr>
@@ -67,27 +67,55 @@
                                     </thead>
                                     <tbody>
                                         <tr v-for="v in pelimpahan" :key="v.id">
-                                            <td style="vertical-align: middle;"><a :href="route + '/detail?id=' + v.id">{{ v.nota_dinas }}</a></td>
-                                            <td style="text-align:center;vertical-align: middle;">{{ v.tgl_nota_dinas | moment }}</td>
-                                            <td style="text-align:right;vertical-align: middle;">Rp.{{ v.total_anggaran | rupiah }}</td>
-                                            <td style="text-align:right;vertical-align: middle;">Rp.{{ v.total_anggaran | rupiah }}</td>
-                                            <td style="text-align:right;vertical-align: middle;">Rp.{{ v.total_anggaran | rupiah }}</td>
-                                            <td style="text-align:right;vertical-align: middle;">Rp.{{ v.total_anggaran | rupiah }}</td>
-
-                                            <td style="text-align:right;vertical-align: middle;">Rp.{{ v.total_anggaran | rupiah }}</td>
-
-                                            <td style="text-align:right;vertical-align: middle;">Rp.{{ v.total_anggaran | rupiah }}</td>
+                                            <td style="vertical-align: middle;">
+                                                <a :href="route + '/detail?id=' + v.id">{{ v.nomor_sp2d }}</a>
+                                            </td>
+                                            <td style="text-align:center;vertical-align: middle;">
+                                                {{ v.tgl_sp2d | moment }}
+                                            </td>
+                                            <td style="text-align:right;vertical-align: middle;">
+                                                <span v-if="v.jenis_sp2d === 'UP'">Rp.{{ v.jumlah_sp2d | rupiah }}</span>
+                                            </td>
+                                            <td style="text-align:right;vertical-align: middle;">
+                                                <span v-if="v.jenis_sp2d === 'GU'">Rp.{{ v.jumlah_sp2d | rupiah }}</span>
+                                            </td>
+                                            <td style="text-align:right;vertical-align: middle;">
+                                                <span v-if="v.jenis_sp2d === 'TU'">Rp.{{ v.jumlah_sp2d | rupiah }}</span>
+                                            </td>
+                                            <td style="text-align:right;vertical-align: middle;">
+                                                <span v-if="v.jenis_sp2d === 'LS'">Rp.{{ v.jumlah_sp2d | rupiah }}</span>
+                                            </td>
+                                            <td style="text-align:right;vertical-align: middle;">
+                                                <span>Rp.{{ v.jumlah_sp2d | rupiah }}</span>
+                                            </td>
+                                            <td style="text-align:right;vertical-align: middle;">
+                                                Rp.{{ v.sisa_anggaran | rupiah }}
+                                            </td>
                                             <td style="text-align: center;vertical-align: middle;">
                                                 <div>
-                                                    <a v-if="(v.status == 0 && access.update === 1)" :href="route + '/edit?id=' + v.id" class="btn btn-sm btn-warning mr-sm-1">
+                                                    <a 
+                                                        v-if="(v.status == 0 && access.update === 1)" 
+                                                        :href="route + '/edit?id=' + v.id" 
+                                                        class="btn btn-sm btn-warning mr-sm-1">
                                                         <i class="fa fa-wrench"></i> Ubah
                                                     </a>
-                                                    <button v-else class="btn btn-sm btn-warning disabled mr-sm-1"><i class="fa fa-wrench"></i> Ubah</button>
-                                                    <a v-if="(v.status == 0 && access.delete === 1)" href="#" @click="toggleModal(v.id)"
+                                                    <button 
+                                                        v-else 
+                                                        class="btn btn-sm btn-warning disabled mr-sm-1">
+                                                        <i class="fa fa-wrench"></i> Ubah
+                                                    </button>
+                                                    <a 
+                                                        v-if="(v.status == 0 && access.delete === 1)" 
+                                                        href="#" 
+                                                        @click="toggleModal(v.id)"
                                                         class="btn btn-sm btn-danger">
                                                         <i class="fa fa-trash-o"></i> Hapus
                                                     </a>
-                                                    <button v-else class="btn btn-sm btn-danger disabled"><i class="fa fa-trash-o"></i> Hapus</button>
+                                                    <button 
+                                                        v-else 
+                                                        class="btn btn-sm btn-danger disabled">
+                                                        <i class="fa fa-trash-o"></i> Hapus
+                                                    </button>
                                                 </div>
                                             </td>
                                         </tr>

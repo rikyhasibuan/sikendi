@@ -5,83 +5,55 @@
                 <div class="card-body">
                     <v-alert :alert=alert></v-alert>
                     <loading :opacity="100" :active.sync="isLoading" :can-cancel="false" :is-full-page="false"></loading>
-                    <form method="POST" v-on:submit.prevent="onSubmit">
+                    <form autocomplete="off" method="POST" v-on:submit.prevent="onSubmit">
                         <div class="row">
-                            <div class="form-group col-md-4">
-                                <label>Program *</label>
-                                <select v-model="dinasbop.program_id" @change="onChangeProgram($event)" class="form-control" required="required">
-                                    <option value="">Pilih Program</option>
-                                    <option v-for="v in this.program" :value="v.id" :key="v.id">{{ v.nama_program }}</option>
+                            <div class="form-group col-md-6">
+                                <label>Tahun Anggaran *</label>
+                                <select v-model="sp2d.tahun_anggaran" class="form-control" :class="{ 'is-invalid': sp2d.tahun_anggaran }">
+                                    <option value="">Pilih Tahun Anggaran</option>
+                                    <option v-for="v in this.tahun_data" :value="v.tahun" :key="v.tahun">{{ v.tahun }}</option>
                                 </select>
-                            </div>
-                            <div class="form-group col-md-4">
-                                <label>Kegiatan *</label>
-                                <select v-model="dinasbop.kegiatan_id" @change="onChangeKegiatan($event)" class="form-control" required="required">
-                                    <option value="">Pilih Kegiatan</option>
-                                    <option v-for="v in this.kegiatan" :value="v.id" :key="v.id">{{ v.nama_kegiatan }}</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group col-md-4">
-                                <label>Belanja *</label>
-                                <select v-model="dinasbop.belanja_id" class="form-control" required="required">
-                                    <option value="">Pilih Belanja</option>
-                                    <option v-for="v in this.belanja" :value="v.id" :key="v.id">{{ v.nama_belanja }}</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-12">
-                                <label>Dasar Surat Perintah *</label>
-                                <input type="text" class="form-control" placeholder="Dasar 1" v-model="dinasbop.dasar[0]" required="required">
-                                <br>
-                                <input type="text" class="form-control" placeholder="Dasar 2" v-model="dinasbop.dasar[1]">
-                                <br>
-                                <input type="text" class="form-control" placeholder="Dasar 3" v-model="dinasbop.dasar[2]">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-12">
-                                <label>Tujuan Pemeriksaan *</label>
-                                <input type="text" class="form-control" placeholder="Tujuan 1" v-model="dinasbop.untuk[0]" required="required">
-                                <br>
-                                <input type="text" class="form-control" placeholder="Tujuan 2" v-model="dinasbop.untuk[1]">
-                                <br>
-                                <input type="text" class="form-control" placeholder="Tujuan 3" v-model="dinasbop.untuk[2]">
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <label>Tanggal Mulai Pemeriksaaan *</label>
+                                <label>Nomor SP2D *</label>
+                                <input type="text" class="form-control" placeholder="Isi Nomor SP2D" v-model="sp2d.nomor_sp2d" :class="{ 'is-invalid': validasi.nomor_sp2d }">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label>Tanggal SP2D *</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                     </div>
                                     <date-picker
-                                        id="dari"
-                                        name="dari"
-                                        v-model="dinasbop.dari"
+                                        id="tgl_sp2d"
+                                        name="tgl_sp2d"
+                                        v-model="sp2d.tgl_sp2d"
                                         :config="options"
-                                        class="form-control disabled"
-                                        placeholder="Tanggal Mulai Pemeriksaan" autocomplete="off" disabled>
+                                        class="form-control"
+                                        placeholder="Tanggal SP2D"
+                                        :class="{ 'is-invalid': validasi.tgl_sp2d }"
+                                        autocomplete="off">
                                     </date-picker>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="form-group col-md-6">
-                                <label>Tanggal Selesai Pemeriksaan *</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                                    </div>
-                                    <date-picker
-                                        id="sampai"
-                                        name="sampai"
-                                        v-model="dinasbop.sampai"
-                                        :config="options"
-                                        class="form-control disabled"
-                                        placeholder="Tanggal Akhir Pemeriksaan" autocomplete="off" disabled>
-                                    </date-picker>
-                                </div>
+                                <label>Jumlah SP2D *</label>
+                                <input type="text" class="form-control" placeholder="Jumlah SP2D" v-model="sp2d.jumlah_sp2d" :class="{ 'is-invalid': validasi.jumlah_sp2d }">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label>Kategori SP2D *</label>
+                                <select v-model="sp2d.jenis_sp2d" class="form-control" :class="{ 'is-invalid': pelimpahan.jenis_sp2d }">
+                                    <option value="">Pilih Kategori SP2D</option>
+                                    <option v-for="(v,k) in this.jenis_sp2d" :value="v" :key="k">{{ v }}</option>
+                                </select>
                             </div>
                         </div>
                         <div class="row">
@@ -102,6 +74,13 @@
     export default {
         data() {
             return {
+                validasi: {
+                    'tahun_anggaran': '',
+                    'nomor_sp2d': '',
+                    'tgl_sp2d': '',
+                    'jumlah_sp2d':'',
+                    'jenis_sp2d':''
+                },
                 alert: {
                     error: false,
                     update: false
@@ -111,52 +90,20 @@
                     useCurrent: false,
                     locale: 'id'
                 },
-                program:'',
-                kegiatan:'',
-                belanja:'',
+                jenis_sp2d: {
+                    'UP': 'UP',
+                    'GU': 'GU',
+                    'TU': 'TU',
+                    'LS': 'TU'
+                },
                 isLoading: false,
             }
         },
-        props: ['program_data','kegiatan_data','belanja_data','dinasbop', 'api', 'route'],
+        props: ['tahun_data','sp2d', 'api', 'route'],
         methods: {
-            onChangeProgram(evt) {
-                const program = evt.target.value;
-                if (program !== '') {
-                    service.fetchData('../api/ajax/kegiatan/'+ program)
-                    .then(response => {
-                        this.dinasbop.kegiatan_id = '';
-                        this.dinasbop.belanja_id = '';
-                        this.kegiatan = response;
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
-                } else {
-                    this.dinasbop.kegiatan_id = '';
-                    this.dinasbop.belanja_id = '';
-                    this.kegiatan = [];
-                    this.belanja = [];
-                }
-            },
-            onChangeKegiatan(evt) {
-                const kegiatan = evt.target.value;
-                if (kegiatan !== '') {
-                    service.fetchData('../api/ajax/belanja/'+ kegiatan)
-                    .then(response => {
-                        this.dinasbop.belanja_id = '';
-                        this.belanja = response;
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
-                } else {
-                    this.dinasbop.belanja_id = '';
-                    this.belanja = [];
-                }
-            },
             onSubmit(evt) {
                 this.isLoading = false;
-                service.putData(this.api, this.dinasbop)
+                service.putData(this.api, this.sp2d)
                     .then(result => {
                         this.response(result);
                     }).catch(error => {
@@ -177,27 +124,7 @@
             }
         },
         created() {
-            this.$cookies.set("last_tab", "tim");
             this.isLoading = true;
-            this.program = this.program_data;
-            this.kegiatan = this.kegiatan_data;
-            this.belanja = this.belanja_data;
-
-            service.fetchData('../api/ajax/kegiatan/' + this.dinasbop.program_id)
-            .then(response => {
-                this.kegiatan = response;
-            })
-            .catch(error => {
-                console.log(error);
-            });
-
-            service.fetchData('../api/ajax/belanja/' + this.dinasbop.kegiatan_id)
-            .then(response => {
-                this.belanja = response;
-            })
-            .catch(error => {
-                console.log(error);
-            });
         },
         mounted() {
             this.isLoading = false;

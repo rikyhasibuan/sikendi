@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Anggaran;
 use App\Models\Kegiatan;
 use App\Models\Belanja;
 use App\Libraries\Common;
@@ -10,36 +11,33 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-/**
- * AjaxController class
- */
 class AjaxController extends Controller
 {
-    /**
-     * menampilkan data kegiatan berdasarkan program tertentu
-     * @param Request $request
-     * @return JsonResponse
-     */
+    public function show_anggaran_by_bendahara(Request $request)
+    {
+        $kegiatan = Kegiatan::where('bendahara', $request['bendahara'])->get();
+        $total_anggaran = 0;
+        $kegiatan_list = [];
+        
+        foreach ($kegiatan as $v) {
+            $kegiatan_list[] = $v->id;
+        }
+
+        $anggaran = Anggaran::whereIn('kegiatan_id', $kegiatan_list)->sum('jumlah');
+        $total_anggaran = $anggaran;
+        return $total_anggaran;
+    }
+
     public function show_kegiatan_by_program(Request $request)
     {
         return response()->json(Kegiatan::where('program_id', $request['program'])->get(), 200);
     }
 
-    /**
-     * menampilkan data belanja berdasarkan kegiatan tertentu
-     * @param Request $request
-     * @return JsonResponse
-     */
     public function show_belanja_by_kegiatan(Request $request)
     {
         return response()->json(Belanja::where('kegiatan_id', $request['kegiatan'])->get(), 200);
     }
 
-    /**
-     * menampilkan total anggaran yang tersedia pada tahun dan kode belanja tertentu
-     * @param Request $request
-     * @return JsonResponse
-     */
     public function show_total_anggaran(Request $request)
     {
         $anggaran = new KasAnggaran();
@@ -50,11 +48,6 @@ class AjaxController extends Controller
         return response()->json(['total_anggaran'=>$totalanggaran], 200);
     }
 
-    /**
-     * menampilkan sisa anggaran pada tahun dan kode belanja tertentu
-     * @param Request $request
-     * @return JsonResponse
-     */
     public function show_sisa_anggaran(Request $request)
     {
         $common = new Common();
@@ -67,11 +60,6 @@ class AjaxController extends Controller
         return response()->json(['sisa_anggaran' => $sisa_anggaran], 200);
     }
 
-    /**
-     * ambil data golongan berdasarkan pangkat
-     * @param Request $request
-     * @return JsonResponse
-     */
     public function show_golongan_by_pangkat(Request $request)
     {
         $pangkat = Pangkat::where('nama_pangkat', $request->input('pangkat'))->first();

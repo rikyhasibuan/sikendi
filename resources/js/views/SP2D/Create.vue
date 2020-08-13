@@ -9,7 +9,7 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>Tahun Anggaran *</label>
-                                <select v-model="pelimpahan.tahun_anggaran" class="form-control" :class="{ 'is-invalid': pelimpahan.tahun_anggaran }">
+                                <select v-model="sp2d.tahun_anggaran" class="form-control" :class="{ 'is-invalid': sp2d.tahun_anggaran }">
                                     <option value="">Pilih Tahun Anggaran</option>
                                     <option v-for="v in this.tahun_data" :value="v.tahun" :key="v.tahun">{{ v.tahun }}</option>
                                 </select>
@@ -17,28 +17,43 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <label>Nomor Nota Dinas *</label>
-                                <input type="text" class="form-control" placeholder="Nomor Nota Dinas" v-model="pelimpahan.nota_dinas" :class="{ 'is-invalid': validasi.nota_dinas }">
+                                <label>Nomor SP2D *</label>
+                                <input type="text" class="form-control" placeholder="Isi Nomor SP2D" v-model="sp2d.nomor_sp2d" :class="{ 'is-invalid': validasi.nomor_sp2d }">
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <label>Tanggal Nota Dinas *</label>
+                                <label>Tanggal SP2D *</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                     </div>
                                     <date-picker
-                                        id="tgl_nota_dinas"
-                                        name="tgl_nota_dinas"
-                                        v-model="pelimpahan.tgl_nota_dinas"
+                                        id="tgl_sp2d"
+                                        name="tgl_sp2d"
+                                        v-model="sp2d.tgl_sp2d"
                                         :config="options"
                                         class="form-control"
-                                        placeholder="Tanggal Nota Dinas"
-                                        :class="{ 'is-invalid': validasi.tgl_nota_dinas }"
+                                        placeholder="Tanggal SP2D"
+                                        :class="{ 'is-invalid': validasi.tgl_sp2d }"
                                         autocomplete="off">
                                     </date-picker>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label>Jumlah SP2D *</label>
+                                <input type="text" class="form-control" placeholder="Jumlah SP2D" v-model="sp2d.jumlah_sp2d" :class="{ 'is-invalid': validasi.jumlah_sp2d }">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label>Kategori SP2D *</label>
+                                <select v-model="sp2d.jenis_sp2d" class="form-control" :class="{ 'is-invalid': validasi.jenis_sp2d }">
+                                    <option value="">Pilih Kategori SPD2D</option>
+                                    <option v-for="(v,k) in this.jenis_sp2d" :value="v" :key="k">{{ v }}</option>
+                                </select>
                             </div>
                         </div>
                         <div class="row">
@@ -60,15 +75,25 @@ import service from './../../services.js';
 export default {
     data() {
         return {
-            pelimpahan: {
+            sp2d: {
                 'tahun_anggaran': '',
-                'nota_dinas': '',
-                'tgl_nota_dinas': ''
+                'nomor_sp2d': '',
+                'tgl_sp2d': '',
+                'jumlah_sp2d':'',
+                'jenis_sp2d':''
             },
             validasi: {
                 'tahun_anggaran': '',
-                'nota_dinas': '',
-                'tgl_nota_dinas': ''
+                'nomor_sp2d': '',
+                'tgl_sp2d': '',
+                'jumlah_sp2d':'',
+                'jenis_sp2d':''
+            },
+            jenis_sp2d: {
+                'UP': 'UP',
+                'GU': 'GU',
+                'TU': 'TU',
+                'LS': 'TU'
             },
             options: {
                 format: 'YYYY-MM-DD',
@@ -102,7 +127,7 @@ export default {
             let validasi = this.validate();
             if (validasi === true) {
                 this.isLoading = true;
-                service.postData(this.api, this.pelimpahan)
+                service.postData(this.api, this.sp2d)
                     .then(result => {
                         this.response(result);
                     }).catch(error => {
@@ -126,33 +151,49 @@ export default {
             }
         },
         reset() {
-            this.pelimpahan.tahun_anggaran = '';
-            this.pelimpahan.nota_dinas = '';
-            this.pelimpahan.tgl_nota_dinas = '';
+            this.sp2d.tahun_anggaran = '';
+            this.sp2d.nomor_sp2d = '';
+            this.sp2d.tgl_sp2d = '';
+            this.sp2d.jumlah_sp2d = '';
+            this.sp2d.jenis_sp2d = '';
         },
         validate() {
             let condition = 0;
             let callback = false;
             
-            if (this.pelimpahan.tahun_anggaran.length === 0) {
+            if (this.sp2d.tahun_anggaran.length === 0) {
                 this.validasi.tahun_anggaran = true;
                 condition++;
             } else {
                 this.validasi.tahun_anggaran = false;
             }
 
-            if (this.pelimpahan.nota_dinas.length === 0) {
-                this.validasi.nota_dinas = true;
+            if (this.sp2d.nomor_sp2d.length === 0) {
+                this.validasi.nomor_sp2d = true;
                 condition++;
             } else {
-                this.validasi.nota_dinas = false;
+                this.validasi.nomor_sp2d = false;
             }
 
-            if (this.pelimpahan.tgl_nota_dinas.length === 0) {
-                this.validasi.tgl_nota_dinas = true;
+            if (this.sp2d.tgl_sp2d.length === 0) {
+                this.validasi.tgl_sp2d = true;
                 condition++;
             } else {
-                this.validasi.tgl_nota_dinas = false;
+                this.validasi.tgl_sp2d = false;
+            }
+
+            if (this.sp2d.jumlah_sp2d.length === 0) {
+                this.validasi.jumlah_sp2d = true;
+                condition++;
+            } else {
+                this.validasi.jumlah_sp2d = false;
+            }
+
+            if (this.sp2d.jenis_sp2d.length === 0) {
+                this.validasi.jenis_sp2d = true;
+                condition++;
+            } else {
+                this.validasi.jenis_sp2d = false;
             }
 
             if (condition > 0) {

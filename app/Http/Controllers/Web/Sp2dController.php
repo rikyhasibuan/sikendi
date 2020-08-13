@@ -7,13 +7,12 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\View;
 use App\Http\Controllers\Controller;
 use App\Models\Anggaran;
-use App\Models\Pelimpahan;
-use App\Models\PelimpahanDetail;
+use App\Models\Sp2d;
 use App\Libraries\Access;
 use App\Libraries\Common;
 use Closure;
 
-class Spd2Controller extends Controller
+class Sp2dController extends Controller
 {
     protected $title = 'SP2D';
     protected $link  = 'sp2d';
@@ -119,45 +118,5 @@ class Spd2Controller extends Controller
         $data['route'] = url($this->route);
         $data['access'] = $this->access;
         return View::make('pelimpahan.detail', $data);
-    }
-
-    public function create()
-    {
-        $breadcrumb = [];
-        $breadcrumb[0] = '<a href="' . url('dashboard') . '"><i class="fa fa-dashboard"></i> Dashboard</a>';
-        $breadcrumb[1] = '<a href="' . url($this->route) . '"><i class="fa fa-database"></i> ' . $this->title . '</a>';
-        $breadcrumb[2] = '<i class="fa fa-plus"></i> Tambah Data';
-
-        $tahun = Anggaran::groupBy('tahun')->select('tahun')->get();
-
-        $data = [];
-        $data['title']  = $this->title;
-        $data['link'] = $this->link;
-        $data['breadcrumb'] = $breadcrumb;
-        $data['api'] = url($this->api.'?nip=' . $this->_nip);
-        $data['act'] = 'create';
-        $data['tahun'] = $tahun;
-        $data['route'] = url($this->route);
-        return View::make('pelimpahan.form', $data);
-    }
-
-    public function edit(Request $request)
-    {
-        $breadcrumb = [];
-        $breadcrumb[0] = '<a href="' . url('dashboard') . '"><i class="fa fa-dashboard"></i> Dashboard</a>';
-        $breadcrumb[1] = '<a href="' . url($this->route) . '"><i class="fa fa-database"></i> ' . $this->title . '</a>';
-        $breadcrumb[2] = '<i class="fa fa-wrench"></i> Ubah Data';
-
-        $pelimpahan = Pelimpahan::find($request['id']);
-
-        $data = [];
-        $data['title']  = $this->title;
-        $data['link'] = $this->link;
-        $data['pelimpahan'] = $pelimpahan;
-        $data['breadcrumb'] = $breadcrumb;
-        $data['api'] = url($this->api . '?nip='.$this->_nip.'&id=' . $pelimpahan->id);
-        $data['act'] = 'edit';
-        $data['route'] = url($this->route);
-        return View::make('pelimpahan.form', $data);
     }
 }

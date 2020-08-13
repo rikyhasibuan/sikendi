@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Libraries\Common;
 use App\Models\Pelimpahan;
+use App\Models\Sp2d;
+use App\Models\PelimpahanDetail;
 use App\Models\Pegawai;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
@@ -16,83 +18,119 @@ class PelimpahanController extends Controller
 
     public function __construct()
     {
-      $this->_common = new Common();
+        $this->_common = new Common();
     }
 
     public function get_data(Request $request)
     {
-      try {
-        $_q = ($request['q'] !== '') ? $request['q'] : '';
-        $pelimpahan = Pelimpahan::searchNotaDinas($_q)->orderBy('id', 'DESC')->paginate(10);
-        return response()->json($pelimpahan, 200);
-      } catch (Exception $e) {
-        return response()->json(['error' => $e->getMessage()], 500);
-      }
+        try {
+            $_q = ($request['q'] !== '') ? $request['q'] : '';
+            $pelimpahan = Pelimpahan::searchNotaDinas($_q)->orderBy('id', 'DESC')->paginate(10);
+            return response()->json($pelimpahan, 200);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function show_data(Request $request)
     {
-      return response()->json(Pelimpahan::find($request['id']), 200);
+        return response()->json(Pelimpahan::find($request['id']), 200);
     }
 
     public function post_data(Request $request)
     {
-      $check = Pelimpahan::where('nota_dinas', $request->input('nota_dinas'))->count();
-      if ($check == 0) {
-        $pelimpahan = new Pelimpahan();
-        $pelimpahan->nota_dinas = $request->input('nota_dinas');
-        $pelimpahan->tgl_nota_dinas = $request->input('tgl_nota_dinas');
-        $pelimpahan->jumlah_pelimpahan = $request->input('jumlah_pelimpahan');
-        $pelimpahan->status = 0;
-        $pelimpahan->created_at = date('Y-m-d H:i:s');
-        if ($pelimpahan->save()) {
-          $payload = [
-            'page' => 'Pelimpahan Uang',
-            'message' => 'User dengan NIP '.$request->query('nip').' menambahkan data Pelimpahan baru'
-          ];
-          $this->_common->generate_log($payload);
-          return response()->json(['status'=>'ok'], 200);
+        $check = Pelimpahan::where('nota_dinas', $request->input('nota_dinas'))->count();
+        if ($check == 0) {
+            $sp2d = Sp2d::latest('id')->first();
+            $pelimpahan = new Pelimpahan();
+            $pelimpahan->nota_dinas = $request->input('nota_dinas');
+            $pelimpahan->tgl_nota_dinas = $request->input('tgl_nota_dinas');
+            $pelimpahan->jumlah_sp2d = $sp2d['jumlah_sp2d'];
+            $pelimpahan->sisa_sp2d = $sp2d['jumlah_sp2d'];
+            $pelimpahan->status = 0;
+            $pelimpahan->created_at = date('Y-m-d H:i:s');
+            if ($pelimpahan->save()) {
+                $payload = [
+                    'page' => 'Pelimpahan Uang',
+                    'message' => 'User dengan NIP '.$request->query('nip').' menambahkan data Pelimpahan baru'
+                ];
+                $this->_common->generate_log($payload);
+                return response()->json(['status'=>'ok'], 200);
+            } else {
+                return response()->json(['status'=>'failed'], 500);
+            }
         } else {
-          return response()->json(['status'=>'failed'], 500);
+            return response()->json(['status'=>'duplicate'], 200);
         }
-      } else {
-        return response()->json(['status'=>'duplicate'], 200);
-      }
     }
 
     public function put_data(Request $request)
     {
-      $pelimpahan = Pelimpahan::find($request['id']);
-      $pelimpahan->nota_dinas = $request->input('nota_dinas');
-      $pelimpahan->tgl_nota_dinas = $request->input('tgl_nota_dinas');
-      $pelimpahan->jumlah_pelimpahan = $request->input('jumlah_pelimpahan');
-      $pelimpahan->updated_at = date('Y-m-d H:i:s');
-      if ($pelimpahan->save()) {
-        $payload = [
-          'page' => 'Pelimpahan Uang',
-          'message' => 'User dengan NIP '.$request->query('nip').' melakukan perubahan pada data Pelimpahan Uang'
-        ];
-        $this->_common->generate_log($payload);
-        return response()->json(['status' => 'ok'], 200);
-      } else {
-        return response()->json(['status' => 'failed'], 500);
-      }
+        $pelimpahan = Pelimpahan::find($request['id']);
+        $pelimpahan->nota_dinas = $request->input('nota_dinas');
+        $pelimpahan->tgl_nota_dinas = $request->input('tgl_nota_dinas');
+        $pelimpahan->jumlah_pelimpahan = $request->input('jumlah_pelimpahan');
+        $pelimpahan->updated_at = date('Y-m-d H:i:s');
+        if ($pelimpahan->save()) {
+            $payload = [
+                'page' => 'Pelimpahan Uang',
+                'message' => 'User dengan NIP '.$request->query('nip').' melakukan perubahan pada data Pelimpahan Uang'
+            ];
+            $this->_common->generate_log($payload);
+            return response()->json(['status' => 'ok'], 200);
+        } else {
+            return response()->json(['status' => 'failed'], 500);
+        }
     }
 
     public function delete_data(Request $request)
     {
-      $pelimpahan = Pelimpahan::find($request['id']);
-      if ($pelimpahan->delete()) {
-        PelimpahanDetail::where('dinasbop_id',  $request['id'])->delete();
-        $payload = [
-          'page' => 'Dinas BOP',
-          'message' => 'User dengan NIP '.$request->query('nip').' melakukan hapus data pada Dinas BOP'
-        ];
-        $this->_common->generate_log($payload);
-        return response()->json(['status' => 'ok'], 200);
-      } else {
-        return response()->json(['status' => 'failed'], 500);
-      }
+        $pelimpahan = Pelimpahan::find($request['id']);
+        if ($pelimpahan->delete()) {
+            PelimpahanDetail::where('pelimpahan_id', $request['id'])->delete();
+            $payload = [
+            'page' => 'Pelimpahan',
+            'message' => 'User dengan NIP '.$request->query('nip').' melakukan hapus data pada Pelimpahan'
+            ];
+            $this->_common->generate_log($payload);
+            return response()->json(['status' => 'ok'], 200);
+        } else {
+            return response()->json(['status' => 'failed'], 500);
+        }
+    }
+
+    public function post_nominal_data(Request $request)
+    {
+        $parent = Pelimpahan::find($request['pelimpahan']);
+        $pelimpahan = new PelimpahanDetail();
+        $pelimpahan->pelimpahan_id = $request['pelimpahan'];
+        $pelimpahan->bendahara = $request->input('bendahara');
+        $pelimpahan->jumlah_pelimpahan = $request->input('jumlah_pelimpahan');
+        $pelimpahan->jenis_pelimpahan = $request->input('jenis_pelimpahan');
+        $pelimpahan->sisa_sp2d = $parent->sisa_sp2d - $request->input('jumlah_pelimpahan');
+        $pelimpahan->created_at = date('Y-m-d H:i:s');
+        if ($pelimpahan->save()) {
+            if ($pelimpahan->jenis_pelimpahan == 'UP') {
+                $parent->up = $parent->up + $pelimpahan->jumlah_pelimpahan;
+            } elseif ($pelimpahan->jenis_pelimpahan == 'GU') {
+                $parent->gu = $parent->gu + $pelimpahan->jumlah_pelimpahan;
+            } elseif ($pelimpahan->jenis_pelimpahan == 'TU') {
+                $parent->tu = $parent->tu + $pelimpahan->jumlah_pelimpahan;
+            } elseif ($pelimpahan->jenis_pelimpahan == 'LS') {
+                $parent->ls = $parent->ls + $pelimpahan->jumlah_pelimpahan;
+            }
+            $parent->jumlah_pelimpahan = $parent->jumlah_pelimpahan + $pelimpahan->jumlah_pelimpahan;
+            $parent->sisa_sp2d = $pelimpahan->sisa_sp2d;
+            $parent->save();
+            $payload = [
+                'page' => 'Pelimpahan Uang',
+                'message' => 'User dengan NIP '.$request->query('nip').' menambahkan data Pelimpahan baru'
+            ];
+            $this->_common->generate_log($payload);
+            return response()->json(['status'=>'ok'], 200);
+        } else {
+            return response()->json(['status'=>'failed'], 500);
+        }
     }
 
     public function get_print(Request $request)
@@ -173,8 +211,7 @@ class PelimpahanController extends Controller
             } else {
                 return response()->json(['status'=>'failed'], 500);
             }
-
-        } else if ($act == 'approve') {
+        } elseif ($act == 'approve') {
             $approvalbop = DinasBopApproval::where('dinasbop_id', $dinasbop_id)->where('tab', $tab)->first();
             $column = $approvalbop[$type];
             $column['approval'] = 1;

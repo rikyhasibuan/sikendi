@@ -20,6 +20,7 @@ Route::get('ajax/belanja/{kegiatan}', 'Api\AjaxController@show_belanja_by_kegiat
 Route::post('ajax/sisa_anggaran', 'Api\AjaxController@show_sisa_anggaran');
 Route::post('ajax/total_anggaran', 'Api\AjaxController@show_total_anggaran');
 Route::post('ajax/golongan', 'Api\AjaxController@show_golongan_by_pangkat');
+Route::get('ajax/anggaran/bendahara/{bendahara}', 'Api\AjaxController@show_anggaran_by_bendahara');
 
 // program
 Route::get('program', 'Api\ProgramController@get_data');
@@ -78,6 +79,6 @@ Route::get('pelimpahan/{id}', 'Api\PelimpahanController@show_data');
 Route::post('pelimpahan', 'Api\PelimpahanController@post_data');
 Route::put('pelimpahan', 'Api\PelimpahanController@put_data');
 Route::delete('pelimpahan', 'Api\PelimpahanController@delete_data');
-Route::post('pelimpahan/nominal', 'Web\PelimpahanController@post_nominal_data');
-Route::put('pelimpahan/nominal', 'Web\PelimpahanController@put_nominal_data');
-Route::delete('pelimpahan/nominal', 'Web\PelimpahanController@delete_nominal_data');
+Route::post('pelimpahan/nominal', 'Api\PelimpahanController@post_nominal_data');
+Route::put('pelimpahan/nominal', 'Api\PelimpahanController@put_nominal_data');
+Route::delete('pelimpahan/nominal', 'Api\PelimpahanController@delete_nominal_data');

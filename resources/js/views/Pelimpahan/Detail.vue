@@ -50,7 +50,7 @@
                         <div class="col-md-12">
                             <v-alert :alert="alert"></v-alert>
                             <transition name="fade">
-                                <div class="table-responsive" v-if="showTable == true">
+                                <div class="table-responsive" v-if="showTable === true">
                                     <table class="table table-hover table-striped table-bordered">
                                         <thead>
                                             <tr>
@@ -67,14 +67,41 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr v-for="v in pelimpahandetail" :key="v.id">
-                                                <td style="vertical-align: middle;">{{ v.bendahara }}</td>
-                                                <td style="text-align:right;vertical-align: middle;">Rp.{{ v.up | rupiah }}</td>
-                                                <td style="text-align:right;vertical-align: middle;">Rp.{{ v.gu | rupiah }}</td>
-                                                <td style="text-align:right;vertical-align: middle;">Rp.{{ v.tu | rupiah }}</td>
-                                                <td style="text-align:right;vertical-align: middle;">Rp.{{ v.ls | rupiah }}</td>
+                                            <tr>
+                                                <td colspan="5" style="text-align: right;vertical-align: middle;">
+                                                    <b>Saldo Bank Bendahara Pengeluaran sebelum pelimpahan uang</b>
+                                                </td>
                                                 <td style="text-align:right;vertical-align: middle;">
-                                                    Rp.{{ (v.up + v.gu + v.tu. v.ls ) | rupiah }}
+                                                    <b>Rp.{{ pelimpahan.jumlah_sp2d | rupiah }}</b>
+                                                </td>
+                                                <td style="text-align: center;vertical-align: middle;"></td>
+                                            </tr>
+                                            <tr v-for="v in pelimpahandetail" :key="v.id">
+                                                <td style="vertical-align: middle;">
+                                                    {{ v.pegawai.nama }}
+                                                </td>
+                                                <td style="text-align:right;vertical-align: middle;">
+                                                    <span v-if="v.jenis_pelimpahan === 'UP'">
+                                                        Rp.{{ v.jumlah_pelimpahan | rupiah }}
+                                                    </span>
+                                                </td>
+                                                <td style="text-align:right;vertical-align: middle;">
+                                                    <span v-if="v.jenis_pelimpahan === 'GU'">
+                                                        Rp.{{ v.jumlah_pelimpahan | rupiah }}
+                                                    </span>
+                                                </td>
+                                                <td style="text-align:right;vertical-align: middle;">
+                                                    <span v-if="v.jenis_pelimpahan === 'TU'">
+                                                        Rp.{{ v.jumlah_pelimpahan | rupiah }}
+                                                    </span>
+                                                </td>
+                                                <td style="text-align:right;vertical-align: middle;">
+                                                    <span v-if="v.jenis_pelimpahan === 'LS'">
+                                                        Rp.{{ v.jumlah_pelimpahan | rupiah }}
+                                                    </span>
+                                                </td>
+                                                <td style="text-align:right;vertical-align: middle;">
+                                                    <b>Rp. {{ v.sisa_sp2d | rupiah }}</b>
                                                 </td>
                                                 <td style="text-align: center;vertical-align: middle;">
                                                     <div>
@@ -124,6 +151,7 @@
                     empty:false,
                     delete:false
                 },
+                saldo: 0,
                 showForm: false,
                 showTable: false
             }
@@ -131,6 +159,7 @@
         props: [
             'pelimpahan',
             'pelimpahandetail',
+            'sp2d',
             'lock',
             'route',
             'print_action',
@@ -160,11 +189,20 @@
                 this.id = id;
             },
         },
+        computed: {
+          total(v) {
+            return this.saldo - v;
+          }
+        },
         created() {
             this.isLoading = true;
-            if (this.pelimpahandetail.length === 0) {
+            if (this.pelimpahandetail.length < 1) {
                 this.alert.empty = true;
+                this.showTable = false;
+            } else {
+                this.showTable = true;
             }
+            this.saldo = this.sp2d
         },
         mounted() {
             this.isLoading = false;

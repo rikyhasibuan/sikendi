@@ -52,7 +52,7 @@
                                     <thead>
                                         <tr>
                                             <th style="width:10%;text-align:center;" rowspan="2">Nota Dinas</th>
-                                            <th style="width:5%;text-align:center;" rowspan="2">Tanggal</th>
+                                            <th style="width:10%;text-align:center;" rowspan="2">Tanggal</th>
                                             <th style="width:10%;text-align:center;" colspan="4">Nilai Pelimpahan</th>
                                             <th style="width:10%;text-align:center;" rowspan="2">Total Pelimpahan</th>
                                             <th style="width:10%;text-align:center;" rowspan="2">Saldo Bank</th>
@@ -69,14 +69,23 @@
                                         <tr v-for="v in pelimpahan" :key="v.id">
                                             <td style="vertical-align: middle;"><a :href="route + '/detail?id=' + v.id">{{ v.nota_dinas }}</a></td>
                                             <td style="text-align:center;vertical-align: middle;">{{ v.tgl_nota_dinas | moment }}</td>
-                                            <td style="text-align:right;vertical-align: middle;">Rp.{{ v.total_anggaran | rupiah }}</td>
-                                            <td style="text-align:right;vertical-align: middle;">Rp.{{ v.total_anggaran | rupiah }}</td>
-                                            <td style="text-align:right;vertical-align: middle;">Rp.{{ v.total_anggaran | rupiah }}</td>
-                                            <td style="text-align:right;vertical-align: middle;">Rp.{{ v.total_anggaran | rupiah }}</td>
-
-                                            <td style="text-align:right;vertical-align: middle;">Rp.{{ v.total_anggaran | rupiah }}</td>
-
-                                            <td style="text-align:right;vertical-align: middle;">Rp.{{ v.total_anggaran | rupiah }}</td>
+                                            <td style="text-align:right;vertical-align: middle;">
+                                                Rp.{{ v.up | rupiah }}
+                                            </td>
+                                            <td style="text-align:right;vertical-align: middle;">
+                                                Rp.{{ v.gu | rupiah }}
+                                            </td>
+                                            <td style="text-align:right;vertical-align: middle;">
+                                                Rp.{{ v.tu | rupiah }}
+                                            </td>
+                                            <td style="text-align:right;vertical-align: middle;">
+                                                Rp.{{ v.ls | rupiah }}
+                                            </td>
+                                            <td style="text-align:right;vertical-align: middle;">
+                                                <span>Rp.{{ v.jumlah_pelimpahan | rupiah }}</span>
+                                            </td>
+                                            <td style="text-align:right;vertical-align: middle;">
+                                                Rp.{{ v.sisa_sp2d | rupiah }}
                                             <td style="text-align: center;vertical-align: middle;">
                                                 <div>
                                                     <a v-if="(v.status == 0 && access.update === 1)" :href="route + '/edit?id=' + v.id" class="btn btn-sm btn-warning mr-sm-1">

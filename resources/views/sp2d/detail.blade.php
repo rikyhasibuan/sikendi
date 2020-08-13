@@ -2,6 +2,7 @@
 @section('content')
   <div id="app">
     <pelimpahan-detail
+      :sp2d='{!! json_encode($sp2d) !!}'
       :pelimpahan='{!! json_encode($pelimpahan) !!}'
       :pelimpahandetail='{!! json_encode($pelimpahandetail) !!}'
       :route='{!! json_encode($route) !!}'
