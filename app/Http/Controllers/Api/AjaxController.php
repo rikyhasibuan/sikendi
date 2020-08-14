@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Pangkat;
 use App\Models\Anggaran;
 use App\Models\Kegiatan;
 use App\Models\Belanja;

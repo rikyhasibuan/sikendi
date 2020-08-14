@@ -55,7 +55,8 @@ class PegawaiController extends Controller
             $pegawai->pangkat = $request->input('pangkat');
             $pegawai->golongan = $request->input('golongan');
             $pegawai->jabatan = $request->input('jabatan');
-            $pegawai->eselon = $request->input('eselon');
+            $pegawai->norek = $request->input('norek');
+            $pegawai->keterangan = $request->input('keterangan');
             $pegawai->created_at = date('Y-m-d H:i:s');
             if ($pegawai->save()) {
                 $payload = [
@@ -80,7 +81,8 @@ class PegawaiController extends Controller
         $pegawai->pangkat = $request->input('pangkat');
         $pegawai->golongan = $request->input('golongan');
         $pegawai->jabatan = $request->input('jabatan');
-        $pegawai->eselon = $request->input('eselon');
+        $pegawai->norek = $request->input('norek');
+        $pegawai->keterangan = $request->input('keterangan');
         $pegawai->updated_at = date('Y-m-d H:i:s');
         if ($pegawai->save()) {
             $payload = [

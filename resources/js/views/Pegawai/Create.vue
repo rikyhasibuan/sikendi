@@ -47,12 +47,15 @@
 
                             <div class="row">
                                 <div class="form-group col-md-6 col-xs-12">
-                                    <label>Eselon</label>
-                                    <select v-model="pegawai.eselon" class="form-control">
-                                        <option value="">Pilih Eselon</option>
-                                        <option v-for="(k,v) in this.eselon_data" v-bind:value="k" v-bind:key="k">
-                                            {{ v }}</option>
-                                    </select>
+                                    <label>Nomor Rekening</label>
+                                    <input type="text" class="form-control" v-model="pegawai.norek">
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-md-6 col-xs-12">
+                                    <label>Keterangan</label>
+                                    <input type="text" class="form-control" v-model="pegawai.keterangan">
                                 </div>
                             </div>
 
@@ -88,7 +91,8 @@ export default {
                 'pangkat': '',
                 'golongan': '',
                 'jabatan': '',
-                'eselon': ''
+                'norek': '',
+                'keterangan': ''
             },
             validasi: {
                 'nip': '',
@@ -197,7 +201,8 @@ export default {
             this.pegawai.nama = '';
             this.pegawai.pangkat = '';
             this.pegawai.jabatan = '';
-            this.pegawai.eselon = '';
+            this.pegawai.norek = '';
+            this.pegawai.keterangan = '';
         }
     },
     created() {

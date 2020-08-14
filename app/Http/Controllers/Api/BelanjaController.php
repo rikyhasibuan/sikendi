@@ -122,7 +122,7 @@ class BelanjaController extends Controller
             $belanja = Belanja::find($request['id']);
             if ($belanja->delete()) {
                 $payload = [
-                    'page' => 'BBM',
+                    'page' => 'Belanja',
                     'message' => 'User dengan NIP '.$request['nip'].' melakukan hapus data pada belanja'
                 ];
                 $this->_common->generate_log($payload);

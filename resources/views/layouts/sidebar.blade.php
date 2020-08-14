@@ -21,12 +21,6 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a class="nav-link" href="{!! url('anggaran') !!}">
-                                <i class="nav-icon fa fa-circle-o"></i>
-                                <p>Anggaran</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" href="{!! url('sp2d') !!}">
                                 <i class="nav-icon fa fa-circle-o"></i>
                                 <p>SP2D</p>
@@ -48,10 +42,12 @@
                 </li>
                 <?php
                     $routes_master = [
+                        'anggaran',
                         'program',
                         'kegiatan',
                         'belanja',
-                        'pegawai'
+                        'pegawai',
+                        'penerima'
                     ];
                 ?>
                 @if (in_array(Cookie::get('level'), ['1','2']))
@@ -73,6 +69,12 @@
                                 </a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link" href="{!! url('penerima') !!}">
+                                    <i class="nav-icon fa fa-circle-o"></i>
+                                    <p>Penerima</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" href="{!! url('program') !!}">
                                     <i class="nav-icon fa fa-circle-o"></i>
                                     <p>Program</p>
@@ -88,6 +90,12 @@
                                 <a class="nav-link" href="{!! url('belanja') !!}">
                                     <i class="nav-icon fa fa-circle-o"></i>
                                     <p>Belanja</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{!! url('anggaran') !!}">
+                                    <i class="nav-icon fa fa-circle-o"></i>
+                                    <p>Anggaran</p>
                                 </a>
                             </li>
                         </ul>

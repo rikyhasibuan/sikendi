@@ -82,3 +82,8 @@ Route::delete('pelimpahan', 'Api\PelimpahanController@delete_data');
 Route::post('pelimpahan/nominal', 'Api\PelimpahanController@post_nominal_data');
 Route::put('pelimpahan/nominal', 'Api\PelimpahanController@put_nominal_data');
 Route::delete('pelimpahan/nominal', 'Api\PelimpahanController@delete_nominal_data');
+
+// Rekening Penerima
+Route::get('penerima', 'Api\PenerimaController@get_data');
+Route::post('penerima', 'Api\PenerimaController@post_data');
+Route::delete('penerima', 'Api\PenerimaController@delete_data');

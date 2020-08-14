@@ -183,6 +183,7 @@ Vue.component('sp2t-detail', require('./views/SP2T/Detail.vue'));
 
 Vue.component('report', require('./views/Report.vue'));
 Vue.component('log-index', require('./views/Log.vue'));
+Vue.component('penerima-index', require('./views/Penerima.vue'));
 
 Vue.config.productionTip = false;
 new Vue().$mount('#app');

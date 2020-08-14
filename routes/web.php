@@ -22,6 +22,7 @@ Route::get('dashboard', 'Web\DashboardController@index');
 Route::get('profile', 'Web\ProfileController@index');
 Route::get('logaktifitas', 'Web\LogActivityController@index');
 Route::get('report', 'Web\ReportController@index');
+Route::get('penerima', 'Web\PenerimaController@index');
 
 // program
 Route::get('program', 'Web\ProgramController@index');

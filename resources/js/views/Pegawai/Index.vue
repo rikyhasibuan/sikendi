@@ -62,9 +62,8 @@
                                         <th style="width:10%; text-align:center;">NIP</th>
                                         <th style="width:20%; text-align:center;">NAMA</th>
                                         <th style="width:15%; text-align:center;">PANGKAT & GOLONGAN</th>
-                                        <th style="width:20%; text-align:center;">JABATAN</th>
-                                        <th style="width:2%; text-align:center;">ESELON</th>
-                                        <th style="width:10%; text-align:center;">NO REKENING</th>
+                                        <th style="width:15%; text-align:center;">JABATAN</th>
+                                        <th style="width:15%; text-align:center;">NO REKENING</th>
                                         <th style="width:15%; text-align:center;">ACTION</th>
                                     </tr>
                                 </thead>
@@ -74,7 +73,6 @@
                                         <td>{{ v.nama }}</td>
                                         <td>{{ v.pangkat }} {{ v.golongan }}</td>
                                         <td>{{ v.jabatan }}</td>
-                                        <td style="text-align:center;">{{ v.eselon }}</td>
                                         <td>{{ v.norek }}</td>
                                         <td>
                                             <div style="text-align: center;">

@@ -88,8 +88,7 @@
                 this.alert.reset = false;
                 this.alert.validate = false;
             },
-            onSubmit(evt) {
-                evt.preventDefault();
+            onSubmit() {
                 this.clearAlert();
                 let validasi = this.validate();
                 if (validasi === true) {
