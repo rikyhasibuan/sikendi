@@ -9,7 +9,7 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>Tahun Anggaran *</label>
-                                <select v-model="sp2d.tahun_anggaran" class="form-control" :class="{ 'is-invalid': sp2d.tahun_anggaran }">
+                                <select v-model="sp2d.tahun_anggaran" class="form-control" :class="{ 'is-invalid': validasi.tahun_anggaran }">
                                     <option value="">Pilih Tahun Anggaran</option>
                                     <option v-for="v in this.tahun_data" :value="v.tahun" :key="v.tahun">{{ v.tahun }}</option>
                                 </select>

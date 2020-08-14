@@ -18,7 +18,7 @@ use Closure;
 class PelimpahanController extends Controller
 {
     protected $title = 'Pelimpahan Uang';
-    protected $link  = 'anggaran';
+    protected $link  = 'pelimpahan';
     protected $api   = 'api/pelimpahan';
     protected $route = 'pelimpahan';
     protected $access;

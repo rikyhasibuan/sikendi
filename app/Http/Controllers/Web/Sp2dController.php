@@ -14,7 +14,7 @@ use Closure;
 
 class Sp2dController extends Controller
 {
-    protected $title = 'SP2D';
+    protected $title = 'SP2D (Surat Perintah Pencairan Dana)';
     protected $link  = 'sp2d';
     protected $api   = 'api/sp2d';
     protected $route = 'sp2d';
@@ -83,40 +83,16 @@ class Sp2dController extends Controller
         $breadcrumb[2] = '<i class="fa fa-wrench"></i> Ubah Data';
 
         $sp2d = Sp2d::find($request['id']);
-
+        $tahun = Anggaran::groupBy('tahun')->select('tahun')->get();
         $data = [];
         $data['title']  = $this->title;
         $data['link'] = $this->link;
         $data['sp2d'] = $sp2d;
+        $data['tahun'] = $tahun;
         $data['breadcrumb'] = $breadcrumb;
         $data['api'] = url($this->api . '?nip='.$this->_nip.'&id=' . $sp2d->id);
         $data['act'] = 'edit';
         $data['route'] = url($this->route);
         return View::make('sp2d.form', $data);
-    }
-
-    public function detail(Request $request)
-    {
-        $breadcrumb = [];
-        $breadcrumb[0] = '<a href="' . url('dashboard') . '"><i class="fa fa-dashboard"></i> Dashboard</a>';
-        $breadcrumb[1] = '<a href="' . url($this->route) . '"><i class="fa fa-database"></i> ' . $this->title . '</a>';
-        $breadcrumb[2] = '<i class="fa fa-wrench"></i> Detail';
-
-        $pelimpahan = Pelimpahan::find($request['id']);
-        $pelimpahandetail = PelimpahanDetail::where('pelimpahan_id', $pelimpahan->id)->get();
-        $bendahara = Kegiatan::with('pegawai')->groupBy('bendahara')->get();
-
-        $data = [];
-        $data['title']  = $this->title;
-        $data['link'] = $this->link;
-        $data['pelimpahan'] = $pelimpahan;
-        $data['pelimpahandetail'] = $pelimpahandetail;
-        $data['bendahara'] = $bendahara;
-        $data['breadcrumb'] = $breadcrumb;
-        $data['api'] = url($this->api . '?nip='.$this->_nip.'&id=' . $pelimpahan->id);
-        $data['act'] = 'edit';
-        $data['route'] = url($this->route);
-        $data['access'] = $this->access;
-        return View::make('pelimpahan.detail', $data);
     }
 }

@@ -9,16 +9,13 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>Tahun Anggaran *</label>
-                                <select v-model="sp2d.tahun_anggaran" class="form-control" :class="{ 'is-invalid': sp2d.tahun_anggaran }">
-                                    <option value="">Pilih Tahun Anggaran</option>
-                                    <option v-for="v in this.tahun_data" :value="v.tahun" :key="v.tahun">{{ v.tahun }}</option>
-                                </select>
+                                <input type="text" class="form-control" placeholder="Isi Nomor SP2D" v-model="sp2d.tahun_anggaran" readonly="readonly">
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>Nomor SP2D *</label>
-                                <input type="text" class="form-control" placeholder="Isi Nomor SP2D" v-model="sp2d.nomor_sp2d" :class="{ 'is-invalid': validasi.nomor_sp2d }">
+                                <input type="text" class="form-control" placeholder="Isi Nomor SP2D" v-model="sp2d.nomor_sp2d">
                             </div>
                         </div>
                         <div class="row">
@@ -35,7 +32,6 @@
                                         :config="options"
                                         class="form-control"
                                         placeholder="Tanggal SP2D"
-                                        :class="{ 'is-invalid': validasi.tgl_sp2d }"
                                         autocomplete="off">
                                     </date-picker>
                                 </div>
@@ -44,14 +40,14 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>Jumlah SP2D *</label>
-                                <input type="text" class="form-control" placeholder="Jumlah SP2D" v-model="sp2d.jumlah_sp2d" :class="{ 'is-invalid': validasi.jumlah_sp2d }">
+                                <input type="text" class="form-control" placeholder="Jumlah SP2D" v-model="sp2d.jumlah_sp2d" readonly="readonly">
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>Kategori SP2D *</label>
-                                <select v-model="sp2d.jenis_sp2d" class="form-control" :class="{ 'is-invalid': pelimpahan.jenis_sp2d }">
-                                    <option value="">Pilih Kategori SP2D</option>
+                                <select v-model="sp2d.jenis_sp2d" class="form-control">
+                                    <option value="">Pilih Kategori SPD2D</option>
                                     <option v-for="(v,k) in this.jenis_sp2d" :value="v" :key="k">{{ v }}</option>
                                 </select>
                             </div>

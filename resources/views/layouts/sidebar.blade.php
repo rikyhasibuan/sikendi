@@ -23,7 +23,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{!! url('sp2d') !!}">
                                 <i class="nav-icon fa fa-circle-o"></i>
-                                <p>SP2D</p>
+                                <p>Surat Perintah Pencairan Dana</p>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -35,10 +35,17 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{!! url('pencairan') !!}">
                                 <i class="nav-icon fa fa-circle-o"></i>
-                                <p>SP2T</p>
+                                <p>Surat Perintah Pembayaran Transfer</p>
                             </a>
                         </li>
                     </ul>
+                </li>
+                <li class="nav-item">
+                    <a @if($link=='report' ) class="nav-link active" @else class="nav-link" @endif
+                    href="{!! url('report') !!}">
+                        <i class="nav-icon fa fa-file-excel-o"></i>
+                        <p>Cetak Data Kendali Keuangan</p>
+                    </a>
                 </li>
                 <?php
                     $routes_master = [
@@ -65,13 +72,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{!! url('pegawai') !!}">
                                     <i class="nav-icon fa fa-circle-o"></i>
-                                    <p>Pegawai</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{!! url('penerima') !!}">
-                                    <i class="nav-icon fa fa-circle-o"></i>
-                                    <p>Penerima</p>
+                                    <p>Pegawai Keuangan</p>
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -98,6 +99,12 @@
                                     <p>Anggaran</p>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{!! url('penerima') !!}">
+                                    <i class="nav-icon fa fa-circle-o"></i>
+                                    <p>Penerima SP2T</p>
+                                </a>
+                            </li>
                         </ul>
                     </li>
                 @endif
@@ -106,14 +113,6 @@
                     <a @if($link=='logaktifitas' ) class="nav-link active" @else class="nav-link" @endif href="{!! url('logaktifitas') !!}">
                         <i class="nav-icon fa fa-file-text-o"></i>
                         <p>Log Aktifitas</p>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a @if($link=='report' ) class="nav-link active" @else class="nav-link" @endif
-                    href="{!! url('report') !!}">
-                        <i class="nav-icon fa fa-file-excel-o"></i>
-                        <p>Cetak Laporan</p>
                     </a>
                 </li>
 

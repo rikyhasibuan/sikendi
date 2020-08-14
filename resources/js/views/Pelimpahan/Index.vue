@@ -51,18 +51,18 @@
                                 <table class="table table-hover table-striped table-bordered" v-if="showTable == true">
                                     <thead>
                                         <tr>
-                                            <th style="width:10%;text-align:center;" rowspan="2">Nota Dinas</th>
-                                            <th style="width:10%;text-align:center;" rowspan="2">Tanggal</th>
-                                            <th style="width:10%;text-align:center;" colspan="4">Nilai Pelimpahan</th>
-                                            <th style="width:10%;text-align:center;" rowspan="2">Total Pelimpahan</th>
-                                            <th style="width:10%;text-align:center;" rowspan="2">Saldo Bank</th>
-                                            <th style="width:12%;text-align:center;" rowspan="2">Action</th>
+                                            <th style="width:10%;text-align:center;vertical-align:middle;" rowspan="2">Nomor Nota Dinas</th>
+                                            <th style="width:10%;text-align:center;vertical-align:middle;" rowspan="2">Tanggal Nota Dinas</th>
+                                            <th style="width:10%;text-align:center;vertical-align:middle;" colspan="4">Nilai Pelimpahan</th>
+                                            <th style="width:10%;text-align:center;vertical-align:middle;" rowspan="2">Jumlah Pelimpahan Uang</th>
+                                            <th style="width:10%;text-align:center;vertical-align:middle;" rowspan="2">Saldo Bank Bendahara Pengeluaran</th>
+                                            <th style="width:12%;text-align:center;vertical-align:middle;" rowspan="2">Action</th>
                                         </tr>
                                         <tr>
-                                            <th style="width:10%;text-align:center;">UP</th>
-                                            <th style="width:10%;text-align:center;">GU</th>
-                                            <th style="width:10%;text-align:center;">TU</th>
-                                            <th style="width:10%;text-align:center;">LS</th>
+                                            <th style="width:10%;text-align:center;vertical-align:middle;">UP</th>
+                                            <th style="width:10%;text-align:center;vertical-align:middle;">GU</th>
+                                            <th style="width:10%;text-align:center;vertical-align:middle;">TU</th>
+                                            <th style="width:10%;text-align:center;vertical-align:middle;">LS</th>
                                         </tr>
                                     </thead>
                                     <tbody>

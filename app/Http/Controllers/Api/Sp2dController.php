@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Libraries\Common;
 use App\Models\Sp2d;
+use App\Models\Anggaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Exception;
@@ -38,8 +39,12 @@ class Sp2dController extends Controller
     {
         $check = Sp2d::where('nomor_sp2d', $request->input('nomor_sp2d'))->count();
         if ($check == 0) {
+            $anggaran = Anggaran::where('tahun', $request->input('tahun_anggaran'))->first();
+            $totalsp2d = Sp2d::sum('jumlah_sp2d');
+            $sisa_anggaran = $anggaran->jumlah - $totalsp2d;
             $sp2d = new Sp2d();
             $sp2d->tahun_anggaran = $request->input('tahun_anggaran');
+            $sp2d->sisa_anggaran = $sisa_anggaran - $request->input('jumlah_sp2d');
             $sp2d->nomor_sp2d = $request->input('nomor_sp2d');
             $sp2d->tgl_sp2d = $request->input('tgl_sp2d');
             $sp2d->jumlah_sp2d = $request->input('jumlah_sp2d');
@@ -65,8 +70,7 @@ class Sp2dController extends Controller
         $sp2d = Sp2d::find($request['id']);
         $sp2d->nomor_sp2d = $request->input('nomor_sp2d');
         $sp2d->tgl_sp2d = $request->input('tgl_sp2d');
-        $sp2d->jumlah_sp2d = $request->input('jumlah_sp2d');
-        $sp2d->kategori_sp2d = $request->input('kategori_sp2d');
+        $sp2d->jenis_sp2d = $request->input('jenis_sp2d');
         $sp2d->updated_at = date('Y-m-d H:i:s');
         if ($sp2d->save()) {
             $payload = [
