@@ -39,7 +39,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label>Kategori Pelimpahan *</label>
-                                <select v-model="pelimpahan.jenis_pelimpahan" class="form-control" :class="{ 'is-invalid': validasi.bendahara }">
+                                <select v-model="pelimpahan.jenis_pelimpahan" class="form-control" :class="{ 'is-invalid': validasi.jenis_pelimpahan }">
                                     <option value="">Pilih Kategori Pelimpahan</option>
                                     <option value="UP">UP</option>
                                     <option value="GU">GU</option>
@@ -120,7 +120,10 @@ export default {
             let validasi = this.validate();
             if (validasi === true) {
                 this.isLoading = true;
-                service.postData(this.api, this.pelimpahan)
+                if (this.pelimpahan.sisa_anggaran < this.pelimpahan.jumlah_pelimpahan) {
+                    window.alert('Jumlah Sisa Anggaran BPP Dibawah Jumlah Pelimpahan');
+                } else {
+                    service.postData(this.api, this.pelimpahan)
                     .then(result => {
                         this.response(result);
                     }).catch(error => {
@@ -129,6 +132,7 @@ export default {
                         window.scroll({top: 0, left: 0, behavior: 'smooth'});
                         console.log(error);
                     });
+                }
             }
         },
         response(result) {

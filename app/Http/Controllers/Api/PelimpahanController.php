@@ -43,6 +43,7 @@ class PelimpahanController extends Controller
         if ($check == 0) {
             $sp2d = Sp2d::latest('id')->first();
             $pelimpahan = new Pelimpahan();
+            $pelimpahan->tahun_anggaran = $request->input('tahun_anggaran');
             $pelimpahan->nota_dinas = $request->input('nota_dinas');
             $pelimpahan->tgl_nota_dinas = $request->input('tgl_nota_dinas');
             $pelimpahan->jumlah_sp2d = $sp2d['jumlah_sp2d'];
@@ -130,6 +131,100 @@ class PelimpahanController extends Controller
             return response()->json(['status'=>'ok'], 200);
         } else {
             return response()->json(['status'=>'failed'], 500);
+        }
+    }
+
+    public function put_nominal_data(Request $request)
+    {
+        $parent = Pelimpahan::find($request['pelimpahan']);
+        $pelimpahan = PelimpahanDetail::find($request['id']);
+
+        // ambil dulu data nominal lama
+        $old_amount = $pelimpahan->jumlah_pelimpahan;
+
+        // kalau jenis pelimpahan yang lama sama dengan yang baru
+        if ($pelimpahan->jenis_pelimpahan == $request->input('jenis_pelimpahan')) {
+            if ($pelimpahan->jenis_pelimpahan == 'UP') {
+                $parent->up = $parent->up - $old_amount + $pelimpahan->jumlah_pelimpahan;
+            } elseif ($pelimpahan->jenis_pelimpahan == 'GU') {
+                $parent->gu = $parent->gu - $old_amount + $pelimpahan->jumlah_pelimpahan;
+            } elseif ($pelimpahan->jenis_pelimpahan == 'TU') {
+                $parent->tu = $parent->tu - $old_amount + $pelimpahan->jumlah_pelimpahan;
+            } elseif ($pelimpahan->jenis_pelimpahan == 'LS') {
+                $parent->ls = $parent->ls - $old_amount + $pelimpahan->jumlah_pelimpahan;
+            }
+        // ini kalau beda jenisnya.
+        } else {
+            if ($pelimpahan->jenis_pelimpahan == 'UP') {
+                $parent->up = $parent->up - $old_amount;
+            } elseif ($pelimpahan->jenis_pelimpahan == 'GU') {
+                $parent->gu = $parent->gu - $old_amount;
+            } elseif ($pelimpahan->jenis_pelimpahan == 'TU') {
+                $parent->tu = $parent->tu - $old_amount;
+            } elseif ($pelimpahan->jenis_pelimpahan == 'LS') {
+                $parent->ls = $parent->ls - $old_amount;
+            }
+
+            if ($request->input('jenis_pelimpahan') == 'UP') {
+                $parent->up = $parent->up + $request->input('jumlah_pelimpahan');
+            } elseif ($request->input('jenis_pelimpahan') == 'GU') {
+                $parent->gu = $parent->gu + $request->input('jumlah_pelimpahan');
+            } elseif ($request->input('jenis_pelimpahan') == 'TU') {
+                $parent->tu = $parent->tu + $request->input('jumlah_pelimpahan');
+            } elseif ($request->input('jenis_pelimpahan') == 'LS') {
+                $parent->ls = $parent->ls + $request->input('jumlah_pelimpahan');
+            }
+        }
+
+        $pelimpahan->pelimpahan_id = $request['pelimpahan'];
+        $pelimpahan->bendahara = $request->input('bendahara');
+        $pelimpahan->jumlah_pelimpahan = $request->input('jumlah_pelimpahan');
+        $pelimpahan->jenis_pelimpahan = $request->input('jenis_pelimpahan');
+        $pelimpahan->sisa_sp2d = $parent->sisa_sp2d + $old_amount - $request->input('jumlah_pelimpahan');
+        $pelimpahan->created_at = date('Y-m-d H:i:s');
+        if ($pelimpahan->save()) {
+            $parent->jumlah_pelimpahan = $parent->jumlah_pelimpahan - $old_amount + $pelimpahan->jumlah_pelimpahan;
+            $parent->sisa_sp2d = $pelimpahan->sisa_sp2d;
+            $parent->save();
+            $payload = [
+                'page' => 'Pelimpahan Uang',
+                'message' => 'User dengan NIP '.$request->query('nip').' melakukan ubah data pada Pelimpahan uang'
+            ];
+            $this->_common->generate_log($payload);
+            return response()->json(['status'=>'ok'], 200);
+        } else {
+            return response()->json(['status'=>'failed'], 500);
+        }
+    }
+
+    public function delete_nominal_data(Request $request)
+    {
+        $pelimpahan = PelimpahanDetail::find($request['id']);
+        $jenis = $pelimpahan->jenis_pelimpahan;
+        $jumlah = $pelimpahan->jumlah_pelimpahan;
+        $pelimpahan_id = $pelimpahan->pelimpahan_id;
+        if ($pelimpahan->delete()) {
+            $parent = Pelimpahan::find($pelimpahan_id);
+            if ($jenis == 'UP') {
+                $parent->up = $parent->up - $jumlah;
+            } elseif ($jenis == 'GU') {
+                $parent->gu = $parent->gu - $jumlah;
+            } elseif ($jenis == 'TU') {
+                $parent->tu = $parent->tu - $jumlah;
+            } elseif ($jenis == 'LS') {
+                $parent->ls = $parent->ls - $jumlah;
+            }
+            $parent->jumlah_pelimpahan = $parent->jumlah_pelimpahan - $jumlah;
+            $parent->sisa_sp2d = $parent->sisa_sp2d + $jumlah;
+            $parent->save();
+            $payload = [
+                'page' => 'Pelimpahan',
+                'message' => 'User dengan NIP '.$request->query('nip').' melakukan hapus data pada Pelimpahan'
+            ];
+            $this->_common->generate_log($payload);
+            return response()->json(['status' => 'ok'], 200);
+        } else {
+            return response()->json(['status' => 'failed'], 500);
         }
     }
 

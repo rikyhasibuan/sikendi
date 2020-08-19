@@ -1,4 +1,4 @@
-<aside class="main-sidebar sidebar-dark-primary elevation-2">
+<aside class="main-sidebar sidebar-dark-warning elevation-2">
     <a href="#" class="brand-link">
         <span class="brand">SIKENDI</span>
         <!-- <span class="brand-text font-weight-light">Inspektorat</span> -->

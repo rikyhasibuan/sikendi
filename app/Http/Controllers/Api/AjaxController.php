@@ -6,6 +6,7 @@ use App\Models\Pangkat;
 use App\Models\Anggaran;
 use App\Models\Kegiatan;
 use App\Models\Belanja;
+use App\Models\PelimpahanDetail;
 use App\Libraries\Common;
 use App\Libraries\KasAnggaran;
 use Illuminate\Http\JsonResponse;
@@ -24,8 +25,9 @@ class AjaxController extends Controller
             $kegiatan_list[] = $v->id;
         }
 
+        $pelimpahan = PelimpahanDetail::where('bendahara', $request['bendahara'])->sum('jumlah_pelimpahan');
         $anggaran = Anggaran::whereIn('kegiatan_id', $kegiatan_list)->sum('jumlah');
-        $total_anggaran = $anggaran;
+        $total_anggaran = $anggaran - $pelimpahan;
         return $total_anggaran;
     }
 
