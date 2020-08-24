@@ -5,40 +5,61 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="pull-right">
-                            <button type="button" v-on:click.prevent="toggle" class="btn btn-info mb-2"><i class="fa fa-search"></i> Form Pencarian</button>
-                            <a v-if="access.write === 1" :href="route + '/create'" class="btn btn-success mb-2"><i class="fa fa-plus"></i> Tambah Data</a>
+                            <button type="button" v-on:click.prevent="toggle" class="btn btn-outline-info mb-2">
+                                <i class="fa fa-search"></i> Form Pencarian
+                            </button>
+                            <a v-if="access.write === 1" :href="route + '/create'" class="btn btn-success mb-2">
+                                <i class="fa fa-plus"></i> Tambah Data
+                            </a>
                         </div>
                         <transition name="fade">
                             <div class="card" style="margin-top:50px;" v-show="showForm">
-                                <div class="card-body table-responsive">
-                                    <!-- <form v-on:submit.prevent="fetchData()">
-                                        <div class="row">
-                                            <div class="form-group col-md-4">
-                                                <select v-model="search.program" @change="onChangeProgram($event)" class="form-control">
-                                                    <option value="">Pilih Program</option>
-                                                    <option v-for="val in this.program_data" :value="val.id" :key="val.id">{{ val.nama_program }}</option>
-                                                </select>
+                                <div class="card-body">
+                                    <form v-on:submit.prevent="fetchData()">
+                                       <div class="row">
+                                           <div class="form-group col-md-3">
+                                                <input type="text" class="form-control" v-model="search.q" placeholder="Nomor SP2D">
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <select v-model="search.kegiatan" @change="onChangeKegiatan($event)" class="form-control">
-                                                    <option value="">Pilih Kegiatan</option>
-                                                    <option v-for="val in this.kegiatan" :value="val.id" :key="val.id">{{ val.nama_kegiatan }}</option>
-                                                </select>
+                                               <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                                    </div>
+                                                    <date-picker
+                                                        v-model="search.start"
+                                                        :config="options"
+                                                        class="form-control"
+                                                        placeholder="Awal Tanggal SP2D"
+                                                        autocomplete="off">
+                                                    </date-picker>
+                                                </div>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <select v-model="search.belanja" class="form-control">
-                                                    <option value="">Pilih Kode Belanja</option>
-                                                    <option v-for="val in this.belanja" :value="val.id" :key="val.id">{{ val.nama_belanja }}</option>
-                                                </select>
+                                               <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                                    </div>
+                                                    <date-picker
+                                                        v-model="search.end"
+                                                        :config="options"
+                                                        class="form-control"
+                                                        placeholder="Akhir Tanggal SP2D"
+                                                        autocomplete="off">
+                                                    </date-picker>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="input-group col-md-4">
-                                                <button type="submit" class="btn btn-success mr-sm-2"><i class="fa fa-search"></i> Cari Data</button>
-                                                <button type="button" v-on:click.prevent="clear" class="btn btn-info"><i class="fa fa-refresh"></i> Reset</button>
+                                                <button type="submit" class="btn btn-success mr-sm-2">
+                                                    <i class="fa fa-search"></i> Cari Data
+                                                </button>
+                                                <button type="button" v-on:click.prevent="clear" class="btn btn-info">
+                                                    <i class="fa fa-refresh"></i> Reset
+                                                </button>
                                             </div>
                                         </div>
-                                    </form> -->
+                                    </form>
                                 </div>
                             </div>
                         </transition>
@@ -152,12 +173,9 @@ export default {
             pelimpahan: {},
             total_penyerapan:0,
             search: {
-                kegiatan:'',
-                program:'',
-                belanja:''
+                q:'',
+                tgl_nota:''
             },
-            kegiatan:[],
-            belanja:[],
             alert: {
                 error:false,
                 empty:false,
@@ -169,6 +187,11 @@ export default {
                 total:0,
                 to:0,
                 from:0
+            },
+            options: {
+                format: 'YYYY-MM-DD',
+                useCurrent: false,
+                locale: 'id'
             },
             isLoading: false,
             showForm: false,
@@ -203,7 +226,7 @@ export default {
         anggaran_tersedia: function(belanja, tahun) {
             service.postData('./api/ajax/total_anggaran', {'tahun':tahun,'belanja':belanja})
             .then(response => {
-                return "<span class='label'>"+ response.total_anggaran +"</span>";
+                return "<span class='label'>" + response.total_anggaran + "</span>";
             })
             .catch(error => {
                 console.log(error);
@@ -247,7 +270,7 @@ export default {
             .then(response => {
                 if(response.status === 'ok') {
                     this.alert.delete = true;
-                    $('#dinasbop_delete_modal').modal('hide');
+                    $('#pelimpahan_delete_modal').modal('hide');
                     this.fetchData();
                     window.scroll({ top: 0, left: 0, behavior: 'smooth' });
                     setTimeout(() => this.alert.delete=false, 5000);
@@ -255,7 +278,7 @@ export default {
             }).catch(error => {
                 this.alert.delete = false;
                 this.alert.error = true;
-                $('#dinasbop_delete_modal').modal('hide');
+                $('#pelimpahan_delete_modal').modal('hide');
                 window.scroll({ top: 0, left: 0, behavior: 'smooth' });
                 this.fetchData();
                 console.log(error);

@@ -23,7 +23,9 @@ class Sp2dController extends Controller
     {
         try {
             $_q = ($request['q'] !== '') ? $request['q'] : '';
-            $sp2d = Sp2d::searchSp2d($_q)->orderBy('id', 'DESC')->paginate(10);
+            $_start = ($request['start'] !== '') ? $request['start'] : '';
+            $_end = ($request['end'] !== '') ? $request['end'] : '';
+            $sp2d = Sp2d::searchSp2d($_q)->searchAwalPeriode($_start)->searchAkhirPeriode($_end)->orderBy('id', 'DESC')->paginate(10);
             return response()->json($sp2d, 200);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);

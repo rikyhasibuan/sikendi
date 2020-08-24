@@ -118,7 +118,6 @@ export default {
         clearAlert() {
             this.alert.error = false;
             this.alert.save = false;
-            this.alert.duplicatedate = false;
             this.alert.validate = false;
         },
         onSubmit(evt) {
@@ -146,7 +145,7 @@ export default {
                 this.reset();
                 setTimeout(() => this.alert.save = false, 2000);
             } else if (result.status === 'duplicate') {
-                this.alert.duplicatedate = true;
+                this.alert.duplicate = true;
                 window.scroll({ top: 0, left: 0, behavior: 'smooth' });
             }
         },

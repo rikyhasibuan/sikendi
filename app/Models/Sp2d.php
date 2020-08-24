@@ -15,4 +15,18 @@ class Sp2d extends Model
             return $query->where('nomor_sp2d', 'LIKE', '%' . $q . '%');
         }
     }
+
+    public function scopeSearchAwalPeriode($query, $start_date)
+    {
+        if ($start_date != '') {
+            return $query->whereDate('tgl_sp2d', '>=', $start_date);
+        }
+    }
+
+    public function scopeSearchAkhirPeriode($query, $end_date)
+    {
+        if ($end_date != '') {
+            return $query->whereDate('tgl_sp2d', '<=', $end_date);
+        }
+    }
 }
