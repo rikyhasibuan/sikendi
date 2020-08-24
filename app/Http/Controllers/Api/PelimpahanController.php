@@ -28,7 +28,13 @@ class PelimpahanController extends Controller
     {
         try {
             $_q = ($request['q'] !== '') ? $request['q'] : '';
-            $pelimpahan = Pelimpahan::searchNotaDinas($_q)->orderBy('id', 'DESC')->paginate(10);
+            $_start = ($request['start'] !== '') ? $request['start'] : '';
+            $_end = ($request['end'] !== '') ? $request['end'] : '';
+            $pelimpahan = Pelimpahan::searchNotaDinas($_q)
+            ->searchAwalPeriode($_start)
+            ->searchAkhirPeriode($_end)
+            ->orderBy('id', 'DESC')
+            ->paginate(10);
             return response()->json($pelimpahan, 200);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
@@ -141,22 +147,17 @@ class PelimpahanController extends Controller
     {
         $parent = Pelimpahan::find($request['pelimpahan']);
         $pelimpahan = PelimpahanDetail::find($request['id']);
-
-        // ambil dulu data nominal lama
         $old_amount = $pelimpahan->jumlah_pelimpahan;
-
-        // kalau jenis pelimpahan yang lama sama dengan yang baru
         if ($pelimpahan->jenis_pelimpahan == $request->input('jenis_pelimpahan')) {
             if ($pelimpahan->jenis_pelimpahan == 'UP') {
-                $parent->up = $parent->up - $old_amount + $pelimpahan->jumlah_pelimpahan;
+                $parent->up = $parent->up - $old_amount + $request->input('jumlah_pelimpahan');
             } elseif ($pelimpahan->jenis_pelimpahan == 'GU') {
-                $parent->gu = $parent->gu - $old_amount + $pelimpahan->jumlah_pelimpahan;
+                $parent->gu = $parent->gu - $old_amount + $request->input('jumlah_pelimpahan');
             } elseif ($pelimpahan->jenis_pelimpahan == 'TU') {
-                $parent->tu = $parent->tu - $old_amount + $pelimpahan->jumlah_pelimpahan;
+                $parent->tu = $parent->tu - $old_amount + $request->input('jumlah_pelimpahan');
             } elseif ($pelimpahan->jenis_pelimpahan == 'LS') {
-                $parent->ls = $parent->ls - $old_amount + $pelimpahan->jumlah_pelimpahan;
+                $parent->ls = $parent->ls - $old_amount + $request->input('jumlah_pelimpahan');
             }
-        // ini kalau beda jenisnya.
         } else {
             if ($pelimpahan->jenis_pelimpahan == 'UP') {
                 $parent->up = $parent->up - $old_amount;
@@ -235,6 +236,7 @@ class PelimpahanController extends Controller
     {
         $pelimpahan = Pelimpahan::find($request['pelimpahan']);
         $detail = PelimpahanDetail::where('pelimpahan_id', $request['pelimpahan'])->get();
+
         foreach ($detail as $v) {
             $kegiatan = Kegiatan::where('bendahara', $v->bendahara)->get();
             $total_anggaran = 0;
@@ -259,6 +261,8 @@ class PelimpahanController extends Controller
             $sp2t->status = 0;
             $sp2t->save();
         }
+        $pelimpahan->status = 1;
+        $pelimpahan->save();
         return response()->json(['status' => 'ok'], 200);
     }
 

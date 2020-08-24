@@ -10,9 +10,15 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>Bendahara *</label>
-                                <select v-model="pelimpahan.bendahara" class="form-control" @change="onChangeBendahara" :class="{ 'is-invalid': validasi.bendahara }">
+                                <select 
+                                    v-model="pelimpahan.bendahara" 
+                                    class="form-control" 
+                                    @change="onChangeBendahara" 
+                                    :class="{ 'is-invalid': validasi.bendahara }">
                                     <option value="">Pilih Bendahara</option>
-                                    <option v-for="v in this.bendahara_data" :value="v.pegawai.id" :key="v.pegawai.id">{{ v.pegawai.nama }}</option>
+                                    <option v-for="v in this.bendahara_data" :value="v.pegawai.id" :key="v.pegawai.id">
+                                        {{ v.pegawai.nama }}
+                                    </option>
                                 </select>
                             </div>
                             <div class="form-group col-md-6">
@@ -39,7 +45,10 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label>Kategori Pelimpahan *</label>
-                                <select v-model="pelimpahan.jenis_pelimpahan" class="form-control" :class="{ 'is-invalid': validasi.jenis_pelimpahan }">
+                                <select 
+                                    v-model="pelimpahan.jenis_pelimpahan" 
+                                    class="form-control" 
+                                    :class="{ 'is-invalid': validasi.jenis_pelimpahan }">
                                     <option value="">Pilih Kategori Pelimpahan</option>
                                     <option value="UP">UP</option>
                                     <option value="GU">GU</option>
@@ -95,7 +104,6 @@ export default {
         clearAlert() {
             this.alert.error = false;
             this.alert.update = false;
-            this.alert.duplicatedate = false;
             this.alert.validate = false;
         },
         onChangeBendahara(evt) {
@@ -136,7 +144,6 @@ export default {
         validate() {
             let condition = 0;
             let callback = false;
-            
             if (this.pelimpahan.bendahara.length === 0) {
                 this.validasi.bendahara = true;
                 condition++;

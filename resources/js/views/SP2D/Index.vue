@@ -206,9 +206,9 @@ export default {
             this.showForm = !this.showForm
         },
         clear() {
-            this.search.kegiatan = '';
-            this.search.program = '';
-            this.search.belanja = '';
+            this.search.q = '';
+            this.search.start = '';
+            this.search.end = '';
             this.fetchData();
         },
         nextPage() {

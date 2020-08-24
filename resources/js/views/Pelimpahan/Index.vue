@@ -5,40 +5,61 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="pull-right">
-                            <button type="button" v-on:click.prevent="toggle" class="btn btn-info mb-2"><i class="fa fa-search"></i> Form Pencarian</button>
-                            <a v-if="access.write === 1" :href="route + '/create'" class="btn btn-success mb-2"><i class="fa fa-plus"></i> Tambah Data</a>
+                            <button type="button" v-on:click.prevent="toggle" class="btn btn-outline-info mb-2">
+                                <i class="fa fa-search"></i> Form Pencarian
+                            </button>
+                            <a v-if="access.write === 1" :href="route + '/create'" class="btn btn-success mb-2">
+                                <i class="fa fa-plus"></i> Tambah Data
+                            </a>
                         </div>
                         <transition name="fade">
                             <div class="card" style="margin-top:50px;" v-show="showForm">
-                                <div class="card-body table-responsive">
-                                    <!-- <form v-on:submit.prevent="fetchData()">
-                                        <div class="row">
-                                            <div class="form-group col-md-4">
-                                                <select v-model="search.program" @change="onChangeProgram($event)" class="form-control">
-                                                    <option value="">Pilih Program</option>
-                                                    <option v-for="val in this.program_data" :value="val.id" :key="val.id">{{ val.nama_program }}</option>
-                                                </select>
+                                <div class="card-body">
+                                    <form v-on:submit.prevent="fetchData()">
+                                       <div class="row">
+                                           <div class="form-group col-md-3">
+                                                <input type="text" class="form-control" v-model="search.q" placeholder="Nomor Nota Dinas">
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <select v-model="search.kegiatan" @change="onChangeKegiatan($event)" class="form-control">
-                                                    <option value="">Pilih Kegiatan</option>
-                                                    <option v-for="val in this.kegiatan" :value="val.id" :key="val.id">{{ val.nama_kegiatan }}</option>
-                                                </select>
+                                               <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                                    </div>
+                                                    <date-picker
+                                                        v-model="search.start"
+                                                        :config="options"
+                                                        class="form-control"
+                                                        placeholder="Awal Tanggal Nota Dinas"
+                                                        autocomplete="off">
+                                                    </date-picker>
+                                                </div>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <select v-model="search.belanja" class="form-control">
-                                                    <option value="">Pilih Kode Belanja</option>
-                                                    <option v-for="val in this.belanja" :value="val.id" :key="val.id">{{ val.nama_belanja }}</option>
-                                                </select>
+                                               <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                                    </div>
+                                                    <date-picker
+                                                        v-model="search.end"
+                                                        :config="options"
+                                                        class="form-control"
+                                                        placeholder="Akhir Tanggal Nota Dinas"
+                                                        autocomplete="off">
+                                                    </date-picker>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="input-group col-md-4">
-                                                <button type="submit" class="btn btn-success mr-sm-2"><i class="fa fa-search"></i> Cari Data</button>
-                                                <button type="button" v-on:click.prevent="clear" class="btn btn-info"><i class="fa fa-refresh"></i> Reset</button>
+                                                <button type="submit" class="btn btn-success mr-sm-2">
+                                                    <i class="fa fa-search"></i> Cari Data
+                                                </button>
+                                                <button type="button" v-on:click.prevent="clear" class="btn btn-info">
+                                                    <i class="fa fa-refresh"></i> Reset
+                                                </button>
                                             </div>
                                         </div>
-                                    </form> -->
+                                    </form>
                                 </div>
                             </div>
                         </transition>
@@ -53,9 +74,9 @@
                                         <tr>
                                             <th style="width:10%;text-align:center;vertical-align:middle;" rowspan="2">Nomor Nota Dinas</th>
                                             <th style="width:10%;text-align:center;vertical-align:middle;" rowspan="2">Tanggal Nota Dinas</th>
-                                            <th style="width:10%;text-align:center;vertical-align:middle;" colspan="4">Nilai Pelimpahan</th>
+                                            <th style="width:10%;text-align:center;vertical-align:middle;" colspan="4">Nilai Pelimpahan Uang</th>
                                             <th style="width:10%;text-align:center;vertical-align:middle;" rowspan="2">Jumlah Pelimpahan Uang</th>
-                                            <th style="width:10%;text-align:center;vertical-align:middle;" rowspan="2">Saldo Bank Bendahara Pengeluaran</th>
+                                            <th style="width:10%;text-align:center;vertical-align:middle;" rowspan="2">Sisa Anggaran di Bank BP</th>
                                             <th style="width:12%;text-align:center;vertical-align:middle;" rowspan="2">Action</th>
                                         </tr>
                                         <tr>
@@ -67,8 +88,12 @@
                                     </thead>
                                     <tbody>
                                         <tr v-for="v in pelimpahan" :key="v.id">
-                                            <td style="vertical-align: middle;"><a :href="route + '/detail?id=' + v.id">{{ v.nota_dinas }}</a></td>
-                                            <td style="text-align:center;vertical-align: middle;">{{ v.tgl_nota_dinas | moment }}</td>
+                                            <td style="vertical-align: middle;">
+                                                <a :href="route + '/detail?id=' + v.id">{{ v.nota_dinas }}</a>
+                                            </td>
+                                            <td style="text-align:center;vertical-align: middle;">
+                                                {{ v.tgl_nota_dinas | moment }}
+                                            </td>
                                             <td style="text-align:right;vertical-align: middle;">
                                                 Rp.{{ v.up | rupiah }}
                                             </td>
@@ -91,12 +116,16 @@
                                                     <a v-if="(v.status == 0 && access.update === 1)" :href="route + '/edit?id=' + v.id" class="btn btn-sm btn-warning mr-sm-1">
                                                         <i class="fa fa-wrench"></i> Ubah
                                                     </a>
-                                                    <button v-else class="btn btn-sm btn-warning disabled mr-sm-1"><i class="fa fa-wrench"></i> Ubah</button>
+                                                    <button v-else class="btn btn-sm btn-warning disabled mr-sm-1">
+                                                        <i class="fa fa-wrench"></i> Ubah
+                                                    </button>
                                                     <a v-if="(v.status == 0 && access.delete === 1)" href="#" @click="toggleModal(v.id)"
                                                         class="btn btn-sm btn-danger">
                                                         <i class="fa fa-trash-o"></i> Hapus
                                                     </a>
-                                                    <button v-else class="btn btn-sm btn-danger disabled"><i class="fa fa-trash-o"></i> Hapus</button>
+                                                    <button v-else class="btn btn-sm btn-danger disabled">
+                                                        <i class="fa fa-trash-o"></i> Hapus
+                                                    </button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -133,12 +162,15 @@ export default {
             pelimpahan: {},
             total_penyerapan:0,
             search: {
-                kegiatan:'',
-                program:'',
-                belanja:''
+                q:'',
+                start:'',
+                end:''
             },
-            kegiatan:[],
-            belanja:[],
+            options: {
+                format: 'YYYY-MM-DD',
+                useCurrent: false,
+                locale: 'id'
+            },
             alert: {
                 error:false,
                 empty:false,
@@ -164,9 +196,9 @@ export default {
             this.showForm = !this.showForm
         },
         clear() {
-            this.search.kegiatan = '';
-            this.search.program = '';
-            this.search.belanja = '';
+            this.search.q = '';
+            this.search.start = '';
+            this.search.end = '';
             this.fetchData();
         },
         nextPage() {
@@ -228,7 +260,7 @@ export default {
             .then(response => {
                 if(response.status === 'ok') {
                     this.alert.delete = true;
-                    $('#dinasbop_delete_modal').modal('hide');
+                    $('#pelimpahan_delete_modal').modal('hide');
                     this.fetchData();
                     window.scroll({ top: 0, left: 0, behavior: 'smooth' });
                     setTimeout(() => this.alert.delete=false, 5000);
@@ -236,7 +268,7 @@ export default {
             }).catch(error => {
                 this.alert.delete = false;
                 this.alert.error = true;
-                $('#dinasbop_delete_modal').modal('hide');
+                $('#pelimpahan_delete_modal').modal('hide');
                 window.scroll({ top: 0, left: 0, behavior: 'smooth' });
                 this.fetchData();
                 console.log(error);
