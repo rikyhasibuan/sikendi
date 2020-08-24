@@ -29,38 +29,40 @@
                                 </div>
                             </transition>
                         </div>
-                        <div class="card-body table-responsive">
+                        <div class="card-body">
                             <v-alert :alert="alert"></v-alert>
                             <loading :opacity="100" :active.sync="isLoading" :can-cancel="false" :is-full-page="false"></loading>
                             <transition name="fade">
-                                <table class="table table-hover table-striped table-bordered" v-if="showTable == true">
-                                    <thead>
-                                        <tr>
-                                            <th style="width:10%; text-align:center;">Kode Program</th>
-                                            <th style="width:50%; text-align:center;">Nama Program</th>
-                                            <th style="width:10%; text-align:center;">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="v in program" :key="v.id">
-                                            <td>{{ v.kode_program }}</td>
-                                            <td>{{ v.nama_program }}</td>
-                                            <td>
-                                                <div style="text-align: center;">
-                                                    <a v-if="(access.update === 1)" :href="route + '/edit?id=' + v.id" class="btn btn-sm btn-warning mr-sm-1">
-                                                        <i class="fa fa-wrench"></i> Ubah
-                                                    </a>
-                                                    <button v-else class="btn btn-sm btn-warning disabled mr-sm-1"><i class="fa fa-wrench"></i> Ubah</button>
-                                                    <a v-if="(access.delete === 1)" href="#" @click="toggleModal(v.id)"
-                                                        class="btn btn-sm btn-danger">
-                                                        <i class="fa fa-trash-o"></i> Hapus
-                                                    </a>
-                                                    <button v-else class="btn btn-sm btn-danger disabled"><i class="fa fa-trash-o"></i> Hapus</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-striped table-bordered" v-if="showTable == true">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:10%; text-align:center;">Kode Program</th>
+                                                <th style="width:50%; text-align:center;">Nama Program</th>
+                                                <th style="width:10%; text-align:center;">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="v in program" :key="v.id">
+                                                <td>{{ v.kode_program }}</td>
+                                                <td>{{ v.nama_program }}</td>
+                                                <td>
+                                                    <div style="text-align: center;">
+                                                        <a v-if="(access.update === 1)" :href="route + '/edit?id=' + v.id" class="btn btn-sm btn-warning mr-sm-1">
+                                                            <i class="fa fa-wrench"></i> Ubah
+                                                        </a>
+                                                        <button v-else class="btn btn-sm btn-warning disabled mr-sm-1"><i class="fa fa-wrench"></i> Ubah</button>
+                                                        <a v-if="(access.delete === 1)" href="#" @click="toggleModal(v.id)"
+                                                            class="btn btn-sm btn-danger">
+                                                            <i class="fa fa-trash-o"></i> Hapus
+                                                        </a>
+                                                        <button v-else class="btn btn-sm btn-danger disabled"><i class="fa fa-trash-o"></i> Hapus</button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </transition>
 
                             <transition name="fade"><v-delete :element="'program_delete_modal'" :id="id" @delete="deleteData"></v-delete></transition>

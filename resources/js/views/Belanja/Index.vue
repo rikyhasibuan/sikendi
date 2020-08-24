@@ -14,7 +14,7 @@
                                     <form v-on:submit.prevent="fetchData()">
                                         <div class="row">
                                             <div class="form-group col-md-4">
-                                                <input type="text" class="form-control" v-model="search.q" placeholder="Kode Kegiatan / Nama Kegiatan">
+                                                <input type="text" class="form-control" v-model="search.q" placeholder="Kode Belanja / Nama Belanja">
                                             </div>
                                             <div class="form-group col-md-4">
                                                 <select v-model="search.program" class="form-control" @change="onChangeProgram($event)">
@@ -40,42 +40,44 @@
                             </div>
                         </transition>
                     </div>
-                    <div class="card-body table-responsive">
+                    <div class="card-body">
                         <v-alert :alert="alert"></v-alert>
                         <loading :opacity="100" :active.sync="isLoading" :can-cancel="false" :is-full-page="false"></loading>
                         <transition name="fade">
-                            <table class="table table-hover table-striped table-bordered" v-if="showTable === true">
-                                <thead>
-                                    <tr>
-                                        <th style="width:20%; text-align:center;">Program</th>
-                                        <th style="width:20%; text-align:center;">Kegiatan</th>
-                                        <th style="width:3%; text-align:center;">Kode Belanja</th>
-                                        <th style="width:15%; text-align:center;">Nama Belanja</th>
-                                        <th style="width:10%; text-align:center;">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="v in belanja" :key="v.id">
-                                        <td>{{ v.program.nama_program }}</td>
-                                        <td>{{ v.kegiatan.nama_kegiatan }}</td>
-                                        <td>{{ v.kode_belanja }}</td>
-                                        <td>{{ v.nama_belanja }}</td>
-                                        <td>
-                                            <div style="text-align: center;">
-                                                <a v-if="(access.update === 1)" :href="route + '/edit?id=' + v.id" class="btn btn-sm btn-warning mr-sm-1">
-                                                    <i class="fa fa-wrench"></i> Ubah
-                                                </a>
-                                                <button v-else class="btn btn-sm btn-warning disabled mr-sm-1"><i class="fa fa-wrench"></i> Ubah</button>
-                                                <a v-if="(access.delete === 1)" href="#" @click="toggleModal(v.id)"
-                                                    class="btn btn-sm btn-danger">
-                                                    <i class="fa fa-trash-o"></i> Hapus
-                                                </a>
-                                                <button v-else class="btn btn-sm btn-danger disabled"><i class="fa fa-trash-o"></i> Hapus</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div class="table-responsive">
+                                <table class="table table-hover table-striped table-bordered" v-if="showTable === true">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:20%; text-align:center;">Program</th>
+                                            <th style="width:20%; text-align:center;">Kegiatan</th>
+                                            <th style="width:3%; text-align:center;">Kode Belanja</th>
+                                            <th style="width:15%; text-align:center;">Nama Belanja</th>
+                                            <th style="width:10%; text-align:center;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="v in belanja" :key="v.id">
+                                            <td>{{ v.program.nama_program }}</td>
+                                            <td>{{ v.kegiatan.nama_kegiatan }}</td>
+                                            <td>{{ v.kode_belanja }}</td>
+                                            <td>{{ v.nama_belanja }}</td>
+                                            <td>
+                                                <div style="text-align: center;">
+                                                    <a v-if="(access.update === 1)" :href="route + '/edit?id=' + v.id" class="btn btn-sm btn-warning mr-sm-1">
+                                                        <i class="fa fa-wrench"></i> Ubah
+                                                    </a>
+                                                    <button v-else class="btn btn-sm btn-warning disabled mr-sm-1"><i class="fa fa-wrench"></i> Ubah</button>
+                                                    <a v-if="(access.delete === 1)" href="#" @click="toggleModal(v.id)"
+                                                        class="btn btn-sm btn-danger">
+                                                        <i class="fa fa-trash-o"></i> Hapus
+                                                    </a>
+                                                    <button v-else class="btn btn-sm btn-danger disabled"><i class="fa fa-trash-o"></i> Hapus</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </transition>
 
                         <transition name="fade">

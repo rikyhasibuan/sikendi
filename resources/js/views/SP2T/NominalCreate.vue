@@ -10,9 +10,9 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>Bendahara *</label>
-                                <select v-model="pelimpahan.bendahara" class="form-control" :class="{ 'is-invalid': pelimpahan.bendahara }">
+                                <select v-model="pelimpahan.bendahara" class="form-control" @change="onChangeBendahara" :class="{ 'is-invalid': validasi.bendahara }">
                                     <option value="">Pilih Bendahara</option>
-                                    <option v-for="v in this.bendahara_data" :value="v.nip" :key="v.nip">{{ v.nama }}</option>
+                                    <option v-for="v in this.bendahara_data" :value="v.pegawai.id" :key="v.pegawai.id">{{ v.pegawai.nama }}</option>
                                 </select>
                             </div>
                             <div class="form-group col-md-6">
@@ -23,7 +23,6 @@
                                   class="form-control"
                                   placeholder="Sisa Anggaran Kegiatan BPP keseluruhan"
                                   v-model="pelimpahan.sisa_anggaran"
-                                  :class="{ 'is-invalid': validasi.sisa_anggaran }"
                                 >
                             </div>
                         </div>
@@ -40,7 +39,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label>Kategori Pelimpahan *</label>
-                                <select v-model="pelimpahan.jenis_pelimpahan" class="form-control" :class="{ 'is-invalid': pelimpahan.bendahara }">
+                                <select v-model="pelimpahan.jenis_pelimpahan" class="form-control" :class="{ 'is-invalid': validasi.jenis_pelimpahan }">
                                     <option value="">Pilih Kategori Pelimpahan</option>
                                     <option value="UP">UP</option>
                                     <option value="GU">GU</option>
@@ -76,7 +75,6 @@ export default {
             },
             validasi: {
                 'bendahara': '',
-                'sisa_anggaran': '',
                 'jenis_pelimpahan': '',
                 'jumlah_pelimpahan': ''
             },
@@ -106,13 +104,26 @@ export default {
             this.alert.duplicatedate = false;
             this.alert.validate = false;
         },
+        onChangeBendahara(evt) {
+            const bendahara = evt.target.value;
+            service.fetchData('./../../api/ajax/anggaran/bendahara/' + bendahara)
+            .then(response => {
+                this.pelimpahan.sisa_anggaran = response;
+            })
+            .catch(error => {
+                console.log(error);
+            });
+        },
         onSubmit(evt) {
             evt.preventDefault();
             this.clearAlert();
             let validasi = this.validate();
             if (validasi === true) {
                 this.isLoading = true;
-                service.postData(this.api, this.pelimpahan)
+                if (this.pelimpahan.sisa_anggaran < this.pelimpahan.jumlah_pelimpahan) {
+                    window.alert('Jumlah Sisa Anggaran BPP Dibawah Jumlah Pelimpahan');
+                } else {
+                    service.postData(this.api, this.pelimpahan)
                     .then(result => {
                         this.response(result);
                     }).catch(error => {
@@ -121,6 +132,7 @@ export default {
                         window.scroll({top: 0, left: 0, behavior: 'smooth'});
                         console.log(error);
                     });
+                }
             }
         },
         response(result) {
@@ -136,33 +148,34 @@ export default {
             }
         },
         reset() {
-            this.pelimpahan.tahun_anggaran = '';
-            this.pelimpahan.nota_dinas = '';
-            this.pelimpahan.tgl_nota_dinas = '';
+            this.pelimpahan.bendahara = '';
+            this.pelimpahan.jumlah_pelimpahan = '';
+            this.pelimpahan.jenis_pelimpahan = '';
+            this.pelimpahan.sisa_anggaran = '';
         },
         validate() {
             let condition = 0;
             let callback = false;
             
-            if (this.pelimpahan.tahun_anggaran.length === 0) {
-                this.validasi.tahun_anggaran = true;
+            if (this.pelimpahan.bendahara.length === 0) {
+                this.validasi.bendahara = true;
                 condition++;
             } else {
-                this.validasi.tahun_anggaran = false;
+                this.validasi.bendahara = false;
             }
 
-            if (this.pelimpahan.nota_dinas.length === 0) {
-                this.validasi.nota_dinas = true;
+            if (this.pelimpahan.jenis_pelimpahan.length === 0) {
+                this.validasi.jenis_pelimpahan = true;
                 condition++;
             } else {
-                this.validasi.nota_dinas = false;
+                this.validasi.jenis_pelimpahan = false;
             }
 
-            if (this.pelimpahan.tgl_nota_dinas.length === 0) {
-                this.validasi.tgl_nota_dinas = true;
+            if (this.pelimpahan.jumlah_pelimpahan.length === 0) {
+                this.validasi.jumlah_pelimpahan = true;
                 condition++;
             } else {
-                this.validasi.tgl_nota_dinas = false;
+                this.validasi.jumlah_pelimpahan = false;
             }
 
             if (condition > 0) {

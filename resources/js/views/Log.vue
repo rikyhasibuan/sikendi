@@ -46,26 +46,28 @@
                                 </div>
                             </transition>
                         </div>
-                        <div class="card-body table-responsive">
+                        <div class="card-body">
                             <v-alert :alert="alert"></v-alert>
                             <loading :opacity="100" :active.sync="isLoading" :can-cancel="false" :is-full-page="false"></loading>
                             <transition name="fade">
-                                <table class="table table-hover table-striped table-bordered" v-if="showTable == true">
-                                    <thead>
-                                        <tr>
-                                            <th style="width:25%; text-align: center;">Halaman</th>
-                                            <th style="width:50%; text-align: center;">Aktifitas</th>
-                                            <th style="width:15%; text-align: center;">Tanggal</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="v in log" :key="v.id">
-                                            <td>{{ v.page }}</td>
-                                            <td><span v-html="v.message"></span></td>
-                                            <td style="text-align: center;">{{ v.created_at | long_moment }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-striped table-bordered" v-if="showTable == true">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:25%; text-align: center;">Halaman</th>
+                                                <th style="width:50%; text-align: center;">Aktifitas</th>
+                                                <th style="width:15%; text-align: center;">Tanggal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="v in log" :key="v.id">
+                                                <td>{{ v.page }}</td>
+                                                <td><span v-html="v.message"></span></td>
+                                                <td style="text-align: center;">{{ v.created_at | long_moment }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </transition>
 
                             <transition name="fade">

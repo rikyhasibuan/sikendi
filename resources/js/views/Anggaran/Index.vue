@@ -51,44 +51,46 @@
                             </div>
                         </transition>
                     </div>
-                    <div class="card-body table-responsive">
+                    <div class="card-body">
                         <v-alert :alert="alert"></v-alert>
                         <loading :opacity="100" :active.sync="isLoading" :can-cancel="false" :is-full-page="false"></loading>
                         <transition name="fade">
-                            <table class="table table-hover table-striped table-bordered" v-if="showTable == true">
-                                <thead>
-                                    <tr>
-                                        <th style="width:15%; text-align:center;">Program</th>
-                                        <th style="width:15%; text-align:center;">Kegiatan</th>
-                                        <th style="width:5%; text-align:center;">Belanja</th>
-                                        <th style="width:5%; text-align:center;">Nominal (Rp)</th>
-                                        <th style="width:5%; text-align:center;">Tahun</th>
-                                        <th style="width:10%; text-align:center;">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="v in anggaran" :key="v.id">
-                                        <td>{{ v.program.nama_program }}</td>
-                                        <td>{{ v.kegiatan.nama_kegiatan }}</td>
-                                        <td>{{ v.belanja.kode_belanja }}</td>
-                                        <td style="text-align:right;">{{ v.jumlah | rupiah }}</td>
-                                        <td style="text-align:center;">{{ v.tahun }}</td>
-                                        <td>
-                                            <div style="text-align: center;">
-                                                <a v-if="(access.update === 1)" :href="route + '/edit?id=' + v.id" class="btn btn-sm btn-warning mr-sm-1">
-                                                    <i class="fa fa-wrench"></i> Ubah
-                                                </a>
-                                                <button v-else class="btn btn-sm btn-warning disabled mr-sm-1"><i class="fa fa-wrench"></i> Ubah</button>
-                                                <a v-if="(access.delete === 1)" href="#" @click="toggleModal(v.id)"
-                                                    class="btn btn-sm btn-danger">
-                                                    <i class="fa fa-trash-o"></i> Hapus
-                                                </a>
-                                                <button v-else class="btn btn-sm btn-danger disabled"><i class="fa fa-trash-o"></i> Hapus</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            <div class="table-responsive">
+                                <table class="table table-hover table-striped table-bordered" v-if="showTable == true">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:15%; text-align:center;">Program</th>
+                                            <th style="width:15%; text-align:center;">Kegiatan</th>
+                                            <th style="width:5%; text-align:center;">Belanja</th>
+                                            <th style="width:5%; text-align:center;">Nominal (Rp)</th>
+                                            <th style="width:5%; text-align:center;">Tahun</th>
+                                            <th style="width:10%; text-align:center;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="v in anggaran" :key="v.id">
+                                            <td>{{ v.program.nama_program }}</td>
+                                            <td>{{ v.kegiatan.nama_kegiatan }}</td>
+                                            <td>{{ v.belanja.kode_belanja }}</td>
+                                            <td style="text-align:right;">{{ v.jumlah | rupiah }}</td>
+                                            <td style="text-align:center;">{{ v.tahun }}</td>
+                                            <td>
+                                                <div style="text-align: center;">
+                                                    <a v-if="(access.update === 1)" :href="route + '/edit?id=' + v.id" class="btn btn-sm btn-warning mr-sm-1">
+                                                        <i class="fa fa-wrench"></i> Ubah
+                                                    </a>
+                                                    <button v-else class="btn btn-sm btn-warning disabled mr-sm-1"><i class="fa fa-wrench"></i> Ubah</button>
+                                                    <a v-if="(access.delete === 1)" href="#" @click="toggleModal(v.id)"
+                                                        class="btn btn-sm btn-danger">
+                                                        <i class="fa fa-trash-o"></i> Hapus
+                                                    </a>
+                                                    <button v-else class="btn btn-sm btn-danger disabled"><i class="fa fa-trash-o"></i> Hapus</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </transition>
 
                         <transition name="fade"><v-delete :element="'anggaran_delete_modal'" :id="id" @delete="deleteData"></v-delete></transition>

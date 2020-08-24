@@ -30,24 +30,26 @@
                                 </div>
                             </transition>
                         </div>
-                        <div class="card-body table-responsive">
+                        <div class="card-body">
                             <v-alert :alert="alert"></v-alert>
                             <loading :opacity="100" :active.sync="isLoading" :can-cancel="false" :is-full-page="false"></loading>
                             <transition name="fade">
-                                <table class="table table-hover table-striped table-bordered" v-if="showTable == true">
-                                    <thead>
-                                        <tr>
-                                            <th style="width:25%; text-align: center;">Nama Penerima</th>
-                                            <th style="width:50%; text-align: center;">Nomor Rekening</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="v in penerima" :key="v.id">
-                                            <td>{{ v.nama_penerima }}</td>
-                                            <td>{{ v.norek }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-striped table-bordered" v-if="showTable == true">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:25%; text-align: center;">Nama Penerima</th>
+                                                <th style="width:50%; text-align: center;">Nomor Rekening</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="v in penerima" :key="v.id">
+                                                <td>{{ v.nama_penerima }}</td>
+                                                <td>{{ v.norek }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </transition>
 
                             <transition name="fade">

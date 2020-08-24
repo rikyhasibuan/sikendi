@@ -24,13 +24,11 @@ class PegawaiController extends Controller
             $_pangkat = ($request['pangkat'] !== '') ? $request['pangkat'] : '';
             $_golongan = ($request['golongan'] !== '') ? $this->_common->join_golongan($request['golongan']) : '';
             $_jabatan = ($request['jabatan'] !== '') ? $request['jabatan'] : '';
-            $_eselon = ($request['eselon'] !== '') ? $request['eselon'] : '';
 
             $pegawai = Pegawai::searchPegawai($_query)
                         ->searchPangkat($_pangkat)
                         ->searchGolongan($_golongan)
                         ->searchJabatan($_jabatan)
-                        ->searchEselon($_eselon)
                         ->orderBy('id', 'DESC')
                         ->paginate(10);
 

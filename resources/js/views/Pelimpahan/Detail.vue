@@ -133,6 +133,8 @@
                         </div> -->
                     </div>
                     <a :href="route" class="btn btn-danger"><i class="fa fa-arrow-left"></i> Kembali</a>
+                    &nbsp;&nbsp;
+                    <a href="#" class="btn btn-warning" @click="sendPelimpahan()"><i class="fa fa-envelope"></i> Kirim Data</a>
                 </div>
             </div>
         </div>
@@ -164,9 +166,33 @@
             'route',
             'print_action',
             'access',
-            'api'
+            'api',
+            'send_api'
         ],
         methods: {
+            sendPelimpahan() {
+                service.postData(this.send_api)
+                .then(response => {
+                    if(response.status === 'ok') {
+                        /*this.alert.delete = true;*/
+                        alert('sukses');
+                        location.reload();
+                       /* window.scroll({ top: 0, left: 0, behavior: 'smooth' });
+                        setTimeout(function() {
+                            this.alert.delete=false;
+                            location.reload();
+                        }, 1000);*/
+                    } else {
+                        alert('error');
+                    }
+                }).catch(error => {
+                    this.alert.delete = false;
+                    this.alert.error = true;
+                    $('#pelimpahandetail_delete_modal').modal('hide');
+                    window.scroll({ top: 0, left: 0, behavior: 'smooth' });
+                    console.log(error);
+                });
+            },
             deleteData(id) {
                 service.deleteData(this.api + '&id=' + id)
                 .then(response => {

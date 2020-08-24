@@ -23,10 +23,10 @@ class UserController extends Controller
             $_status = isset($request['status']) ?  $request['status'] : '';
             $_level = isset($request['level']) ?  $request['level'] : '';
             $user = User::searchNotAdmin()
-                        ->searchUser($_query)
+                        ->searchPegawai($_query)
                         ->searchLevel($_level)
                         ->searchStatus($_status)
-                        ->with('level','pegawai')
+                        ->with('level', 'pegawai')
                         ->orderBy('id', 'DESC')
                         ->paginate(10);
 

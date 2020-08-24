@@ -82,6 +82,17 @@ Route::delete('pelimpahan', 'Api\PelimpahanController@delete_data');
 Route::post('pelimpahan/nominal', 'Api\PelimpahanController@post_nominal_data');
 Route::put('pelimpahan/nominal', 'Api\PelimpahanController@put_nominal_data');
 Route::delete('pelimpahan/nominal', 'Api\PelimpahanController@delete_nominal_data');
+Route::post('pelimpahan/nominal/send', 'Api\PelimpahanController@send_nominal_data');
+
+// Sp2t
+Route::get('sp2t', 'Api\Sp2tController@get_data');
+Route::get('sp2t/{id}', 'Api\Sp2tController@show_data');
+Route::post('sp2t', 'Api\Sp2tController@post_data');
+Route::put('sp2t', 'Api\Sp2tController@put_data');
+Route::delete('sp2t', 'Api\Sp2tController@delete_data');
+Route::post('sp2t/nominal', 'Api\Sp2tController@post_nominal_data');
+Route::put('sp2t/nominal', 'Api\Sp2tController@put_nominal_data');
+Route::delete('sp2t/nominal', 'Api\Sp2tController@delete_nominal_data');
 
 // Rekening Penerima
 Route::get('penerima', 'Api\PenerimaController@get_data');

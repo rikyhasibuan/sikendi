@@ -69,3 +69,11 @@ Route::get('pelimpahan/edit', 'Web\PelimpahanController@edit');
 Route::get('pelimpahan/detail', 'Web\PelimpahanController@detail');
 Route::get('pelimpahan/nominal/create', 'Web\PelimpahanController@create_nominal');
 Route::get('pelimpahan/nominal/edit', 'Web\PelimpahanController@edit_nominal');
+
+// SP2T
+Route::get('sp2t', 'Web\Sp2tController@index');
+Route::get('sp2t/create', 'Web\Sp2tController@create');
+Route::get('sp2t/edit', 'Web\Sp2tController@edit');
+Route::get('sp2t/detail', 'Web\Sp2tController@detail');
+Route::get('sp2t/nominal/create', 'Web\Sp2tController@create_nominal');
+Route::get('sp2t/nominal/edit', 'Web\Sp2tController@edit_nominal');
