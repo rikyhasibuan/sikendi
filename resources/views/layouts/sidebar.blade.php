@@ -1,5 +1,5 @@
-<aside class="main-sidebar sidebar-dark-warning elevation-2">
-    <a href="#" class="brand-link">
+<aside class="main-sidebar sidebar-dark-orange elevation-4">
+    <a href="#" class="brand-link navbar-gray-dark">
         <span class="brand">SIKENDI</span>
         <!-- <span class="brand-text font-weight-light">Inspektorat</span> -->
     </a>
@@ -23,7 +23,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{!! url('sp2d') !!}">
                                 <i class="nav-icon fa fa-circle-o"></i>
-                                <p>Surat Perintah Pencairan Dana</p>
+                                <p>SP2D</p>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -35,7 +35,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{!! url('pencairan') !!}">
                                 <i class="nav-icon fa fa-circle-o"></i>
-                                <p>Surat Perintah Pembayaran Transfer</p>
+                                <p>SP2T</p>
                             </a>
                         </li>
                     </ul>
