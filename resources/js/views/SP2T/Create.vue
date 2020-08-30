@@ -87,6 +87,7 @@
                                     type="text" 
                                     class="form-control" 
                                     placeholder="Nominal" 
+                                    :change="onChangeBruto()"
                                     v-model="sp2t.nominalbruto"
                                     :class="{ 'is-invalid': validasi.nominalbruto }"
                                 />
@@ -95,31 +96,31 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>PPN *</label>
-                                <money type="text" class="form-control" v-model="sp2t.ppn" />
+                                <money type="text" :change="onChangePpn()" class="form-control" v-model="sp2t.ppn" />
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>PPh Pasal 22 *</label>
-                                <money type="text" class="form-control" v-model="sp2t.pph22" />
+                                <money type="text" :change="onChangePph22()" class="form-control" v-model="sp2t.pph22" />
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>PPh Final Pasal 4 ayat 2 *</label>
-                                <money type="text" class="form-control" v-model="sp2t.pph4" />
+                                <money type="text" :change="onChangePph4()" class="form-control" v-model="sp2t.pph4" />
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>PPh Pasal 21 *</label>
-                                <money type="text" class="form-control" v-model="sp2t.pph21" />
+                                <money type="text" :change="onChangePph21()" class="form-control" v-model="sp2t.pph21" />
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>PPh Pasal 23 *</label>
-                                <money type="text" class="form-control" v-model="sp2t.pph23" />
+                                <money type="text" :change="onChangePph23()" class="form-control" v-model="sp2t.pph23" />
                             </div>
                         </div>
                         <div class="row">
@@ -202,6 +203,24 @@ export default {
         'route'
     ],
     methods: {
+        onChangeBruto() {
+            this.sp2t.nominal_transfer = this.sp2t.nominalbruto;
+        },
+        onChangePpn() {
+            // this.sp2t.nominal_transfer = this.sp2t.nominalbruto - this.sp2t.ppn;
+        },
+        onChangePph21() {
+            // this.sp2t.nominal_transfer = this.sp2t.nominalbruto - this.sp2t.ppn - this.sp2t.pph21;
+        },
+        onChangePph22() {
+            // this.sp2t.nominal_transfer = this.sp2t.nominalbruto - this.sp2t.ppn - this.sp2t.pph21 - this.sp2t.pph22;
+        },
+        onChangePph23() {
+            // this.sp2t.nominal_transfer = this.sp2t.nominalbruto - this.sp2t.ppn - this.sp2t.pph21 - this.sp2t.pph23;
+        },
+        onChangePph4() {
+            // this.sp2t.nominal_transfer = this.sp2t.nominalbruto - this.sp2t.ppn - this.sp2t.pph21 - this.sp2t.pph4;
+        },
         getNamaPenerimaSp2t(query) {
             service.fetchData('../api/ajax/penerimasp2t/' + query)
             .then(response => {

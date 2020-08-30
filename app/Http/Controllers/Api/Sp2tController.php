@@ -75,7 +75,10 @@ class Sp2tController extends Controller
 
     public function post_nominal_data(Request $request)
     {
-        $parent = Pelimpahan::find($request['pelimpahan']);
+        echo "<pre>";
+        print_r($request);
+        exit;
+        /*$parent = Pelimpahan::find($request['pelimpahan']);
         $pelimpahan = new PelimpahanDetail();
         $pelimpahan->pelimpahan_id = $request['pelimpahan'];
         $pelimpahan->bendahara = $request->input('bendahara');
@@ -104,7 +107,7 @@ class Sp2tController extends Controller
             return response()->json(['status'=>'ok'], 200);
         } else {
             return response()->json(['status'=>'failed'], 500);
-        }
+        }*/
     }
 
     public function put_nominal_data(Request $request)

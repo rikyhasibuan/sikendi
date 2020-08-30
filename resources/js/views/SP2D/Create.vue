@@ -44,14 +44,14 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>Jumlah SP2D *</label>
-                                <input type="text" class="form-control" placeholder="Jumlah SP2D" v-model="sp2d.jumlah_sp2d" :class="{ 'is-invalid': validasi.jumlah_sp2d }">
+                                <money type="text" v-model="sp2d.jumlah_sp2d" class="form-control" :class="{ 'is-invalid': validasi.jumlah_sp2d }" />
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>Kategori SP2D *</label>
                                 <select v-model="sp2d.jenis_sp2d" class="form-control" :class="{ 'is-invalid': validasi.jenis_sp2d }">
-                                    <option value="">Pilih Kategori SPD2D</option>
+                                    <option value="">Pilih Kategori SP2D</option>
                                     <option v-for="(v,k) in this.jenis_sp2d" :value="v" :key="k">{{ v }}</option>
                                 </select>
                             </div>
@@ -93,7 +93,7 @@ export default {
                 'UP': 'UP',
                 'GU': 'GU',
                 'TU': 'TU',
-                'LS': 'TU'
+                'LS': 'LS'
             },
             options: {
                 format: 'YYYY-MM-DD',
