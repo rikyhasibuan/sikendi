@@ -242,24 +242,30 @@ class PelimpahanController extends Controller
             $total_anggaran = 0;
             $kegiatan_list = [];
             
-            foreach ($kegiatan as $v) {
-                $kegiatan_list[] = $v->id;
+            foreach ($kegiatan as $k) {
+                $kegiatan_list[] = $k->id;
             }
 
             $pdetail = PelimpahanDetail::where('bendahara', $v->bendahara)->sum('jumlah_pelimpahan');
             $anggaran = Anggaran::whereIn('kegiatan_id', $kegiatan_list)->sum('jumlah');
             $total_anggaran = $anggaran - $pdetail;
 
-            $sp2t = new Sp2t();
-            $sp2t->nota_dinas = $pelimpahan->nota_dinas;
-            $sp2t->tgl_nota_dinas = $pelimpahan->tgl_nota_dinas;
-            $sp2t->bendahara = $v->bendahara;
-            $sp2t->jumlah_pelimpahan = $v->jumlah_pelimpahan;
-            $sp2t->sisa_pelimpahan = $v->jumlah_pelimpahan;
-            $sp2t->sisa_anggaran = $total_anggaran;
-            $sp2t->jumlah_transfer = 0;
-            $sp2t->status = 0;
-            $sp2t->save();
+            Sp2t::updateOrCreate(
+                [
+                    'nota_dinas' => $pelimpahan->nota_dinas,
+                    'tgl_nota_dinas' => $pelimpahan->tgl_nota_dinas,
+                    'bendahara' => $v->bendahara,
+                    'jumlah_pelimpahan' => $v->jumlah_pelimpahan,
+                    'status' => 0
+                ],
+                [
+                    'jumlah_transfer' => 0,
+                    'jumlah_pelimpahan' => $v->jumlah_pelimpahan,
+                    'sisa_pelimpahan' => $v->jumlah_pelimpahan,
+                    'sisa_anggaran' => $total_anggaran,
+                    'status' => 0
+                ]
+            );
         }
         $pelimpahan->status = 1;
         $pelimpahan->save();

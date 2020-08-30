@@ -5,8 +5,18 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="pull-right">
-                            <button type="button" v-on:click.prevent="toggle" class="btn btn-outline-info mb-2"><i class="fa fa-search"></i> Form Pencarian</button>
-                            <a v-if="access.write === 1" :href="route + '/create'" class="btn btn-success mb-2"><i class="fa fa-plus"></i> Tambah Data</a>
+                            <button 
+                                type="button" 
+                                v-on:click.prevent="toggle" 
+                                class="btn btn-outline-info mb-2">
+                                <i class="fa fa-search"></i> Form Pencarian
+                            </button>
+                            <a 
+                                v-if="access.write === 1" 
+                                :href="route + '/create'" 
+                                class="btn btn-success mb-2">
+                                <i class="fa fa-plus"></i> Tambah Data
+                            </a>
                         </div>
                         <transition name="fade">
                             <div class="card" style="margin-top:50px;" v-show="showForm">
@@ -17,28 +27,54 @@
                                                 <input type="text" class="form-control" v-model="search.q" placeholder="NAMA / NIP">
                                             </div>
                                             <div class="form-group col-md-2">
-                                                <select v-model="search.golongan" class="form-control">
+                                                <select 
+                                                    v-model="search.golongan" 
+                                                    class="form-control">
                                                     <option value="">Pilih Golongan</option>
-                                                    <option v-for="(k,v) in this.golongan_data" :value="k" :key="k">{{ v }}</option>
+                                                    <option 
+                                                        v-for="(k,v) in this.golongan_data" 
+                                                        :value="k" 
+                                                        :key="k">
+                                                        {{ v }}
+                                                    </option>
                                                 </select>
                                             </div>
                                             <div class="form-group col-md-2">
                                                 <select v-model="search.pangkat" class="form-control">
                                                     <option value="">Pilih Pangkat</option>
-                                                    <option v-for="v in this.pangkat_data" :value="v.nama_pangkat" :key="v.id">{{ v.nama_pangkat }}</option>
+                                                    <option 
+                                                        v-for="v in this.pangkat_data" 
+                                                        :value="v.nama_pangkat" 
+                                                        :key="v.id">
+                                                        {{ v.nama_pangkat }}
+                                                    </option>
                                                 </select>
                                             </div>
                                             <div class="form-group col-md-3">
                                                 <select v-model="search.jabatan" class="form-control">
                                                     <option value="">Pilih Jabatan</option>
-                                                    <option v-for="v in this.jabatan_data" :value="v.nama_jabatan" :key="v.id">{{ v.nama_jabatan }}</option>
+                                                    <option 
+                                                        v-for="v in this.jabatan_data" 
+                                                        :value="v.nama_jabatan" 
+                                                        :key="v.id">
+                                                        {{ v.nama_jabatan }}
+                                                    </option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="input-group col-md-4">
-                                                <button type="submit" class="btn btn-outline-success mr-sm-2"><i class="fa fa-search"></i> Cari Data</button>
-                                                <button type="button" v-on:click.prevent="clear" class="btn btn-outline-info"><i class="fa fa-refresh"></i> Reset</button>
+                                                <button 
+                                                    type="submit" 
+                                                    class="btn btn-outline-success mr-sm-2">
+                                                    <i class="fa fa-search"></i> Cari Data
+                                                </button>
+                                                <button 
+                                                    type="button" 
+                                                    v-on:click.prevent="clear" 
+                                                    class="btn btn-outline-info">
+                                                    <i class="fa fa-refresh"></i> Reset
+                                                </button>
                                             </div>
                                         </div>
                                     </form>
@@ -48,7 +84,12 @@
                     </div>
                     <div class="card-body">
                         <v-alert :alert="alert"></v-alert>
-                        <loading :opacity="100" :active.sync="isLoading" :can-cancel="false" :is-full-page="false"></loading>
+                        <loading 
+                            :opacity="100" 
+                            :active.sync="isLoading" 
+                            :can-cancel="false" 
+                            :is-full-page="false">    
+                        </loading>
                         <transition name="fade">
                             <div class="table-responsive">
                                 <table class="table table-hover table-striped table-bordered" v-if="showTable === true">
@@ -58,7 +99,7 @@
                                             <th style="width:20%; text-align:center;">Nama</th>
                                             <th style="width:15%; text-align:center;">Pangkat & Golongan</th>
                                             <th style="width:15%; text-align:center;">Jabatan</th>
-                                            <th style="width:15%; text-align:center;">NO REKENING</th>
+                                            <th style="width:15%; text-align:center;">No Rekening</th>
                                             <th style="width:15%; text-align:center;">Action</th>
                                         </tr>
                                     </thead>
@@ -71,15 +112,29 @@
                                             <td>{{ v.norek }}</td>
                                             <td>
                                                 <div style="text-align: center;">
-                                                    <a v-if="(access.update === 1)" :href="route + '/edit?id=' + v.id" class="btn btn-sm btn-warning mr-sm-1">
+                                                    <a 
+                                                        v-if="(access.update === 1)" 
+                                                        :href="route + '/edit?id=' + v.id" 
+                                                        class="btn btn-sm btn-warning mr-sm-1">
                                                         <i class="fa fa-wrench"></i> Ubah
                                                     </a>
-                                                    <button v-else class="btn btn-sm btn-warning disabled mr-sm-1"><i class="fa fa-wrench"></i> Ubah</button>
-                                                    <a v-if="(access.delete === 1)" href="#" @click="toggleModal(v.id)"
+                                                    <button 
+                                                        v-else 
+                                                        class="btn btn-sm btn-warning disabled mr-sm-1">
+                                                        <i class="fa fa-wrench"></i> Ubah
+                                                    </button>
+                                                    <a 
+                                                        v-if="(access.delete === 1)" 
+                                                        href="#" 
+                                                        @click="toggleModal(v.id)"
                                                         class="btn btn-sm btn-danger">
                                                         <i class="fa fa-trash-o"></i> Hapus
                                                     </a>
-                                                    <button v-else class="btn btn-sm btn-danger disabled"><i class="fa fa-trash-o"></i> Hapus</button>
+                                                    <button 
+                                                        v-else 
+                                                        class="btn btn-sm btn-danger disabled">
+                                                        <i class="fa fa-trash-o"></i> Hapus
+                                                    </button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -87,8 +142,12 @@
                                 </table>
                             </div>
                         </transition>
-
-                        <transition name="fade"><v-delete :element="'pegawai_delete_modal'" :id="id" @delete="deleteData"></v-delete></transition>
+                        <transition name="fade">
+                            <v-delete 
+                                :element="'pegawai_delete_modal'" 
+                                :id="id" @delete="deleteData">            
+                            </v-delete>
+                        </transition>
                         <transition name="fade">
                             <div class="card-footer clearfix">
                                 <v-pagination
@@ -139,7 +198,7 @@ export default {
             usernip:''
         }
     },
-    props: ['golongan_data','pangkat_data','jabatan_data','api','route','access'],
+    props: ['golongan_data', 'pangkat_data', 'jabatan_data', 'api', 'route', 'access'],
     methods: {
         toggle() {
             this.showForm = !this.showForm

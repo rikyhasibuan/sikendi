@@ -9,11 +9,15 @@
                             <tbody>
                                 <tr>
                                     <td style="width:15%;"><b>Nomor Nota Dinas</b></td>
-                                    <td style="width:85%;">{{ pelimpahan.nota_dinas }}</td>
+                                    <td style="width:85%;">{{ sp2t.nota_dinas }}</td>
                                 </tr>
                                 <tr>
                                     <td style="width:15%;"><b>Tanggal Nota Dinas</b></td>
-                                    <td style="width:85%;">{{ pelimpahan.tgl_nota_dinas | moment }}</td>
+                                    <td style="width:85%;">{{ sp2t.tgl_nota_dinas | moment }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="width:15%;"><b>Bendahara</b></td>
+                                    <td style="width:85%;">{{ sp2t.pegawai.nama }}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -22,7 +26,9 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="pull-left">
-                                <a v-if="(access.write === 1)" :href="route + '/nominal/create?pelimpahan=' + pelimpahan.id" class="btn btn-success mb-2 mr-2"><i class="fa fa-plus"></i> Tambah Data</a>
+                                <a v-if="(access.write === 1)" :href="route +'/create?sp2t='+ sp2t.id" class="btn btn-success mb-2 mr-2">
+                                    <i class="fa fa-plus"></i> Tambah Data
+                                </a>
                                 <!-- <span v-if="pelim.length !== 0 && access.approval === 1 && dinasbop.status === 0">
                                     <a v-if="(approval_type === 'kassubag' || approval_type === 'administrator') && (approval_tab.kassubag.approval === 0)" class="btn btn-warning mb-2 mr-2" href="#" @click="toggleRevisiModal('kassubag')">
                                         <i class="fa fa-edit"></i> Form Revisi Kassubag
@@ -54,20 +60,20 @@
                                     <table class="table table-hover table-striped table-bordered">
                                         <thead>
                                             <tr>
-                                                <th style="width:10%;text-align:center;" rowspan="2">BPP</th>
-                                                <th style="width:10%;text-align:center;" colspan="5">Nilai Pelimpahan</th>
+                                                <th style="width:10%;text-align:center;" rowspan="2">Kode Rekening</th>
+                                                <th style="width:10%;text-align:center;" rowspan="2">Program / Kegiatan / Belanja / Nama dan Norek Penerima</th>
+                                                <th style="width:10%;text-align:center;" rowspan="2">Sisa Anggaran BPP</th>
+                                                <th style="width:10%;text-align:center;" colspan="3">Nominal</th>
                                                 <th style="width:12%;text-align:center;" rowspan="2">Action</th>
                                             </tr>
                                             <tr>
-                                                <th style="width:10%;text-align:center;">UP</th>
-                                                <th style="width:10%;text-align:center;">GU</th>
-                                                <th style="width:10%;text-align:center;">TU</th>
-                                                <th style="width:10%;text-align:center;">LS</th>
-                                                <th style="width:10%;text-align:center;">Jumlah</th>
+                                                <th style="width:10%;text-align:center;">Jumlah Bruto</th>
+                                                <th style="width:10%;text-align:center;">Potongan Pajak</th>
+                                                <th style="width:10%;text-align:center;">Jumlah Transfer</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
+<!--                                             <tr>
                                                 <td colspan="5" style="text-align: right;vertical-align: middle;">
                                                     <b>Saldo Bank Bendahara Pengeluaran sebelum pelimpahan uang</b>
                                                 </td>
@@ -75,8 +81,8 @@
                                                     <b>Rp.{{ pelimpahan.jumlah_sp2d | rupiah }}</b>
                                                 </td>
                                                 <td style="text-align: center;vertical-align: middle;"></td>
-                                            </tr>
-                                            <tr v-for="v in pelimpahandetail" :key="v.id">
+                                            </tr> -->
+                                            <tr v-for="v in sp2tdetail" :key="v.id">
                                                 <td style="vertical-align: middle;">
                                                     {{ v.pegawai.nama }}
                                                 </td>
@@ -157,9 +163,8 @@
             }
         },
         props: [
-            'pelimpahan',
-            'pelimpahandetail',
-            'sp2d',
+            'sp2t',
+            'sp2tdetail',
             'lock',
             'route',
             'print_action',
@@ -199,7 +204,7 @@
         },
         created() {
             this.isLoading = true;
-            if (this.pelimpahandetail.length < 1) {
+            if (this.sp2tdetail.length < 1) {
                 this.alert.empty = true;
                 this.showTable = false;
             } else {

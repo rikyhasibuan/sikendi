@@ -14,7 +14,7 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
-                <li @if (in_array($link, ['pelimpahan','pencairan', 'sp2d'])) class="nav-item has-treeview" @else
+                <li @if (in_array($link, ['pelimpahan','sp2t', 'sp2d'])) class="nav-item has-treeview" @else
                 class="nav-item has-treeview" @endif>
                     <a class="nav-link" href="#"><i class="nav-icon fa fa-money"></i>
                         <p>Data Kendali Keuangan <i class="fa fa-angle-left right"></i></p>
@@ -33,7 +33,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{!! url('pencairan') !!}">
+                            <a class="nav-link" href="{!! url('sp2t') !!}">
                                 <i class="nav-icon fa fa-circle-o"></i>
                                 <p>SP2T</p>
                             </a>

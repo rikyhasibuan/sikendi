@@ -51,48 +51,38 @@
                                 <table class="table table-hover table-striped table-bordered" v-if="showTable == true">
                                     <thead>
                                         <tr>
-                                            <th style="width:10%;text-align:center;vertical-align:middle;" rowspan="2">Nomor Nota Dinas</th>
-                                            <th style="width:10%;text-align:center;vertical-align:middle;" rowspan="2">Tanggal Nota Dinas</th>
-                                            <th style="width:10%;text-align:center;vertical-align:middle;" colspan="4">Nilai Pelimpahan</th>
-                                            <th style="width:10%;text-align:center;vertical-align:middle;" rowspan="2">Jumlah Pelimpahan Uang</th>
-                                            <th style="width:10%;text-align:center;vertical-align:middle;" rowspan="2">Saldo Bank Bendahara Pengeluaran</th>
-                                            <th style="width:12%;text-align:center;vertical-align:middle;" rowspan="2">Action</th>
-                                        </tr>
-                                        <tr>
-                                            <th style="width:10%;text-align:center;vertical-align:middle;">UP</th>
-                                            <th style="width:10%;text-align:center;vertical-align:middle;">GU</th>
-                                            <th style="width:10%;text-align:center;vertical-align:middle;">TU</th>
-                                            <th style="width:10%;text-align:center;vertical-align:middle;">LS</th>
+                                            <th style="width:10%;text-align:center;vertical-align:middle;">Nomor Nota Dinas</th>
+                                            <th style="width:10%;text-align:center;vertical-align:middle;">Tanggal Nota Dinas</th>
+                                            <th style="width:10%;text-align:center;vertical-align:middle;">Bendahara</th>
+                                            <th style="width:10%;text-align:center;vertical-align:middle;">Pelimpahan Uang</th>
+                                            <th style="width:10%;text-align:center;vertical-align:middle;">Pembayaran Transfer</th>
+                                            <th style="width:10%;text-align:center;vertical-align:middle;">Sisa Anggaran BPP</th>
+                                            <th style="width:12%;text-align:center;vertical-align:middle;">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="v in pelimpahan" :key="v.id">
+                                        <tr v-for="v in sp2t" :key="v.id">
                                             <td style="vertical-align: middle;"><a :href="route + '/detail?id=' + v.id">{{ v.nota_dinas }}</a></td>
                                             <td style="text-align:center;vertical-align: middle;">{{ v.tgl_nota_dinas | moment }}</td>
-                                            <td style="text-align:right;vertical-align: middle;">
-                                                Rp.{{ v.up | rupiah }}
+                                            <td style="vertical-align: middle;">
+                                                {{ v.pegawai.nama }}
                                             </td>
                                             <td style="text-align:right;vertical-align: middle;">
-                                                Rp.{{ v.gu | rupiah }}
+                                                Rp.{{ v.jumlah_pelimpahan | rupiah }}
                                             </td>
                                             <td style="text-align:right;vertical-align: middle;">
-                                                Rp.{{ v.tu | rupiah }}
+                                                Rp.{{ v.jumlah_transfer | rupiah }}
                                             </td>
                                             <td style="text-align:right;vertical-align: middle;">
-                                                Rp.{{ v.ls | rupiah }}
+                                                <span>Rp.{{ v.sisa_anggaran | rupiah }}</span>
                                             </td>
-                                            <td style="text-align:right;vertical-align: middle;">
-                                                <span>Rp.{{ v.jumlah_pelimpahan | rupiah }}</span>
-                                            </td>
-                                            <td style="text-align:right;vertical-align: middle;">
-                                                Rp.{{ v.sisa_sp2d | rupiah }}
                                             <td style="text-align: center;vertical-align: middle;">
                                                 <div>
-                                                    <a v-if="(v.status == 0 && access.update === 1)" :href="route + '/edit?id=' + v.id" class="btn btn-sm btn-warning mr-sm-1">
+                                                    <a v-if="(access.update === 1)" :href="route + '/edit?id=' + v.id" class="btn btn-sm btn-warning mr-sm-1">
                                                         <i class="fa fa-wrench"></i> Ubah
                                                     </a>
                                                     <button v-else class="btn btn-sm btn-warning disabled mr-sm-1"><i class="fa fa-wrench"></i> Ubah</button>
-                                                    <a v-if="(v.status == 0 && access.delete === 1)" href="#" @click="toggleModal(v.id)"
+                                                    <a v-if="(access.delete === 1)" href="#" @click="toggleModal(v.id)"
                                                         class="btn btn-sm btn-danger">
                                                         <i class="fa fa-trash-o"></i> Hapus
                                                     </a>
@@ -105,7 +95,7 @@
                             </div>
                         </transition>
                         <transition name="fade">
-                            <v-delete :element="'pelimpahan_delete_modal'" :id="id" @delete="deleteData"></v-delete>
+                            <v-delete :element="'sp2t_delete_modal'" :id="id" @delete="deleteData"></v-delete>
                         </transition>
                         <transition name="fade">
                             <div class="card-footer clearfix">
@@ -130,15 +120,13 @@ import service from './../../services.js';
 export default {
     data: function() {
         return {
-            pelimpahan: {},
+            sp2t: {},
             total_penyerapan:0,
             search: {
-                kegiatan:'',
-                program:'',
-                belanja:''
+                q:'',
+                start:'',
+                end:''
             },
-            kegiatan:[],
-            belanja:[],
             alert: {
                 error:false,
                 empty:false,
@@ -164,9 +152,9 @@ export default {
             this.showForm = !this.showForm
         },
         clear() {
-            this.search.kegiatan = '';
-            this.search.program = '';
-            this.search.belanja = '';
+            this.search.q = '';
+            this.search.start = '';
+            this.search.end = '';
             this.fetchData();
         },
         nextPage() {
@@ -178,7 +166,7 @@ export default {
             this.fetchData();
         },
         toggleModal(id) {
-            $("#pelimpahan_delete_modal").modal('show');
+            $("#sp2t_delete_modal").modal('show');
             this.id = id;
         },
         anggaran_tersedia: function(belanja, tahun) {
@@ -212,7 +200,7 @@ export default {
                 this.showTable = true;
                 this.alert.empty = false;
                 this.alert.error = false;
-                this.pelimpahan = response.data;
+                this.sp2t = response.data;
                 this.pagination.last = response.last_page;
                 this.pagination.from = response.from;
                 this.pagination.to = response.to;
@@ -228,7 +216,7 @@ export default {
             .then(response => {
                 if(response.status === 'ok') {
                     this.alert.delete = true;
-                    $('#dinasbop_delete_modal').modal('hide');
+                    $('#sp2t_delete_modal').modal('hide');
                     this.fetchData();
                     window.scroll({ top: 0, left: 0, behavior: 'smooth' });
                     setTimeout(() => this.alert.delete=false, 5000);
@@ -236,7 +224,7 @@ export default {
             }).catch(error => {
                 this.alert.delete = false;
                 this.alert.error = true;
-                $('#dinasbop_delete_modal').modal('hide');
+                $('#sp2t_delete_modal').modal('hide');
                 window.scroll({ top: 0, left: 0, behavior: 'smooth' });
                 this.fetchData();
                 console.log(error);

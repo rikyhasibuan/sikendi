@@ -8,37 +8,129 @@
                     <form autocomplete="off" method="POST" v-on:submit.prevent="onSubmit">
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <label>Tahun Anggaran *</label>
-                                <select v-model="pelimpahan.tahun_anggaran" class="form-control" :class="{ 'is-invalid': validasi.tahun_anggaran }">
-                                    <option value="">Pilih Tahun Anggaran</option>
-                                    <option v-for="v in this.tahun_data" :value="v.tahun" :key="v.tahun">{{ v.tahun }}</option>
+                                <label>Program *</label>
+                                <select 
+                                    v-model="sp2t.program_id" 
+                                    class="form-control" 
+                                    @change="onChangeProgram($event)" 
+                                    :class="{ 'is-invalid': validasi.program_id }"
+                                >
+                                    <option value="">Pilih Program</option>
+                                    <option v-for="v in this.program" :value="v.id" :key="v.id">
+                                        {{ v.nama_program }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label>Kegiatan *</label>
+                                <select 
+                                    v-model="sp2t.kegiatan_id" 
+                                    class="form-control" 
+                                    @change="onChangeKegiatan($event)" 
+                                    :class="{ 'is-invalid': validasi.kegiatan_id }"
+                                >
+                                    <option value="">Pilih Kegiatan</option>
+                                    <option v-for="v in this.kegiatan" :value="v.id" :key="v.id">
+                                        {{ v.nama_kegiatan }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label>Belanja *</label>
+                                <select 
+                                    v-model="sp2t.belanja_id" 
+                                    class="form-control" 
+                                    :class="{ 'is-invalid': validasi.belanja_id }"
+                                >
+                                    <option value="">Pilih Belanja</option>
+                                    <option v-for="v in this.belanja" :value="v.id" :key="v.id">
+                                        {{ v.nama_belanja }}
+                                    </option>
                                 </select>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <label>Nomor Nota Dinas *</label>
-                                <input type="text" class="form-control" placeholder="Nomor Nota Dinas" v-model="pelimpahan.nota_dinas" :class="{ 'is-invalid': validasi.nota_dinas }">
+                                <label>Nama Rekening Penerima *</label>
+                                <vue-bootstrap-typeahead 
+                                    :data="nama_sp2t"
+                                    placeholder="Nama Rekening Penerima"
+                                    v-model="nama_penerima_sp2t"
+                                    :serializer="res => res.nama_penerima"
+                                    @hit="nomor_penerima_sp2t = $event.norek_penerima"
+                                    :class="{ 'is-invalid': validasi.nama_penerima_sp2t }"
+                                />
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <label>Tanggal Nota Dinas *</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                                    </div>
-                                    <date-picker
-                                        id="tgl_nota_dinas"
-                                        name="tgl_nota_dinas"
-                                        v-model="pelimpahan.tgl_nota_dinas"
-                                        :config="options"
-                                        class="form-control"
-                                        placeholder="Tanggal Nota Dinas"
-                                        :class="{ 'is-invalid': validasi.tgl_nota_dinas }"
-                                        autocomplete="off">
-                                    </date-picker>
-                                </div>
+                                <label>Nomor Rekening Penerima *</label>
+                                <input 
+                                    type="text"
+                                    class="form-control"
+                                    placeholder="Nomor Rekening Penerima"
+                                    v-model="nomor_penerima_sp2t"
+                                    :class="{ 'is-invalid': validasi.nomor_penerima_sp2t }"
+                                >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label>Nominal *</label>
+                                <money 
+                                    type="text" 
+                                    class="form-control" 
+                                    placeholder="Nominal" 
+                                    v-model="sp2t.nominalbruto"
+                                    :class="{ 'is-invalid': validasi.nominalbruto }"
+                                />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label>PPN *</label>
+                                <money type="text" class="form-control" v-model="sp2t.ppn" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label>PPh Pasal 22 *</label>
+                                <money type="text" class="form-control" v-model="sp2t.pph22" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label>PPh Final Pasal 4 ayat 2 *</label>
+                                <money type="text" class="form-control" v-model="sp2t.pph4" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label>PPh Pasal 21 *</label>
+                                <money type="text" class="form-control" v-model="sp2t.pph21" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label>PPh Pasal 23 *</label>
+                                <money type="text" class="form-control" v-model="sp2t.pph23" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label>Nominal Transfer *</label>
+                                <money 
+                                    type="text" 
+                                    class="form-control readonly" 
+                                    v-model="sp2t.nominal_transfer"
+                                    readonly="readonly"
+                                />
                             </div>
                         </div>
                         <div class="row">
@@ -56,20 +148,39 @@
 
 <script>
 import service from './../../services.js';
+import _ from 'underscore';
 
 export default {
     data() {
         return {
-            pelimpahan: {
-                'tahun_anggaran': '',
-                'nota_dinas': '',
-                'tgl_nota_dinas': ''
+            nama_sp2t: [],
+            nama_penerima_sp2t: '',
+            nomor_penerima_sp2t: '',
+            sp2t: {
+                'program_id': '',
+                'kegiatan_id': '',
+                'belanja_id': '',
+                'nama_penerima_sp2t': '',
+                'nomor_penerima_sp2t': '',
+                'nominalbruto': '',
+                'ppn': '',
+                'pph22': '',
+                'pph4': '',
+                'pph21': '',
+                'pph23': '',
+                'nominal_transfer': ''
             },
             validasi: {
-                'tahun_anggaran': '',
-                'nota_dinas': '',
-                'tgl_nota_dinas': ''
+                'program_id': '',
+                'kegiatan_id': '',
+                'belanja_id': '',
+                'nominalbruto': '',
+                'nama_penerima_sp2t': '',
+                'nomor_penerima_sp2t': '',
             },
+            program: [],
+            kegiatan: [],
+            belanja: [],
             options: {
                 format: 'YYYY-MM-DD',
                 useCurrent: false,
@@ -78,22 +189,56 @@ export default {
             alert: {
                 error: false,
                 save: false,
-                duplicatedate: false,
                 validate: false
             },
             isLoading: false
         }
     },
     props: [
-        'tahun_data',
+        'program_data',
+        'kegiatan_data',
+        'belanja_data',
         'api',
         'route'
     ],
     methods: {
+        getNamaPenerimaSp2t(query) {
+            service.fetchData('../api/ajax/penerimasp2t/' + query)
+            .then(response => {
+                this.nama_sp2t = response;
+                console.log(this.nama_sp2t);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+        },
+        onChangeProgram(evt) {
+            const program = evt.target.value;
+            service.fetchData('../api/ajax/kegiatan/' + program)
+            .then(response => {
+                this.sp2t.kegiatan_id = '';
+                this.sp2t.belanja_id = '';
+                this.kegiatan = response;
+                this.belanja = [];
+            })
+            .catch(error => {
+                console.log(error);
+            });
+        },
+        onChangeKegiatan(evt) {
+            const kegiatan = evt.target.value;
+            service.fetchData('../api/ajax/belanja/' + kegiatan)
+            .then(response => {
+                this.sp2t.belanja_id = '';
+                this.belanja = response;
+            })
+            .catch(error => {
+                console.log(error);
+            });
+        },
         clearAlert() {
             this.alert.error = false;
             this.alert.save = false;
-            this.alert.duplicatedate = false;
             this.alert.validate = false;
         },
         onSubmit(evt) {
@@ -101,8 +246,10 @@ export default {
             this.clearAlert();
             let validasi = this.validate();
             if (validasi === true) {
+                this.sp2t.nama_penerima_sp2t = this.nama_penerima_sp2t;
+                this.sp2t.nomor_penerima_sp2t = this.nomor_penerima_sp2t;
                 this.isLoading = true;
-                service.postData(this.api, this.pelimpahan)
+                service.postData(this.api, this.sp2t)
                     .then(result => {
                         this.response(result);
                     }).catch(error => {
@@ -126,33 +273,61 @@ export default {
             }
         },
         reset() {
-            this.pelimpahan.tahun_anggaran = '';
-            this.pelimpahan.nota_dinas = '';
-            this.pelimpahan.tgl_nota_dinas = '';
+            this.sp2t.program_id = '';
+            this.sp2t.kegiatan_id = '';
+            this.sp2t.belanja_id = '';
+            this.sp2t.nominalbruto = '';
+            this.sp2t.ppn = '';
+            this.sp2t.pph21 = '';
+            this.sp2t.pph4 = '';
+            this.sp2t.pph22 = '';
+            this.sp2t.pph23 = '';
+            this.sp2t.nominal_transfer = '';
         },
         validate() {
             let condition = 0;
             let callback = false;
             
-            if (this.pelimpahan.tahun_anggaran.length === 0) {
-                this.validasi.tahun_anggaran = true;
+            if (this.sp2t.program_id.length === 0) {
+                this.validasi.program_id = true;
                 condition++;
             } else {
-                this.validasi.tahun_anggaran = false;
+                this.validasi.program_id = false;
             }
 
-            if (this.pelimpahan.nota_dinas.length === 0) {
-                this.validasi.nota_dinas = true;
+            if (this.sp2t.kegiatan_id.length === 0) {
+                this.validasi.kegiatan_id = true;
                 condition++;
             } else {
-                this.validasi.nota_dinas = false;
+                this.validasi.kegiatan_id = false;
             }
 
-            if (this.pelimpahan.tgl_nota_dinas.length === 0) {
-                this.validasi.tgl_nota_dinas = true;
+            if (this.sp2t.belanja_id.length === 0) {
+                this.validasi.belanja_id = true;
                 condition++;
             } else {
-                this.validasi.tgl_nota_dinas = false;
+                this.validasi.belanja_id = false;
+            }
+
+            if (this.sp2t.nominalbruto.length === 0) {
+                this.validasi.nominalbruto = true;
+                condition++;
+            } else {
+                this.validasi.nominalbruto = false;
+            }
+
+            if (this.sp2t.nama_penerima_sp2t.length === 0) {
+                this.validasi.nama_penerima_sp2t = true;
+                condition++;
+            } else {
+                this.validasi.nama_penerima_sp2t = false;
+            }
+
+            if (this.sp2t.nomor_penerima_sp2t.length === 0) {
+                this.validasi.nomor_penerima_sp2t = true;
+                condition++;
+            } else {
+                this.validasi.nomor_penerima_sp2t = false;
             }
 
             if (condition > 0) {
@@ -164,8 +339,14 @@ export default {
             return callback;
         }
     },
+    watch: {
+        nama_penerima_sp2t: _.debounce(function(v) { this.getNamaPenerimaSp2t(v) }, 500)
+    },
     created() {
         this.isLoading = true;
+        this.program = this.program_data;
+        this.belanja = this.belanja_data;
+        this.kegiatan = this.kegiatan_data;
     },
     mounted() {
         setTimeout(() => { this.isLoading = false }, 1000);

@@ -10,7 +10,7 @@ import money from 'v-money';
 import accounting from 'accounting';
 import datePicker from 'vue-bootstrap-datetimepicker';
 import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
-import Multiselect from 'vue-multiselect';
+import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
 
 Vue.use(money, {
     decimal: ',',
@@ -133,7 +133,7 @@ Vue.component('v-delete', require('./components/Delete.vue'));
 Vue.component('v-revision', require('./components/Revision.vue'));
 Vue.component('v-approval', require('./components/Approval.vue'));
 Vue.component('v-revision-log', require('./components/RevisionLog.vue'));
-Vue.component('multiselect', Multiselect);
+Vue.component('vue-bootstrap-typeahead', VueBootstrapTypeahead)
 Vue.component('loading', Loading);
 
 Vue.component('login', require('./views/Login.vue'));

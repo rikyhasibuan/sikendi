@@ -15,6 +15,7 @@ Route::get('logaktifitas', 'Api\LogActivityController@get_data');
 Route::get('report', 'Api\ReportController@print_data');
 
 // AJAX request
+Route::get('ajax/penerimasp2t/{query}', 'Api\AjaxController@show_nama_penerima_sp2t');
 Route::get('ajax/kegiatan/{program}', 'Api\AjaxController@show_kegiatan_by_program');
 Route::get('ajax/belanja/{kegiatan}', 'Api\AjaxController@show_belanja_by_kegiatan');
 Route::post('ajax/sisa_anggaran', 'Api\AjaxController@show_sisa_anggaran');

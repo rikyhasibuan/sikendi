@@ -26,8 +26,8 @@ class Sp2tController extends Controller
     {
         try {
             $_q = ($request['q'] !== '') ? $request['q'] : '';
-            $pelimpahan = Pelimpahan::searchNotaDinas($_q)->orderBy('id', 'DESC')->paginate(10);
-            return response()->json($pelimpahan, 200);
+            $sp2t = Sp2t::searchNotaDinas($_q)->with('pegawai')->orderBy('id', 'DESC')->paginate(10);
+            return response()->json($sp2t, 200);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }

@@ -7,6 +7,7 @@ use App\Models\Anggaran;
 use App\Models\Kegiatan;
 use App\Models\Belanja;
 use App\Models\PelimpahanDetail;
+use App\Models\Penerima;
 use App\Libraries\Common;
 use App\Libraries\KasAnggaran;
 use Illuminate\Http\JsonResponse;
@@ -29,6 +30,16 @@ class AjaxController extends Controller
         $anggaran = Anggaran::whereIn('kegiatan_id', $kegiatan_list)->sum('jumlah');
         $total_anggaran = $anggaran - $pelimpahan;
         return $total_anggaran;
+    }
+
+    public function show_nama_penerima_sp2t(Request $request)
+    {
+        $penerima = Penerima::where('nama_penerima', 'LIKE', '%'.$request['query'].'%')->get();
+        $response = [];
+        foreach ($penerima as $v) {
+            array_push($response, ['nama_penerima' => $v->nama_penerima, 'norek_penerima' => $v->norek]);
+        }
+        return response()->json($response, 200);
     }
 
     public function show_kegiatan_by_program(Request $request)
