@@ -54,16 +54,16 @@
                                     <table class="table table-hover table-striped table-bordered">
                                         <thead>
                                             <tr>
-                                                <th style="width:15%;text-align:center;" rowspan="2">BPP</th>
-                                                <th style="width:10%;text-align:center;" colspan="5">Nilai Pelimpahan Uang</th>
-                                                <th style="width:12%;text-align:center;" rowspan="2">Action</th>
+                                                <th style="width:15%;text-align:center;vertical-align:middle;" rowspan="2">BPP</th>
+                                                <th style="width:10%;text-align:center;vertical-align:middle;" colspan="5">Nilai Pelimpahan Uang</th>
+                                                <th style="width:12%;text-align:center;vertical-align:middle;" rowspan="2">Action</th>
                                             </tr>
                                             <tr>
-                                                <th style="width:10%;text-align:center;">UP</th>
-                                                <th style="width:10%;text-align:center;">GU</th>
-                                                <th style="width:10%;text-align:center;">TU</th>
-                                                <th style="width:10%;text-align:center;">LS</th>
-                                                <th style="width:10%;text-align:center;">Jumlah</th>
+                                                <th style="width:10%;text-align:center;vertical-align:middle;">UP</th>
+                                                <th style="width:10%;text-align:center;vertical-align:middle;">GU</th>
+                                                <th style="width:10%;text-align:center;vertical-align:middle;">TU</th>
+                                                <th style="width:10%;text-align:center;vertical-align:middle;">LS</th>
+                                                <th style="width:10%;text-align:center;vertical-align:middle;">Jumlah</th>
                                             </tr>
                                         </thead>
                                         <tbody>
