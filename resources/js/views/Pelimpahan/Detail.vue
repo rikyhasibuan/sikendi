@@ -101,7 +101,7 @@
                                                     </span>
                                                 </td>
                                                 <td style="text-align:right;vertical-align: middle;">
-                                                    <b>Rp. {{ v.sisa_sp2d | rupiah }}</b>
+                                                    <b>Rp. {{ v.jumlah_pelimpahan | rupiah }}</b>
                                                 </td>
                                                 <td style="text-align: center;vertical-align: middle;">
                                                     <div>
@@ -116,6 +116,15 @@
                                                         <button v-else class="btn btn-sm btn-danger disabled"><i class="fa fa-trash-o"></i> Hapus</button>
                                                     </div>
                                                 </td>
+                                            </tr>
+                                             <tr>
+                                                <td colspan="5" style="text-align: right;vertical-align: middle;">
+                                                    <b>Saldo Bank Bendahara Pengeluaran setelah pelimpahan uang</b>
+                                                </td>
+                                                <td style="text-align:right;vertical-align: middle;">
+                                                    <b>Rp.{{ sisa_sp2d | rupiah }}</b>
+                                                </td>
+                                                <td style="text-align: center;vertical-align: middle;"></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -155,7 +164,8 @@
                 },
                 saldo: 0,
                 showForm: false,
-                showTable: false
+                showTable: false,
+                sisa_sp2d: 0
             }
         },
         props: [
@@ -230,6 +240,11 @@
                 this.showTable = false;
             } else {
                 this.showTable = true;
+                let jml = this.pelimpahan.jumlah_sp2d;
+                for (var i = 0; i < this.pelimpahandetail.length; i++) {
+                    jml -= this.pelimpahandetail[i]['jumlah_pelimpahan']
+                }
+                this.sisa_sp2d = jml
             }
             this.saldo = this.sp2d
         },

@@ -23,25 +23,17 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label>Sisa Anggaran Kegiatan BPP keseluruhan *</label>
-                                <input 
-                                  type="text" 
-                                  readonly="readonly"
-                                  class="form-control"
-                                  placeholder="Sisa Anggaran Kegiatan BPP keseluruhan"
-                                  v-model="pelimpahan.sisa_anggaran"
-                                >
+                                <money type="text" 
+                                  placeholder="Sisa Anggaran Kegiatan BPP keseluruhan" 
+                                  v-model="pelimpahan.sisa_anggaran" class="form-control" 
+                                  readonly="true" />
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>Jumlah Pelimpahan Uang *</label>
-                                <input 
-                                  type="text" 
-                                  class="form-control" 
-                                  placeholder="Jumlah Pelimpahan Uang" 
-                                  v-model="pelimpahan.jumlah_pelimpahan"
-                                  :class="{ 'is-invalid': validasi.jumlah_pelimpahan }"
-                                >
+                                <money type="text" 
+                                  placeholder="Jumlah Pelimpahan Uang" v-model="pelimpahan.jumlah_pelimpahan" class="form-control" :class="{ 'is-invalid': validasi.jumlah_pelimpahan }" />
                             </div>
                             <div class="form-group col-md-6">
                                 <label>Kategori Pelimpahan *</label>

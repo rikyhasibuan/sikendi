@@ -163,7 +163,7 @@ class PelimpahanController extends Controller
         $data['breadcrumb'] = $breadcrumb;
         $data['api'] = url($this->api.'/nominal?id='.$pelimpahan->id.'&pelimpahan='.$request['pelimpahan'].'&nip=' . $this->_nip);
         $data['act'] = 'edit';
-        $data['route'] = url($this->route .'/detail?id=' . $pelimpahan->id);
+        $data['route'] = url($this->route .'/detail?id=' . $pelimpahan->pelimpahan_id);
         return View::make('pelimpahan.nominal', $data);
     }
 }
