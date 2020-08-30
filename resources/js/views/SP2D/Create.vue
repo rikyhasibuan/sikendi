@@ -103,8 +103,8 @@ export default {
             alert: {
                 error: false,
                 save: false,
-                duplicatedate: false,
-                validate: false
+                validate: false,
+                duplicate: false
             },
             isLoading: false
         }
