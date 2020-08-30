@@ -48,26 +48,51 @@ class PelimpahanController extends Controller
 
     public function post_data(Request $request)
     {
+        $sp2d = Sp2d::latest('id')->first();
         $check = Pelimpahan::where('nota_dinas', $request->input('nota_dinas'))->count();
         if ($check == 0) {
-            $sp2d = Sp2d::latest('id')->first();
-            $pelimpahan = new Pelimpahan();
-            $pelimpahan->tahun_anggaran = $request->input('tahun_anggaran');
-            $pelimpahan->nota_dinas = $request->input('nota_dinas');
-            $pelimpahan->tgl_nota_dinas = $request->input('tgl_nota_dinas');
-            $pelimpahan->jumlah_sp2d = $sp2d['jumlah_sp2d'];
-            $pelimpahan->sisa_sp2d = $sp2d['jumlah_sp2d'];
-            $pelimpahan->status = 0;
-            $pelimpahan->created_at = date('Y-m-d H:i:s');
-            if ($pelimpahan->save()) {
-                $payload = [
-                    'page' => 'Pelimpahan Uang',
-                    'message' => 'User dengan NIP '.$request->query('nip').' menambahkan data Pelimpahan baru'
-                ];
-                $this->_common->generate_log($payload);
-                return response()->json(['status'=>'ok'], 200);
+            $check2 = Pelimpahan::where('nomor_sp2d', $sp2d['nomor_sp2d'])->latest()->first();
+            if ($check2 != null) {
+                $pelimpahan = new Pelimpahan();
+                $pelimpahan->tahun_anggaran = $request->input('tahun_anggaran');
+                $pelimpahan->nomor_sp2d = $check2['nomor_sp2d'];
+                $pelimpahan->nota_dinas = $request->input('nota_dinas');
+                $pelimpahan->tgl_nota_dinas = $request->input('tgl_nota_dinas');
+                $pelimpahan->jumlah_sp2d = $check2['sisa_sp2d'];
+                $pelimpahan->sisa_sp2d = $check2['sisa_sp2d'];
+                $pelimpahan->status = 0;
+                $pelimpahan->created_at = date('Y-m-d H:i:s');
+                if ($pelimpahan->save()) {
+                    $payload = [
+                        'page' => 'Pelimpahan Uang',
+                        'message' => 'User dengan NIP '.$request->query('nip').' menambahkan data Pelimpahan baru'
+                    ];
+                    $this->_common->generate_log($payload);
+                    return response()->json(['status'=>'ok'], 200);
+                } else {
+                    return response()->json(['status'=>'failed'], 500);
+                }
             } else {
-                return response()->json(['status'=>'failed'], 500);
+                $check2 = Pelimpahan::latest()->first();
+                $pelimpahan = new Pelimpahan();
+                $pelimpahan->tahun_anggaran = $request->input('tahun_anggaran');
+                $pelimpahan->nomor_sp2d = $sp2d['nomor_sp2d'];
+                $pelimpahan->nota_dinas = $request->input('nota_dinas');
+                $pelimpahan->tgl_nota_dinas = $request->input('tgl_nota_dinas');
+                $pelimpahan->jumlah_sp2d = $sp2d['jumlah_sp2d'] + $check2['sisa_sp2d'];
+                $pelimpahan->sisa_sp2d = $sp2d['jumlah_sp2d'] + $check2['sisa_sp2d'];
+                $pelimpahan->status = 0;
+                $pelimpahan->created_at = date('Y-m-d H:i:s');
+                if ($pelimpahan->save()) {
+                    $payload = [
+                        'page' => 'Pelimpahan Uang',
+                        'message' => 'User dengan NIP '.$request->query('nip').' menambahkan data Pelimpahan baru'
+                    ];
+                    $this->_common->generate_log($payload);
+                    return response()->json(['status'=>'ok'], 200);
+                } else {
+                    return response()->json(['status'=>'failed'], 500);
+                }
             }
         } else {
             return response()->json(['status'=>'duplicate'], 200);

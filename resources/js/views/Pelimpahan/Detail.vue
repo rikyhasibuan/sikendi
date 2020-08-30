@@ -22,7 +22,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="pull-left">
-                                <a v-if="(access.write === 1)" :href="route + '/nominal/create?pelimpahan=' + pelimpahan.id" class="btn btn-success mb-2 mr-2"><i class="fa fa-plus"></i> Tambah Data</a>
+                                <a v-if="(pelimpahan.status == 0) && (access.write === 1)" :href="route + '/nominal/create?pelimpahan=' + pelimpahan.id" class="btn btn-success mb-2 mr-2"><i class="fa fa-plus"></i> Tambah Data</a>
                                 <!-- <span v-if="pelim.length !== 0 && access.approval === 1 && dinasbop.status === 0">
                                     <a v-if="(approval_type === 'kassubag' || approval_type === 'administrator') && (approval_tab.kassubag.approval === 0)" class="btn btn-warning mb-2 mr-2" href="#" @click="toggleRevisiModal('kassubag')">
                                         <i class="fa fa-edit"></i> Form Revisi Kassubag
@@ -54,8 +54,8 @@
                                     <table class="table table-hover table-striped table-bordered">
                                         <thead>
                                             <tr>
-                                                <th style="width:10%;text-align:center;" rowspan="2">BPP</th>
-                                                <th style="width:10%;text-align:center;" colspan="5">Nilai Pelimpahan</th>
+                                                <th style="width:15%;text-align:center;" rowspan="2">BPP</th>
+                                                <th style="width:10%;text-align:center;" colspan="5">Nilai Pelimpahan Uang</th>
                                                 <th style="width:12%;text-align:center;" rowspan="2">Action</th>
                                             </tr>
                                             <tr>
@@ -105,11 +105,11 @@
                                                 </td>
                                                 <td style="text-align: center;vertical-align: middle;">
                                                     <div>
-                                                        <a v-if="(access.update === 1)" :href="route + '/nominal/edit?pelimpahan='+ v.pelimpahan_id +'&id=' + v.id" class="btn btn-sm btn-warning mr-sm-1">
+                                                        <a v-if="(pelimpahan.status == 0) && (access.update === 1)" :href="route + '/nominal/edit?pelimpahan='+ v.pelimpahan_id +'&id=' + v.id" class="btn btn-sm btn-warning mr-sm-1">
                                                             <i class="fa fa-wrench"></i> Ubah
                                                         </a>
                                                         <button v-else class="btn btn-sm btn-warning disabled mr-sm-1"><i class="fa fa-wrench"></i> Ubah</button>
-                                                        <a v-if="(access.delete === 1)" href="#" @click="toggleModal(v.id)"
+                                                        <a v-if="(pelimpahan.status == 0) && (access.delete === 1)" href="#" @click="toggleModal(v.id)"
                                                             class="btn btn-sm btn-danger">
                                                             <i class="fa fa-trash-o"></i> Hapus
                                                         </a>

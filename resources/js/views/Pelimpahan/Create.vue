@@ -78,7 +78,7 @@ export default {
             alert: {
                 error: false,
                 save: false,
-                duplicatedate: false,
+                duplicate: false,
                 validate: false
             },
             isLoading: false
@@ -93,7 +93,7 @@ export default {
         clearAlert() {
             this.alert.error = false;
             this.alert.save = false;
-            this.alert.duplicatedate = false;
+            this.alert.duplicate = false;
             this.alert.validate = false;
         },
         onSubmit(evt) {
