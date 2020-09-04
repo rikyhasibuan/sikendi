@@ -7,8 +7,8 @@ class PelimpahanDetail extends Model
 {
     protected $table = 'pelimpahan_detail';
     protected $dates = [
-      'created_at',
-      'updated_at'
+        'created_at',
+        'updated_at'
     ];
 
     public function pegawai()

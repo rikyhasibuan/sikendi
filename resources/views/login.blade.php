@@ -16,7 +16,7 @@
             <div class="card-body login-card-body">
                 <div id="app">
                     <div class="login-logo">
-                        <img src="{{ asset('img/logo.png') }}" width="50%;">
+                        <img src="{{ asset('img/logo-h.png') }}" width="100%;">
                     </div>
                     <login :api='{!! json_encode($api) !!}' :redirect='{!! json_encode($redirect) !!}'></login>
                 </div>

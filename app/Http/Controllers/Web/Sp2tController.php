@@ -59,7 +59,7 @@ class Sp2tController extends Controller
         return View::make('sp2t.index', $data);
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $breadcrumb = [];
         $breadcrumb[0] = '<a href="' . url('dashboard') . '"><i class="fa fa-dashboard"></i> Dashboard</a>';
@@ -74,7 +74,7 @@ class Sp2tController extends Controller
         $data['title']  = $this->title;
         $data['link'] = $this->link;
         $data['breadcrumb'] = $breadcrumb;
-        $data['api'] = url($this->api.'?nip=' . $this->_nip);
+        $data['api'] = url($this->api.'?sp2t='.$request['sp2t'].'&nip=' . $this->_nip);
         $data['act'] = 'create';
         $data['program'] = $program;
         $data['kegiatan'] = $kegiatan;
@@ -90,7 +90,7 @@ class Sp2tController extends Controller
         $breadcrumb[1] = '<a href="' . url($this->route) . '"><i class="fa fa-database"></i> ' . $this->title . '</a>';
         $breadcrumb[2] = '<i class="fa fa-wrench"></i> Ubah Data';
 
-        $sp2t = Sp2t::find($request['id']);
+        $sp2t = Sp2tDetail::find($request['id']);
         $program = Program::all();
         $kegiatan = [];
         $belanja = [];
@@ -124,7 +124,7 @@ class Sp2tController extends Controller
         $data['sp2t'] = $sp2t;
         $data['sp2tdetail'] = $sp2tdetail;
         $data['breadcrumb'] = $breadcrumb;
-        $data['api'] = url($this->api . '/nominal?nip='.$this->_nip);
+        $data['api'] = url($this->api . '?nip='.$this->_nip);
         $data['send_api'] = url($this->api . '/nominal/send?sp2t='.$sp2t->id.'&nip='.$this->_nip);
         $data['act'] = 'edit';
         $data['route'] = url($this->route);

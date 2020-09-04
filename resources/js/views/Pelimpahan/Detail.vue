@@ -117,7 +117,7 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                             <tr>
+                                            <tr>
                                                 <td colspan="5" style="text-align: right;vertical-align: middle;">
                                                     <b>Saldo Bank Bendahara Pengeluaran setelah pelimpahan uang</b>
                                                 </td>
@@ -144,6 +144,7 @@
                     <a :href="route" class="btn btn-danger"><i class="fa fa-arrow-left"></i> Kembali</a>
                     &nbsp;&nbsp;
                     <a  v-if="(pelimpahan.status == 0)" href="#" class="btn btn-warning" @click="sendPelimpahan()"><i class="fa fa-envelope"></i> Kirim Data</a>
+                    <a  v-if="(pelimpahan.status == 1)" href="#" class="btn btn-success" @click="cetakPelimpahan()"><i class="fa fa-print"></i> Cetak Data</a>
                 </div>
             </div>
         </div>

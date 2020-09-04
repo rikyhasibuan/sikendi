@@ -1,6 +1,7 @@
 <aside class="main-sidebar sidebar-dark-orange elevation-4">
     <a href="#" class="brand-link navbar-gray-dark">
-        <span class="brand">SIKENDI</span>
+        <img class="brand-image" src="{{ asset('img/logo.png') }}" width="100%;">
+        
         <!-- <span class="brand-text font-weight-light">Inspektorat</span> -->
     </a>
     <div class="sidebar">

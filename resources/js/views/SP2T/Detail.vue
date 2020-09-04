@@ -60,20 +60,19 @@
                                     <table class="table table-hover table-striped table-bordered">
                                         <thead>
                                             <tr>
-                                                <th style="width:10%;text-align:center;" rowspan="2">Kode Rekening</th>
-                                                <th style="width:10%;text-align:center;" rowspan="2">Program / Kegiatan / Belanja / Nama dan Norek Penerima</th>
-                                                <th style="width:10%;text-align:center;" rowspan="2">Sisa Anggaran BPP</th>
+                                                <th style="width:3%;text-align:center;" rowspan="2">Kode Rekening</th>
+                                                <th style="width:20%;text-align:center;" rowspan="2">Program / Kegiatan / Belanja / Nama Penerima</th>
                                                 <th style="width:10%;text-align:center;" colspan="3">Nominal</th>
-                                                <th style="width:12%;text-align:center;" rowspan="2">Action</th>
+                                                <th style="width:8%;text-align:center;" rowspan="2">Action</th>
                                             </tr>
                                             <tr>
-                                                <th style="width:10%;text-align:center;">Jumlah Bruto</th>
+                                                <th style="width:3%;text-align:center;">Jumlah Bruto</th>
                                                 <th style="width:10%;text-align:center;">Potongan Pajak</th>
-                                                <th style="width:10%;text-align:center;">Jumlah Transfer</th>
+                                                <th style="width:3%;text-align:center;">Jumlah Transfer</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-<!--                                             <tr>
+<!--                                        <tr>
                                                 <td colspan="5" style="text-align: right;vertical-align: middle;">
                                                     <b>Saldo Bank Bendahara Pengeluaran sebelum pelimpahan uang</b>
                                                 </td>
@@ -84,34 +83,37 @@
                                             </tr> -->
                                             <tr v-for="v in sp2tdetail" :key="v.id">
                                                 <td style="vertical-align: middle;">
-                                                    {{ v.pegawai.nama }}
+                                                    {{ v.program.kode_program }}<br>
+                                                    {{ v.kegiatan.kode_kegiatan }}<br>
+                                                    {{ v.belanja.kode_belanja }}<br>
+                                                    {{ v.nomor_penerima_sp2t }}
+                                                </td>
+                                                <td style="vertical-align: middle;">
+                                                    {{ v.program.nama_program }}<br>
+                                                    {{ v.kegiatan.nama_kegiatan }}<br>
+                                                    {{ v.belanja.nama_belanja }}<br>
+                                                    {{ v.nama_penerima_sp2t }}
                                                 </td>
                                                 <td style="text-align:right;vertical-align: middle;">
-                                                    <span v-if="v.jenis_pelimpahan === 'UP'">
-                                                        Rp.{{ v.jumlah_pelimpahan | rupiah }}
-                                                    </span>
+                                                    <br><br><br>
+                                                    Rp.{{ v.nominalbruto | rupiah }}
                                                 </td>
                                                 <td style="text-align:right;vertical-align: middle;">
-                                                    <span v-if="v.jenis_pelimpahan === 'GU'">
-                                                        Rp.{{ v.jumlah_pelimpahan | rupiah }}
-                                                    </span>
+                                                    <br><br><br>
+                                                    <span v-if="v.ppn !== 0">PPN Rp.{{ v.ppn | rupiah }}</span>
+                                                    <span v-else-if="v.pph22 !== 0">PPh Pasal 22 Rp.{{ v.pph22 | rupiah }}</span>
+                                                    <span v-else-if="v.pph4 !== 0">PPh Final Pasal 4 ayat 2 Rp.{{ v.pph4 | rupiah }}</span>
+                                                    <span v-else-if="v.pph21 !== 0">PPh Pasal 21 Rp.{{ v.pph21 | rupiah }}</span>
+                                                    <span v-else-if="v.pph23 !== 0">PPh Pasal 23 Rp.{{ v.pph23 | rupiah }}</span>
+                                                    <span v-else></span>
                                                 </td>
                                                 <td style="text-align:right;vertical-align: middle;">
-                                                    <span v-if="v.jenis_pelimpahan === 'TU'">
-                                                        Rp.{{ v.jumlah_pelimpahan | rupiah }}
-                                                    </span>
-                                                </td>
-                                                <td style="text-align:right;vertical-align: middle;">
-                                                    <span v-if="v.jenis_pelimpahan === 'LS'">
-                                                        Rp.{{ v.jumlah_pelimpahan | rupiah }}
-                                                    </span>
-                                                </td>
-                                                <td style="text-align:right;vertical-align: middle;">
-                                                    <b>Rp. {{ v.sisa_sp2d | rupiah }}</b>
+                                                    <br><br><br>
+                                                    Rp.{{ v.nominal_transfer | rupiah }}
                                                 </td>
                                                 <td style="text-align: center;vertical-align: middle;">
                                                     <div>
-                                                        <a v-if="(access.update === 1)" :href="route + '/nominal/edit?pelimpahan='+ v.pelimpahan_id +'&id=' + v.id" class="btn btn-sm btn-warning mr-sm-1">
+                                                        <a v-if="(access.update === 1)" :href="route + '/edit?sp2t='+ v.sp2t_id +'&id=' + v.id" class="btn btn-sm btn-warning mr-sm-1">
                                                             <i class="fa fa-wrench"></i> Ubah
                                                         </a>
                                                         <button v-else class="btn btn-sm btn-warning disabled mr-sm-1"><i class="fa fa-wrench"></i> Ubah</button>
@@ -123,12 +125,21 @@
                                                     </div>
                                                 </td>
                                             </tr>
+                                            <tr>
+                                                <td colspan="4" style="text-align: right;vertical-align: middle;">
+                                                    <b>Jumlah Pencairan Transfer</b>
+                                                </td>
+                                                <td style="text-align:right;vertical-align: middle;">
+                                                    <b>Rp.{{ sp2t.jumlah_transfer | rupiah }}</b>
+                                                </td>
+                                                <td style="text-align: center;vertical-align: middle;"></td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
                             </transition>
                             <transition name="fade">
-                                <v-delete :element="'pelimpahandetail_delete_modal'" :id="id" @delete="deleteData"></v-delete>
+                                <v-delete :element="'sp2tdetail_delete_modal'" :id="id" @delete="deleteData"></v-delete>
                             </transition>
                         </div>
                         <!-- <div class="col-md-12 col-xs-12" v-if="pelimpahandetail.length !== 0">
@@ -177,7 +188,7 @@
                 .then(response => {
                     if(response.status === 'ok') {
                         this.alert.delete = true;
-                        $('#pelimpahandetail_delete_modal').modal('hide');
+                        $('#sp2tdetail_delete_modal').modal('hide');
                         window.scroll({ top: 0, left: 0, behavior: 'smooth' });
                         setTimeout(function() {
                             this.alert.delete=false;
@@ -187,20 +198,20 @@
                 }).catch(error => {
                     this.alert.delete = false;
                     this.alert.error = true;
-                    $('#pelimpahandetail_delete_modal').modal('hide');
+                    $('#sp2tdetail_delete_modal').modal('hide');
                     window.scroll({ top: 0, left: 0, behavior: 'smooth' });
                     console.log(error);
                 });
             },
             toggleModal(id) {
-                $("#pelimpahandetail_delete_modal").modal('show');
+                $("#sp2tdetail_delete_modal").modal('show');
                 this.id = id;
             },
         },
         computed: {
-          total(v) {
-            return this.saldo - v;
-          }
+            total(v) {
+                return this.saldo - v;
+            }
         },
         created() {
             this.isLoading = true;

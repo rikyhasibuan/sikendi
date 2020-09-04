@@ -335,14 +335,14 @@ export default {
                 this.validasi.nominalbruto = false;
             }
 
-            if (this.sp2t.nama_penerima_sp2t.length === 0) {
+            if (this.nama_penerima_sp2t.length === 0) {
                 this.validasi.nama_penerima_sp2t = true;
                 condition++;
             } else {
                 this.validasi.nama_penerima_sp2t = false;
             }
 
-            if (this.sp2t.nomor_penerima_sp2t.length === 0) {
+            if (this.nomor_penerima_sp2t.length === 0) {
                 this.validasi.nomor_penerima_sp2t = true;
                 condition++;
             } else {

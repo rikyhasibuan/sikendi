@@ -26,7 +26,16 @@ class Sp2tController extends Controller
     {
         try {
             $_q = ($request['q'] !== '') ? $request['q'] : '';
-            $sp2t = Sp2t::searchNotaDinas($_q)->with('pegawai')->orderBy('id', 'DESC')->paginate(10);
+            $_start = ($request['start'] !== '') ? $request['start'] : '';
+            $_end = ($request['end'] !== '') ? $request['end'] : '';
+            $sp2t = Sp2t::searchNotaDinas($_q)
+            ->searchAwalPeriode($_start)
+            ->searchAkhirPeriode($_end)
+            ->orderBy('id', 'DESC')
+            ->with('pegawai')
+            ->orderBy('id', 'DESC')
+            ->paginate(10);
+
             return response()->json($sp2t, 200);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
@@ -38,33 +47,21 @@ class Sp2tController extends Controller
         return response()->json(Pelimpahan::find($request['id']), 200);
     }
 
-    public function put_data(Request $request)
-    {
-        $pelimpahan = Pelimpahan::find($request['id']);
-        $pelimpahan->nota_dinas = $request->input('nota_dinas');
-        $pelimpahan->tgl_nota_dinas = $request->input('tgl_nota_dinas');
-        $pelimpahan->jumlah_pelimpahan = $request->input('jumlah_pelimpahan');
-        $pelimpahan->updated_at = date('Y-m-d H:i:s');
-        if ($pelimpahan->save()) {
-            $payload = [
-                'page' => 'Pelimpahan Uang',
-                'message' => 'User dengan NIP '.$request->query('nip').' melakukan perubahan pada data Pelimpahan Uang'
-            ];
-            $this->_common->generate_log($payload);
-            return response()->json(['status' => 'ok'], 200);
-        } else {
-            return response()->json(['status' => 'failed'], 500);
-        }
-    }
-
     public function delete_data(Request $request)
     {
-        $pelimpahan = Pelimpahan::find($request['id']);
-        if ($pelimpahan->delete()) {
-            PelimpahanDetail::where('pelimpahan_id', $request['id'])->delete();
+        $detail = Sp2tDetail::find($request['id']);
+        $old_jml = $detail->nominal_transfer;
+        $parent_id = $detail->sp2t_id;
+        if ($detail->delete()) {
+            $sp2t = Sp2t::find($parent_id);
+            $jml = $sp2t->jumlah_transfer;
+            $sisa = $sp2t->sisa_pelimpahan;
+            $sp2t->jumlah_transfer = $jml - $old_jml;
+            $sp2t->sisa_pelimpahan = $sisa + $old_jml;
+            $sp2t->save();
             $payload = [
-            'page' => 'Pelimpahan',
-            'message' => 'User dengan NIP '.$request->query('nip').' melakukan hapus data pada Pelimpahan'
+            'page' => 'SP2T',
+            'message' => 'User dengan NIP '.$request->query('nip').' melakukan hapus data pada SP2T'
             ];
             $this->_common->generate_log($payload);
             return response()->json(['status' => 'ok'], 200);
@@ -73,98 +70,69 @@ class Sp2tController extends Controller
         }
     }
 
-    public function post_nominal_data(Request $request)
+    public function post_data(Request $request)
     {
-        echo "<pre>";
-        print_r($request);
-        exit;
-        /*$parent = Pelimpahan::find($request['pelimpahan']);
-        $pelimpahan = new PelimpahanDetail();
-        $pelimpahan->pelimpahan_id = $request['pelimpahan'];
-        $pelimpahan->bendahara = $request->input('bendahara');
-        $pelimpahan->jumlah_pelimpahan = $request->input('jumlah_pelimpahan');
-        $pelimpahan->jenis_pelimpahan = $request->input('jenis_pelimpahan');
-        $pelimpahan->sisa_sp2d = $parent->sisa_sp2d - $request->input('jumlah_pelimpahan');
-        $pelimpahan->created_at = date('Y-m-d H:i:s');
-        if ($pelimpahan->save()) {
-            if ($pelimpahan->jenis_pelimpahan == 'UP') {
-                $parent->up = $parent->up + $pelimpahan->jumlah_pelimpahan;
-            } elseif ($pelimpahan->jenis_pelimpahan == 'GU') {
-                $parent->gu = $parent->gu + $pelimpahan->jumlah_pelimpahan;
-            } elseif ($pelimpahan->jenis_pelimpahan == 'TU') {
-                $parent->tu = $parent->tu + $pelimpahan->jumlah_pelimpahan;
-            } elseif ($pelimpahan->jenis_pelimpahan == 'LS') {
-                $parent->ls = $parent->ls + $pelimpahan->jumlah_pelimpahan;
-            }
-            $parent->jumlah_pelimpahan = $parent->jumlah_pelimpahan + $pelimpahan->jumlah_pelimpahan;
-            $parent->sisa_sp2d = $pelimpahan->sisa_sp2d;
-            $parent->save();
+        $sp2t = Sp2t::find($request['sp2t']);
+        $detail = new Sp2tDetail();
+        $detail->sp2t_id = $request['sp2t'];
+        $detail->program_id = $request->input('program_id');
+        $detail->kegiatan_id = $request->input('kegiatan_id');
+        $detail->belanja_id = $request->input('belanja_id');
+        $detail->nama_penerima_sp2t = $request->input('nama_penerima_sp2t');
+        $detail->nomor_penerima_sp2t = $request->input('nomor_penerima_sp2t');
+        $detail->nominalbruto = $request->input('nominalbruto');
+        $detail->ppn = $request->input('ppn');
+        $detail->pph22 = $request->input('pph22');
+        $detail->pph4 = $request->input('pph4');
+        $detail->pph21 = $request->input('pph21');
+        $detail->pph23 = $request->input('pph23');
+        $detail->nominal_transfer = $request->input('nominal_transfer');
+        $detail->created_at = date('Y-m-d H:i:s');
+        if ($detail->save()) {
+            $jml = $sp2t->jumlah_transfer;
+            $sisa = $sp2t->sisa_pelimpahan;
+            $sp2t->jumlah_transfer = $jml + $detail->nominal_transfer;
+            $sp2t->sisa_pelimpahan = $sisa - ($jml + $detail->nominal_transfer);
+            $sp2t->save();
             $payload = [
-                'page' => 'Pelimpahan Uang',
-                'message' => 'User dengan NIP '.$request->query('nip').' menambahkan data Pelimpahan baru'
+                'page' => 'SP2T',
+                'message' => 'User dengan NIP '.$request->query('nip').' menambahkan data SP2T baru'
             ];
             $this->_common->generate_log($payload);
             return response()->json(['status'=>'ok'], 200);
         } else {
             return response()->json(['status'=>'failed'], 500);
-        }*/
+        }
     }
 
-    public function put_nominal_data(Request $request)
+    public function put_data(Request $request)
     {
-        $parent = Pelimpahan::find($request['pelimpahan']);
-        $pelimpahan = PelimpahanDetail::find($request['id']);
-
-        // ambil dulu data nominal lama
-        $old_amount = $pelimpahan->jumlah_pelimpahan;
-
-        // kalau jenis pelimpahan yang lama sama dengan yang baru
-        if ($pelimpahan->jenis_pelimpahan == $request->input('jenis_pelimpahan')) {
-            if ($pelimpahan->jenis_pelimpahan == 'UP') {
-                $parent->up = $parent->up - $old_amount + $pelimpahan->jumlah_pelimpahan;
-            } elseif ($pelimpahan->jenis_pelimpahan == 'GU') {
-                $parent->gu = $parent->gu - $old_amount + $pelimpahan->jumlah_pelimpahan;
-            } elseif ($pelimpahan->jenis_pelimpahan == 'TU') {
-                $parent->tu = $parent->tu - $old_amount + $pelimpahan->jumlah_pelimpahan;
-            } elseif ($pelimpahan->jenis_pelimpahan == 'LS') {
-                $parent->ls = $parent->ls - $old_amount + $pelimpahan->jumlah_pelimpahan;
-            }
-        // ini kalau beda jenisnya.
-        } else {
-            if ($pelimpahan->jenis_pelimpahan == 'UP') {
-                $parent->up = $parent->up - $old_amount;
-            } elseif ($pelimpahan->jenis_pelimpahan == 'GU') {
-                $parent->gu = $parent->gu - $old_amount;
-            } elseif ($pelimpahan->jenis_pelimpahan == 'TU') {
-                $parent->tu = $parent->tu - $old_amount;
-            } elseif ($pelimpahan->jenis_pelimpahan == 'LS') {
-                $parent->ls = $parent->ls - $old_amount;
-            }
-
-            if ($request->input('jenis_pelimpahan') == 'UP') {
-                $parent->up = $parent->up + $request->input('jumlah_pelimpahan');
-            } elseif ($request->input('jenis_pelimpahan') == 'GU') {
-                $parent->gu = $parent->gu + $request->input('jumlah_pelimpahan');
-            } elseif ($request->input('jenis_pelimpahan') == 'TU') {
-                $parent->tu = $parent->tu + $request->input('jumlah_pelimpahan');
-            } elseif ($request->input('jenis_pelimpahan') == 'LS') {
-                $parent->ls = $parent->ls + $request->input('jumlah_pelimpahan');
-            }
-        }
-
-        $pelimpahan->pelimpahan_id = $request['pelimpahan'];
-        $pelimpahan->bendahara = $request->input('bendahara');
-        $pelimpahan->jumlah_pelimpahan = $request->input('jumlah_pelimpahan');
-        $pelimpahan->jenis_pelimpahan = $request->input('jenis_pelimpahan');
-        $pelimpahan->sisa_sp2d = $parent->sisa_sp2d + $old_amount - $request->input('jumlah_pelimpahan');
-        $pelimpahan->created_at = date('Y-m-d H:i:s');
-        if ($pelimpahan->save()) {
-            $parent->jumlah_pelimpahan = $parent->jumlah_pelimpahan - $old_amount + $pelimpahan->jumlah_pelimpahan;
-            $parent->sisa_sp2d = $pelimpahan->sisa_sp2d;
-            $parent->save();
+        $sp2t = Sp2t::find($request['sp2t']);
+        $detail = Sp2tDetail::find($request['id']);
+        $old_jml = $detail->nominal_transfer;
+        $detail->sp2t_id = $request['sp2t'];
+        $detail->program_id = $request->input('program_id');
+        $detail->kegiatan_id = $request->input('kegiatan_id');
+        $detail->belanja_id = $request->input('belanja_id');
+        $detail->nama_penerima_sp2t = $request->input('nama_penerima_sp2t');
+        $detail->nomor_penerima_sp2t = $request->input('nomor_penerima_sp2t');
+        $detail->nominalbruto = $request->input('nominalbruto');
+        $detail->ppn = $request->input('ppn');
+        $detail->pph22 = $request->input('pph22');
+        $detail->pph4 = $request->input('pph4');
+        $detail->pph21 = $request->input('pph21');
+        $detail->pph23 = $request->input('pph23');
+        $detail->nominal_transfer = $request->input('nominal_transfer');
+        $detail->created_at = date('Y-m-d H:i:s');
+        if ($detail->save()) {
+            $jml = $sp2t->jumlah_transfer;
+            $sisa = $sp2t->sisa_pelimpahan;
+            $sp2t->jumlah_transfer = $jml - $old_jml + $detail->nominal_transfer;
+            $sp2t->sisa_pelimpahan = $sisa + $old_jml - ($jml + $detail->nominal_transfer);
+            $sp2t->save();
             $payload = [
-                'page' => 'Pelimpahan Uang',
-                'message' => 'User dengan NIP '.$request->query('nip').' melakukan ubah data pada Pelimpahan uang'
+                'page' => 'SP2T',
+                'message' => 'User dengan NIP '.$request->query('nip').' melakukan ubah data pada SP2T'
             ];
             $this->_common->generate_log($payload);
             return response()->json(['status'=>'ok'], 200);

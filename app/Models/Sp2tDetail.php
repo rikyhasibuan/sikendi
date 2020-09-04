@@ -20,4 +20,19 @@ class Sp2tDetail extends Model
     {
         return $this->belongsTo('App\Models\Sp2t', 'sp2t_id');
     }
+
+    public function program()
+    {
+        return $this->belongsTo('App\Models\Program', 'program_id');
+    }
+
+    public function kegiatan()
+    {
+        return $this->belongsTo('App\Models\Kegiatan', 'kegiatan_id');
+    }
+
+    public function belanja()
+    {
+        return $this->belongsTo('App\Models\Belanja', 'belanja_id');
+    }
 }
