@@ -1,10 +1,10 @@
 <template>
     <div>
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <!-- <form method="POST" v-on:submit.prevent="fetchData">
+                        <form method="POST" v-on:submit.prevent="fetchData">
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <div class="input-group">
@@ -26,34 +26,80 @@
                                     <button type="submit" class="btn btn-success"><i class="fa fa-search"></i> Tampikan Data</button>
                                 </div>
                             </div>
-                        </form> -->
+                        </form>
                         
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
-        <!-- <div class="row">
-            <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-6">
                 <div class="card">
-                    <div class="card-body table-responsive">
+                    <div class="card-body">
                         <loading :opacity="100" :active.sync="isLoading" :can-cancel="false" :is-full-page="false"></loading>
                         <transition name="fade">
                             <table class="table table-hover table-striped table-bordered">
                                 <thead>
                                     <tr>
-                                        <th style="text-align: center;">Kegiatan</th>
-                                        <th style="text-align: center;">Pagu Anggaran</th>
-                                        <th style="text-align: center;">Realisasi Anggaran</th>
-                                        <th style="text-align: center;">Sisa Anggaran</th>
+                                        <th style="text-align: center;">ANGGARAN KEGIATAN</th>
+                                        <th style="text-align: center;">SP2D</th>
+                                        <th style="text-align: center;">SISA ANGGARAN KEGIATAN</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(v,k) in output_table" :key="k">
-                                        <td>{{ v.kegiatan }}</td>
-                                        <td style="text-align:right;">{{ v.anggaran | rupiah }}</td>
-                                        <td style="text-align:right;">{{ v.serapan | rupiah }}</td>
-                                        <td style="text-align:right;">{{ v.sisa | rupiah}}</td>
+                                    <tr>
+                                        <td style="text-align:right;">{{ anggaran | rupiah }}</td>
+                                        <td style="text-align:right;">{{ sp2d | rupiah }}</td>
+                                        <td style="text-align:right;">{{ anggaran - sp2d | rupiah }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </transition>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <loading :opacity="100" :active.sync="isLoading" :can-cancel="false" :is-full-page="false"></loading>
+                        <transition name="fade">
+                            <table class="table table-hover table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: center;">PELIMPAHAN</th>
+                                        <th style="text-align: center;">SISA ANGGARAN DI BANK BP</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="text-align:right;">{{ pelimpahan | rupiah }}</td>
+                                        <td style="text-align:right;">{{ sp2d - pelimpahan | rupiah }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </transition>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <loading :opacity="100" :active.sync="isLoading" :can-cancel="false" :is-full-page="false"></loading>
+                        <transition name="fade">
+                            <table class="table table-hover table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: center;">SP2T</th>
+                                        <th style="text-align: center;">SALDO BANK DI REKENING BPP</th>
+                                        <th style="text-align: center;">SALDO BANK DI REKENING BP</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="text-align:right;">{{ sp2t | rupiah }}</td>
+                                        <td style="text-align:right;">{{ pelimpahan - sp2t | rupiah }}</td>
+                                        <td style="text-align:right;">{{ sp2d - pelimpahan - sp2t | rupiah }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -62,22 +108,30 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+
+        <!-- <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-                    <div class="card-body table-responsive">
+                    <div class="card-body">
                         <loading :opacity="100" :active.sync="isLoading" :can-cancel="false" :is-full-page="false"></loading>
-                        <highcharts :options="anggaran"></highcharts>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body table-responsive">
-                        <loading :opacity="100" :active.sync="isLoading" :can-cancel="false" :is-full-page="false"></loading>
-                        <highcharts :options="serapan"></highcharts>
+                        <transition name="fade">
+                            <table class="table table-hover table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: center;">SP2T</th>
+                                        <th style="text-align: center;">SALDO BANK DI REKENING BPP</th>
+                                        <th style="text-align: center;">SALDO BANK DI REKENING BP</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="text-align:right;">{{ sp2t | rupiah }}</td>
+                                        <td style="text-align:right;">{{ pelimpahan - sp2t | rupiah }}</td>
+                                        <td style="text-align:right;">{{ sp2d - pelimpahan - sp2t | rupiah }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </transition>
                     </div>
                 </div>
             </div>
@@ -93,6 +147,10 @@ import { Chart } from 'highcharts-vue';
 export default {
     data: function() {
         return {
+            anggaran:'',
+            sp2d:'',
+            pelimpahan:'',
+            sp2t: '',
             periode:'',
             tahun: '',
             chart_tahun: '',
@@ -141,14 +199,15 @@ export default {
             let tahun = date[0];
             let bulan = (typeof date[1] !== "undefined") ? parseInt(date[1]) : '';
 
-            service.fetchData(this.api + '?tahun='+tahun+'&bulan='+bulan)
+            service.fetchData(this.api)
                 .then(
                     response => {
                         this.isLoading = false;
                         this.chart_tahun = this.tahun;
-                        this.output_table = response.output_table;
-                        this.generateAnggaranChart(response);
-                        this.generateSerapanChart(response);
+                        this.anggaran = response.anggaran;
+                        this.sp2d = response.sp2d;
+                        this.pelimpahan = response.pelimpahan;
+                        this.sp2t = response.sp2t;
                     }
                 ).catch(error => {
                     this.isLoading = false;
