@@ -10,7 +10,7 @@ import money from 'v-money';
 import accounting from 'accounting';
 import datePicker from 'vue-bootstrap-datetimepicker';
 import 'pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css';
-import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
+import VueTypeaheadBootstrap from 'vue-typeahead-bootstrap';
 
 Vue.use(money, {
     decimal: ',',

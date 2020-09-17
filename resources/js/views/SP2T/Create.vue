@@ -9,16 +9,9 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>Program *</label>
-                                <select 
-                                    v-model="sp2t.program_id" 
-                                    class="form-control" 
-                                    @change="onChangeProgram($event)" 
-                                    :class="{ 'is-invalid': validasi.program_id }"
-                                >
+                                <select v-model="sp2t.program_id" class="form-control" @change="onChangeProgram($event)" :class="{ 'is-invalid': validasi.program_id }">
                                     <option value="">Pilih Program</option>
-                                    <option v-for="v in this.program" :value="v.id" :key="v.id">
-                                        {{ v.nama_program }}
-                                    </option>
+                                    <option v-for="v in this.program" :value="v.id" :key="v.id">{{ v.nama_program }}</option>
                                 </select>
                             </div>
                         </div>
@@ -26,16 +19,9 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>Kegiatan *</label>
-                                <select 
-                                    v-model="sp2t.kegiatan_id" 
-                                    class="form-control" 
-                                    @change="onChangeKegiatan($event)" 
-                                    :class="{ 'is-invalid': validasi.kegiatan_id }"
-                                >
+                                <select v-model="sp2t.kegiatan_id" class="form-control" @change="onChangeKegiatan($event)" :class="{ 'is-invalid': validasi.kegiatan_id }">
                                     <option value="">Pilih Kegiatan</option>
-                                    <option v-for="v in this.kegiatan" :value="v.id" :key="v.id">
-                                        {{ v.nama_kegiatan }}
-                                    </option>
+                                    <option v-for="v in this.kegiatan" :value="v.id" :key="v.id">{{ v.nama_kegiatan }}</option>
                                 </select>
                             </div>
                         </div>
@@ -43,53 +29,47 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>Belanja *</label>
-                                <select 
-                                    v-model="sp2t.belanja_id" 
-                                    class="form-control" 
-                                    :class="{ 'is-invalid': validasi.belanja_id }"
-                                >
+                                <select v-model="sp2t.belanja_id" class="form-control" :class="{ 'is-invalid': validasi.belanja_id }">
                                     <option value="">Pilih Belanja</option>
-                                    <option v-for="v in this.belanja" :value="v.id" :key="v.id">
-                                        {{ v.nama_belanja }}
-                                    </option>
+                                    <option v-for="v in this.belanja" :value="v.id" :key="v.id">{{ v.nama_belanja }}</option>
                                 </select>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>Nama Rekening Penerima *</label>
-                                <vue-bootstrap-typeahead 
-                                    :data="nama_sp2t"
-                                    placeholder="Nama Rekening Penerima"
-                                    v-model="nama_penerima_sp2t"
-                                    :serializer="res => res.nama_penerima"
-                                    @hit="nomor_penerima_sp2t = $event.norek_penerima"
-                                    :class="{ 'is-invalid': validasi.nama_penerima_sp2t }"
+                                <vue-bootstrap-typeahead
+                                :data="nama_sp2t"
+                                placeholder="Nama Rekening Penerima"
+                                v-model="nama_penerima_sp2t"
+                                :serializer="res => res.nama_penerima"
+                                @hit="nomor_penerima_sp2t = $event.norek_penerima"
+                                :class="{ 'is-invalid': validasi.nama_penerima_sp2t }"
                                 />
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>Nomor Rekening Penerima *</label>
-                                <input 
-                                    type="text"
-                                    class="form-control"
-                                    placeholder="Nomor Rekening Penerima"
-                                    v-model="nomor_penerima_sp2t"
-                                    :class="{ 'is-invalid': validasi.nomor_penerima_sp2t }"
+                                <input
+                                type="text"
+                                class="form-control"
+                                placeholder="Nomor Rekening Penerima"
+                                v-model="nomor_penerima_sp2t"
+                                :class="{ 'is-invalid': validasi.nomor_penerima_sp2t }"
                                 >
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>Nominal *</label>
-                                <money 
-                                    type="text" 
-                                    class="form-control" 
-                                    placeholder="Nominal" 
-                                    :change="onChangeBruto()"
-                                    v-model="sp2t.nominalbruto"
-                                    :class="{ 'is-invalid': validasi.nominalbruto }"
+                                <money
+                                type="text"
+                                class="form-control"
+                                placeholder="Nominal"
+                                :change="onChangeBruto()"
+                                v-model="sp2t.nominalbruto"
+                                :class="{ 'is-invalid': validasi.nominalbruto }"
                                 />
                             </div>
                         </div>
@@ -121,17 +101,6 @@
                             <div class="form-group col-md-6">
                                 <label>PPh Pasal 23 *</label>
                                 <money type="text" :change="onChangePph23()" class="form-control" v-model="sp2t.pph23" />
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-6">
-                                <label>Nominal Transfer *</label>
-                                <money 
-                                    type="text" 
-                                    class="form-control readonly" 
-                                    v-model="sp2t.nominal_transfer"
-                                    readonly="readonly"
-                                />
                             </div>
                         </div>
                         <div class="row">
@@ -168,8 +137,7 @@ export default {
                 'pph22': '',
                 'pph4': '',
                 'pph21': '',
-                'pph23': '',
-                'nominal_transfer': ''
+                'pph23': ''
             },
             validasi: {
                 'program_id': '',
@@ -204,10 +172,11 @@ export default {
     ],
     methods: {
         onChangeBruto() {
-            this.sp2t.nominal_transfer = this.sp2t.nominalbruto;
+            //this.sp2t.nominal_transfer = this.sp2t.nominalbruto;
         },
-        onChangePpn() {
-            // this.sp2t.nominal_transfer = this.sp2t.nominalbruto - this.sp2t.ppn;
+        onChangePpn(evt) {
+            //console.log(evt);
+            //this.sp2t.nominal_transfer = this.sp2t.nominalbruto - evt;
         },
         onChangePph21() {
             // this.sp2t.nominal_transfer = this.sp2t.nominalbruto - this.sp2t.ppn - this.sp2t.pph21;
@@ -306,7 +275,7 @@ export default {
         validate() {
             let condition = 0;
             let callback = false;
-            
+
             if (this.sp2t.program_id.length === 0) {
                 this.validasi.program_id = true;
                 condition++;

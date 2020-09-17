@@ -79,7 +79,7 @@ class Sp2tController extends Controller
         $data['program'] = $program;
         $data['kegiatan'] = $kegiatan;
         $data['belanja'] = $belanja;
-        $data['route'] = url($this->route);
+        $data['route'] = url($this->route . '/detail?id=' . $request['sp2t']);
         return View::make('sp2t.form', $data);
     }
 
@@ -103,9 +103,9 @@ class Sp2tController extends Controller
         $data['kegiatan'] = $kegiatan;
         $data['belanja'] = $belanja;
         $data['breadcrumb'] = $breadcrumb;
-        $data['api'] = url($this->api . '?nip='.$this->_nip.'&id=' . $sp2t->id);
+        $data['api'] = url($this->api . '?nip='.$this->_nip.'&sp2t='.$sp2t->sp2t_id.'&id=' . $sp2t->id);
         $data['act'] = 'edit';
-        $data['route'] = url($this->route);
+        $data['route'] = url($this->route . '/detail?id=' . $sp2t->sp2t_id);
         return View::make('sp2t.form', $data);
     }
 

@@ -74,6 +74,21 @@ class Sp2tController extends Controller
     {
         $sp2t = Sp2t::find($request['sp2t']);
         $detail = new Sp2tDetail();
+
+        $tf = 0;
+        if ($request->input('ppn') != 0) {
+            $tf = $request->input('nominalbruto') - $request->input('ppn');
+        } elseif ($request->input('pph22') != 0) {
+            $tf = $request->input('nominalbruto') - $request->input('pph22');
+        } elseif ($request->input('pph4') != 0) {
+            $tf = $request->input('nominalbruto') - $request->input('pph4');
+        } elseif ($request->input('pph21') != 0) {
+            $tf = $request->input('nominalbruto') - $request->input('pph21');
+        } elseif ($request->input('pph23') != 0) {
+            $tf = $request->input('nominalbruto') - $request->input('pph23');
+        } else {
+            $tf = $request->input('nominalbruto');
+        }
         $detail->sp2t_id = $request['sp2t'];
         $detail->program_id = $request->input('program_id');
         $detail->kegiatan_id = $request->input('kegiatan_id');
@@ -86,7 +101,7 @@ class Sp2tController extends Controller
         $detail->pph4 = $request->input('pph4');
         $detail->pph21 = $request->input('pph21');
         $detail->pph23 = $request->input('pph23');
-        $detail->nominal_transfer = $request->input('nominal_transfer');
+        $detail->nominal_transfer = $tf;
         $detail->created_at = date('Y-m-d H:i:s');
         if ($detail->save()) {
             $jml = $sp2t->jumlah_transfer;
@@ -110,6 +125,22 @@ class Sp2tController extends Controller
         $sp2t = Sp2t::find($request['sp2t']);
         $detail = Sp2tDetail::find($request['id']);
         $old_jml = $detail->nominal_transfer;
+
+        $tf = 0;
+        if ($request->input('ppn') != 0) {
+            $tf = $request->input('nominalbruto') - $request->input('ppn');
+        } elseif ($request->input('pph22') != 0) {
+            $tf = $request->input('nominalbruto') - $request->input('pph22');
+        } elseif ($request->input('pph4') != 0) {
+            $tf = $request->input('nominalbruto') - $request->input('pph4');
+        } elseif ($request->input('pph21') != 0) {
+            $tf = $request->input('nominalbruto') - $request->input('pph21');
+        } elseif ($request->input('pph23') != 0) {
+            $tf = $request->input('nominalbruto') - $request->input('pph23');
+        } else {
+            $tf = $request->input('nominalbruto');
+        }
+
         $detail->sp2t_id = $request['sp2t'];
         $detail->program_id = $request->input('program_id');
         $detail->kegiatan_id = $request->input('kegiatan_id');
@@ -122,7 +153,7 @@ class Sp2tController extends Controller
         $detail->pph4 = $request->input('pph4');
         $detail->pph21 = $request->input('pph21');
         $detail->pph23 = $request->input('pph23');
-        $detail->nominal_transfer = $request->input('nominal_transfer');
+        $detail->nominal_transfer = $tf;
         $detail->created_at = date('Y-m-d H:i:s');
         if ($detail->save()) {
             $jml = $sp2t->jumlah_transfer;
