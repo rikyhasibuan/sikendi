@@ -1,146 +1,94 @@
 <template>
     <div>
-        <!-- <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <form method="POST" v-on:submit.prevent="fetchData">
-                            <div class="form-row">
-                                <div class="form-group col-md-4">
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                                        </div>
-                                        <date-picker
-                                            id="periode"
-                                            name="periode"
-                                            v-model="periode"
-                                            :config="options"
-                                            class="form-control"
-                                            placeholder="Periode"
-                                            autocomplete="off">
-                                        </date-picker>
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <button type="submit" class="btn btn-success"><i class="fa fa-search"></i> Tampikan Data</button>
-                                </div>
-                            </div>
-                        </form>
-                        
-                    </div>
-                </div>
-            </div>
-        </div> -->
-
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-3">
                 <div class="card">
                     <div class="card-body">
-                        <loading :opacity="100" :active.sync="isLoading" :can-cancel="false" :is-full-page="false"></loading>
-                        <transition name="fade">
-                            <table class="table table-hover table-striped table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th style="text-align: center;">ANGGARAN KEGIATAN</th>
-                                        <th style="text-align: center;">SP2D</th>
-                                        <th style="text-align: center;">SISA ANGGARAN KEGIATAN</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td style="text-align:right;">{{ anggaran | rupiah }}</td>
-                                        <td style="text-align:right;">{{ sp2d | rupiah }}</td>
-                                        <td style="text-align:right;">{{ anggaran - sp2d | rupiah }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </transition>
+                        <div class="info-box">
+                            <span class="info-box-icon bg-danger elevation-1"><i class="fa fa-money"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Sisa Anggaran Kegiatan</span>
+                                <span class="info-box-number">{{ anggaran - sp2d | rupiah }}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-3">
                 <div class="card">
                     <div class="card-body">
-                        <loading :opacity="100" :active.sync="isLoading" :can-cancel="false" :is-full-page="false"></loading>
-                        <transition name="fade">
-                            <table class="table table-hover table-striped table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th style="text-align: center;">PELIMPAHAN</th>
-                                        <th style="text-align: center;">SISA ANGGARAN DI BANK BP</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td style="text-align:right;">{{ pelimpahan | rupiah }}</td>
-                                        <td style="text-align:right;">{{ sp2d - pelimpahan | rupiah }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </transition>
+                        <div class="info-box">
+                            <span class="info-box-icon bg-info elevation-1"><i class="fa fa-money"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">SP2D</span>
+                                <span class="info-box-number">{{ sp2d | rupiah }}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-12">
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-warning elevation-1"><i class="fa fa-money"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">Pelimpahan</span>
+                                <span class="info-box-number">{{ pelimpahan | rupiah }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
                 <div class="card">
                     <div class="card-body">
                         <loading :opacity="100" :active.sync="isLoading" :can-cancel="false" :is-full-page="false"></loading>
-                        <transition name="fade">
-                            <table class="table table-hover table-striped table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th style="text-align: center;">SP2T</th>
-                                        <th style="text-align: center;">SALDO BANK DI REKENING BPP</th>
-                                        <th style="text-align: center;">SALDO BANK DI REKENING BP</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td style="text-align:right;">{{ sp2t | rupiah }}</td>
-                                        <td style="text-align:right;">{{ pelimpahan - sp2t | rupiah }}</td>
-                                        <td style="text-align:right;">{{ sp2d - pelimpahan - sp2t | rupiah }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </transition>
+                        <div class="info-box">
+                            <span class="info-box-icon bg-success elevation-1"><i class="fa fa-money"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">SP2T</span>
+                                <span class="info-box-number">{{ sp2t | rupiah }}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- <div class="row">
+        <div class="row">
             <div class="col-lg-12">
                 <div class="card">
-                    <div class="card-body">
+                    <div class="card-body table-responsive">
                         <loading :opacity="100" :active.sync="isLoading" :can-cancel="false" :is-full-page="false"></loading>
-                        <transition name="fade">
-                            <table class="table table-hover table-striped table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th style="text-align: center;">SP2T</th>
-                                        <th style="text-align: center;">SALDO BANK DI REKENING BPP</th>
-                                        <th style="text-align: center;">SALDO BANK DI REKENING BP</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td style="text-align:right;">{{ sp2t | rupiah }}</td>
-                                        <td style="text-align:right;">{{ pelimpahan - sp2t | rupiah }}</td>
-                                        <td style="text-align:right;">{{ sp2d - pelimpahan - sp2t | rupiah }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </transition>
+                        <highcharts :options="sp2d_chart"></highcharts>
                     </div>
                 </div>
             </div>
-        </div> -->
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body table-responsive">
+                        <loading :opacity="100" :active.sync="isLoading" :can-cancel="false" :is-full-page="false"></loading>
+                        <highcharts :options="pelimpahan_chart"></highcharts>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body table-responsive">
+                        <loading :opacity="100" :active.sync="isLoading" :can-cancel="false" :is-full-page="false"></loading>
+                        <highcharts :options="sp2t_chart"></highcharts>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
-
 import service from './../services.js';
 import { Chart } from 'highcharts-vue';
 
@@ -151,12 +99,12 @@ export default {
             sp2d:'',
             pelimpahan:'',
             sp2t: '',
+            sp2d_chart: {},
+            pelimpahan_chart: {},
+            sp2t_chart: {},
             periode:'',
             tahun: '',
             chart_tahun: '',
-            resapanAnggaran: {},
-            anggaran:{},
-            serapan:{},
             output_table:{},
             isLoading: false,
             options:null,
@@ -198,35 +146,38 @@ export default {
             let date  = this.periode.split('-');
             let tahun = date[0];
             let bulan = (typeof date[1] !== "undefined") ? parseInt(date[1]) : '';
-
             service.fetchData(this.api)
-                .then(
-                    response => {
-                        this.isLoading = false;
-                        this.chart_tahun = this.tahun;
-                        this.anggaran = response.anggaran;
-                        this.sp2d = response.sp2d;
-                        this.pelimpahan = response.pelimpahan;
-                        this.sp2t = response.sp2t;
-                    }
-                ).catch(error => {
+            .then(
+                response => {
                     this.isLoading = false;
-                    console.log(error);
-                });
+                    this.chart_tahun = this.tahun;
+                    this.anggaran = response.anggaran;
+                    this.sp2d = response.sp2d;
+                    this.pelimpahan = response.pelimpahan;
+                    this.sp2t = response.sp2t;
+
+                    this.generateSp2dChart(response.sp2d_chart);
+                    this.generatePelimpahanChart(response.pelimpahan_chart);
+                    this.generateSp2tChart(response.sp2t_chart);
+                }
+            ).catch(error => {
+                this.isLoading = false;
+                console.log(error);
+            });
         },
-        generateAnggaranChart(response) {
-            this.anggaran = {
+        generateSp2dChart(response) {
+            this.sp2d_chart = {
                 chart: {
-                    type: 'bar',
-                    height: '50%'
+                    type: 'column',
+                    height: '40%'
                 },
                 title: {
-                    text: response.anggaran.anggaran[0].name
+                    text: 'Data SP2D'
                 },
                 yAxis: {
                     min: 0,
                     title: {
-                        text: 'Total Pagu'
+                        text: null
                     },
                     labels: {
                         formatter: function() {
@@ -238,12 +189,12 @@ export default {
                     },
                 },
                 xAxis: {
-                    categories: response.kegiatan,
+                    categories: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
                     title: {
                         text: null
                     }
                 },
-                series: response.anggaran.anggaran,
+                series: [{ name: 'Jumlah SP2D', data: response }],
                 tooltip: {
                     headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
                     pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}:</td><td style="padding:0"><b>Rp.{point.y:.1f}</b></td></tr>',
@@ -251,7 +202,6 @@ export default {
                     shared: true,
                     useHTML: true
                 },
-
                 plotOptions: {
                     bar: {
                         dataLabels: {
@@ -264,19 +214,19 @@ export default {
                 }
             }
         },
-        generateSerapanChart(response) {
-            this.serapan = {
+        generatePelimpahanChart(response) {
+            this.pelimpahan_chart = {
                 chart: {
-                    type: 'bar',
-                    height: '50%'
+                    type: 'column',
+                    height: '40%'
                 },
                 title: {
-                    text: response.serapan.serapan[0].name
+                    text: 'Data Pelimpahan'
                 },
                 yAxis: {
                     min: 0,
                     title: {
-                        text: 'Total Realisasi Anggaran'
+                        text: null
                     },
                     labels: {
                         formatter: function() {
@@ -288,12 +238,12 @@ export default {
                     },
                 },
                 xAxis: {
-                    categories: response.kegiatan,
+                    categories: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
                     title: {
                         text: null
                     }
                 },
-                series: response.serapan.serapan,
+                series: [{ name: 'Jumlah Pelimpahan', data: response }],
                 tooltip: {
                     headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
                     pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}:</td><td style="padding:0"><b>Rp.{point.y:.1f}</b></td></tr>',
@@ -301,7 +251,6 @@ export default {
                     shared: true,
                     useHTML: true
                 },
-
                 plotOptions: {
                     bar: {
                         dataLabels: {
@@ -313,7 +262,57 @@ export default {
                     enabled: false
                 }
             }
-        }
+        },
+        generateSp2tChart(response) {
+            this.sp2t_chart = {
+                chart: {
+                    type: 'column',
+                    height: '40%'
+                },
+                title: {
+                    text: 'Data SP2T'
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: null
+                    },
+                    labels: {
+                        formatter: function() {
+                            if (this.value >= 1E6) {
+                                return (this.value / 1000000).toFixed(0) + ' Jt';
+                            }
+                            return this.value / 1000;
+                        }
+                    },
+                },
+                xAxis: {
+                    categories: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
+                    title: {
+                        text: null
+                    }
+                },
+                series: [{ name: 'Jumlah Transfer', data: response }],
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}:</td><td style="padding:0"><b>Rp.{point.y:.1f}</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    bar: {
+                        dataLabels: {
+                            enabled: true
+                        }
+                    }
+                },
+                legend: {
+                    enabled: false
+                }
+            }
+        },
+
     }
 };
 </script>
