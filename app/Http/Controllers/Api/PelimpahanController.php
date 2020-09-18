@@ -303,7 +303,7 @@ class PelimpahanController extends Controller
             $_id = isset($request['id']) ? $request['id'] : '';
 
             $pelimpahan = Pelimpahan::find($_id);
-            $detail = PelimpahanDetail::where('pelimpahan_id', $_id)->get();
+            $detail = PelimpahanDetail::with('pegawai')->where('pelimpahan_id', $_id)->get();
             $view = View::make('pelimpahan.print', ['pelimpahan' => $pelimpahan, 'detail' => $detail]);
             return $view;
         } catch (Exception $e) {
