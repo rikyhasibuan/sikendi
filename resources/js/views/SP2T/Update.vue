@@ -38,7 +38,7 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>Nama Rekening Penerima *</label>
-                                <vue-bootstrap-typeahead
+                                <vue-typeahead-bootstrap
                                     ref="nama_penerima"
                                     :data="nama_sp2t"
                                     placeholder="Nama Rekening Penerima"

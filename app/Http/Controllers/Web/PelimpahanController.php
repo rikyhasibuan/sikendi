@@ -118,6 +118,7 @@ class PelimpahanController extends Controller
         $data['bendahara'] = $bendahara;
         $data['breadcrumb'] = $breadcrumb;
         $data['api'] = url($this->api . '/nominal?nip='.$this->_nip);
+        $data['print_api'] = url($this->api . '/print?id='.$pelimpahan->id);
         $data['send_api'] = url($this->api . '/nominal/send?pelimpahan='.$pelimpahan->id.'&nip='.$this->_nip);
         $data['act'] = 'edit';
         $data['route'] = url($this->route);

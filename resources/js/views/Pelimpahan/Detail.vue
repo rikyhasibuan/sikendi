@@ -144,7 +144,7 @@
                     <a :href="route" class="btn btn-danger"><i class="fa fa-arrow-left"></i> Kembali</a>
                     &nbsp;&nbsp;
                     <a  v-if="(pelimpahan.status == 0)" href="#" class="btn btn-warning" @click="sendPelimpahan()"><i class="fa fa-envelope"></i> Kirim Data</a>
-                    <a  v-if="(pelimpahan.status == 1)" href="#" class="btn btn-success" @click="cetakPelimpahan()"><i class="fa fa-print"></i> Cetak Data</a>
+                    <a  v-if="(pelimpahan.status == 1)" href="#" class="btn btn-success" @click="cetakPelimpahan(pelimpahan.id)"><i class="fa fa-print"></i> Cetak Data</a>
                 </div>
             </div>
         </div>
@@ -178,7 +178,8 @@
             'print_action',
             'access',
             'api',
-            'send_api'
+            'send_api',
+            'print_api'
         ],
         methods: {
             sendPelimpahan() {
@@ -203,6 +204,10 @@
                     window.scroll({ top: 0, left: 0, behavior: 'smooth' });
                     console.log(error);
                 });
+            },
+            cetakPelimpahan(id) {
+                let newWindow = window.open();
+                newWindow.location = this.print_api;
             },
             deleteData(id) {
                 service.deleteData(this.api + '&id=' + id)

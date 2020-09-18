@@ -133,7 +133,7 @@ Vue.component('v-delete', require('./components/Delete.vue'));
 Vue.component('v-revision', require('./components/Revision.vue'));
 Vue.component('v-approval', require('./components/Approval.vue'));
 Vue.component('v-revision-log', require('./components/RevisionLog.vue'));
-Vue.component('vue-bootstrap-typeahead', VueBootstrapTypeahead)
+Vue.component('vue-typeahead-bootstrap', VueTypeaheadBootstrap)
 Vue.component('loading', Loading);
 
 Vue.component('login', require('./views/Login.vue'));
