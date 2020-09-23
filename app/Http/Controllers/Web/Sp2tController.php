@@ -129,6 +129,7 @@ class Sp2tController extends Controller
         $data['breadcrumb'] = $breadcrumb;
         $data['api'] = url($this->api . '?nip='.$this->_nip);
         $data['send_api'] = url($this->api . '/nominal/send?sp2t='.$sp2t->id.'&nip='.$this->_nip);
+        $data['print_api'] = url($this->api . '/print?id='.$sp2t->id);
         $data['act'] = 'edit';
         $data['route'] = url($this->route);
         $data['access'] = $this->access;

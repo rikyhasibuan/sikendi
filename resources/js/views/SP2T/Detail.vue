@@ -150,6 +150,8 @@
                         </div> -->
                     </div>
                     <a :href="route" class="btn btn-danger"><i class="fa fa-arrow-left"></i> Kembali</a>
+                    &nbsp;&nbsp;
+                    <a v-if="showTable === true" href="#" class="btn btn-success" @click="cetakSp2t(sp2t.id)"><i class="fa fa-print"></i> Cetak Data</a>
                 </div>
             </div>
         </div>
@@ -178,7 +180,7 @@
             'sp2tdetail',
             'lock',
             'route',
-            'print_action',
+            'print_api',
             'access',
             'api'
         ],
@@ -206,6 +208,10 @@
             toggleModal(id) {
                 $("#sp2tdetail_delete_modal").modal('show');
                 this.id = id;
+            },
+            cetakSp2t(id) {
+                let newWindow = window.open();
+                newWindow.location = this.print_api;
             },
         },
         computed: {

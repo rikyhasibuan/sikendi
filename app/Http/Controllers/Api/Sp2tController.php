@@ -211,48 +211,9 @@ class Sp2tController extends Controller
     {
         try {
             $_id = isset($request['id']) ? $request['id'] : '';
-            $_type = isset($request['type']) ? $request['type'] : '';
-
-            $view = '';
-            switch ($_type) {
-                case 'tim':
-                    $dinasboptim = DinasBopTim::with('dinasbop')->find($_id);
-                    $view = View::make('dinasbop.print_tim.sp', ['dinasboptim'=>$dinasboptim]);
-                    break;
-                case 'driver':
-                    $dinasbopdriver = DinasBopDriver::with('dinasbop')->find($_id);
-                    $view = View::make('dinasbop.print_driver.sp', ['dinasbopdriver'=>$dinasbopdriver]);
-                    break;
-                case 'inspektur':
-                    $dinasbopinspektur = DinasBopInspektur::with('dinasbop')->find($_id);
-                    $view = View::make('dinasbop.print_inspektur.sp', ['dinasbopinspektur'=>$dinasbopinspektur]);
-                    break;
-                case 'sekretaris':
-                    $dinasbopsekretaris = DinasBopSekretaris::with('dinasbop')->find($_id);
-                    $view = View::make('dinasbop.print_sekretaris.sp', ['dinasbopsekretaris'=>$dinasbopsekretaris]);
-                    break;
-                case 'reviu':
-                    $dinasbopreviu = DinasBopReviu::with('dinasbop')->find($_id);
-                    $view = View::make('dinasbop.print_reviu.sp', ['dinasbopreviu'=>$dinasbopreviu]);
-                    break;
-                case 'supervisi':
-                    $dinasbopsupervisi = DinasBopSupervisi::with('dinasbop')->find($_id);
-                    $view = View::make('dinasbop.print_supervisi.sp', ['dinasbopsupervisi'=>$dinasbopsupervisi]);
-                    break;
-                case 'pengumpuldata':
-                    $dinasboppengumpuldata = DinasBopPengumpulDataTim::with('dinasboppengumpuldata')->find($_id);
-                    $view = View::make('dinasbop.print_pengumpuldata.sp', ['timpengumpuldata'=>$dinasboppengumpuldata]);
-                    break;
-                case 'administrasi':
-                    $dinasbopadministrasi = DinasBopAdministrasiTim::with('dinasbopadministrasi')->find($_id);
-                    $view = View::make('dinasbop.print_administrasi.sp', ['timadministrasi'=>$dinasbopadministrasi]);
-                    break;
-                case 'custom':
-                    $dinasbopcustom = DinasBopCustomTim::with('dinasbop')->find($_id);
-                    $view = View::make('dinasbop.print_custom.sp', ['dinasbopcustom'=>$dinasbopcustom]);
-                    break;
-            }
-
+            $sp2t = Sp2t::with('pegawai')->find($_id);
+            $detail = Sp2tDetail::with('program', 'kegiatan', 'belanja')->where('sp2t_id', $_id)->get();
+            $view = View::make('sp2t.print', ['sp2t' => $sp2t, 'detail' => $detail]);
             return $view;
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
