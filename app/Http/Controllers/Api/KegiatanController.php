@@ -50,10 +50,9 @@ class KegiatanController extends Controller
     public function post_data(Request $request)
     {
         $check = Kegiatan::where(function ($query) use ($request) {
-            $query->where('kode_kegiatan', $request->input('kode_kegiatan'))
-            ->orWhere('nama_kegiatan', $request->input('nama_kegiatan'));
+            $query->where('kode_kegiatan', $request->input('kode_kegiatan'))->where('program_id', $request->input('program_id'));
         })->count();
-        
+
         if ($check == 0) {
             $kegiatan = new Kegiatan();
             $kegiatan->program_id = $request->input('program_id');
@@ -80,8 +79,7 @@ class KegiatanController extends Controller
     {
         $check = Kegiatan::where('id', '<>', $request['id'])
         ->where(function ($query) use ($request) {
-            $query->where('kode_kegiatan', $request->input('kode_kegiatan'))
-            ->orWhere('nama_kegiatan', $request->input('nama_kegiatan'));
+            $query->where('kode_kegiatan', $request->input('kode_kegiatan'))->where('program_id', $request->input('program_id'));
         })->count();
 
         if($check === 0) {

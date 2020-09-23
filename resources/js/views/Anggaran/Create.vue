@@ -40,7 +40,7 @@
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label>Jumlah Anggaran *</label>
-                                    <input type="text" class="form-control" v-model="anggaran.jumlah" :class="{ 'is-invalid': validasi.jumlah }">
+                                    <money type="text" v-model="anggaran.jumlah" class="form-control" :class="{ 'is-invalid': validasi.jumlah }" />
                                 </div>
                             </div>
 
