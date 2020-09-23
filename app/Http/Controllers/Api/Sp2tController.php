@@ -102,11 +102,14 @@ class Sp2tController extends Controller
         $detail->pph21 = $request->input('pph21');
         $detail->pph23 = $request->input('pph23');
         $detail->nominal_transfer = $tf;
+        $detail->keterangan = $request->input('keterangan');
         $detail->created_at = date('Y-m-d H:i:s');
         if ($detail->save()) {
             $jml = $sp2t->jumlah_transfer;
             $sisa = $sp2t->sisa_pelimpahan;
+            $anggaran = $sp2t->sisa_anggaran;
             $sp2t->jumlah_transfer = $jml + $detail->nominal_transfer;
+            $sp2t->sisa_anggaran = $anggaran - $detail->nominal_transfer;
             $sp2t->sisa_pelimpahan = $sisa - ($jml + $detail->nominal_transfer);
             $sp2t->save();
             $payload = [
@@ -154,6 +157,7 @@ class Sp2tController extends Controller
         $detail->pph21 = $request->input('pph21');
         $detail->pph23 = $request->input('pph23');
         $detail->nominal_transfer = $tf;
+        $detail->keterangan = $request->input('keterangan');
         $detail->created_at = date('Y-m-d H:i:s');
         if ($detail->save()) {
             $jml = $sp2t->jumlah_transfer;

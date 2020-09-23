@@ -70,6 +70,8 @@ class Sp2tController extends Controller
         $kegiatan = [];
         $belanja = [];
 
+        $sp2t = Sp2t::find($request['sp2t']);
+
         $data = [];
         $data['title']  = $this->title;
         $data['link'] = $this->link;
@@ -79,6 +81,7 @@ class Sp2tController extends Controller
         $data['program'] = $program;
         $data['kegiatan'] = $kegiatan;
         $data['belanja'] = $belanja;
+        $data['sp2t'] = $sp2t;
         $data['route'] = url($this->route . '/detail?id=' . $request['sp2t']);
         return View::make('sp2t.form', $data);
     }

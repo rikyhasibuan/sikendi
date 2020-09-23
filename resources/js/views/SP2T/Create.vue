@@ -62,6 +62,18 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
+                                <label>Jumlah Pelimpahan Uang *</label>
+                                <money
+                                type="text"
+                                class="form-control"
+                                placeholder="Jumlah Pelimpahan Uang"
+                                v-model="sp2t_data.sisa_pelimpahan"
+                                readonly="readonly"
+                                />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
                                 <label>Nominal *</label>
                                 <money
                                 type="text"
@@ -75,32 +87,38 @@
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <label>PPN *</label>
+                                <label>PPN</label>
                                 <money type="text" :change="onChangePpn()" class="form-control" v-model="sp2t.ppn" />
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <label>PPh Pasal 22 *</label>
+                                <label>PPh Pasal 22</label>
                                 <money type="text" :change="onChangePph22()" class="form-control" v-model="sp2t.pph22" />
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <label>PPh Final Pasal 4 ayat 2 *</label>
+                                <label>PPh Final Pasal 4 ayat 2</label>
                                 <money type="text" :change="onChangePph4()" class="form-control" v-model="sp2t.pph4" />
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <label>PPh Pasal 21 *</label>
+                                <label>PPh Pasal 21</label>
                                 <money type="text" :change="onChangePph21()" class="form-control" v-model="sp2t.pph21" />
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <label>PPh Pasal 23 *</label>
+                                <label>PPh Pasal 23</label>
                                 <money type="text" :change="onChangePph23()" class="form-control" v-model="sp2t.pph23" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label>Keterangan</label>
+                                <textarea class="form-control" v-model="sp2t.keterangan"/>
                             </div>
                         </div>
                         <div class="row">
@@ -137,7 +155,8 @@ export default {
                 'pph22': '',
                 'pph4': '',
                 'pph21': '',
-                'pph23': ''
+                'pph23': '',
+                'keterangan': ''
             },
             validasi: {
                 'program_id': '',
@@ -167,6 +186,7 @@ export default {
         'program_data',
         'kegiatan_data',
         'belanja_data',
+        'sp2t_data',
         'api',
         'route'
     ],
@@ -234,18 +254,23 @@ export default {
             this.clearAlert();
             let validasi = this.validate();
             if (validasi === true) {
-                this.sp2t.nama_penerima_sp2t = this.nama_penerima_sp2t;
-                this.sp2t.nomor_penerima_sp2t = this.nomor_penerima_sp2t;
-                this.isLoading = true;
-                service.postData(this.api, this.sp2t)
-                    .then(result => {
-                        this.response(result);
-                    }).catch(error => {
-                        setTimeout(() => { this.isLoading = false }, 1000);
-                        this.alert.error = true;
-                        window.scroll({top: 0, left: 0, behavior: 'smooth'});
-                        console.log(error);
-                    });
+                let total = this.sp2t.nominalbruto - (this.sp2t.ppn - this.sp2t.pph22 + this.sp2t.pph4 + this.sp2t.pph21 + this.sp2t.pph23);
+                if (total >= this.sp2t_data.sisa_pelimpahan) {
+                    alert('Jumlah Nominal Transfer Melebihi Jumlah Pelimpahan');
+                } else {
+                    this.sp2t.nama_penerima_sp2t = this.nama_penerima_sp2t;
+                    this.sp2t.nomor_penerima_sp2t = this.nomor_penerima_sp2t;
+                    this.isLoading = true;
+                    service.postData(this.api, this.sp2t)
+                        .then(result => {
+                            this.response(result);
+                        }).catch(error => {
+                            setTimeout(() => { this.isLoading = false }, 1000);
+                            this.alert.error = true;
+                            window.scroll({top: 0, left: 0, behavior: 'smooth'});
+                            console.log(error);
+                        });
+                }
             }
         },
         response(result) {
@@ -271,6 +296,7 @@ export default {
             this.sp2t.pph22 = '';
             this.sp2t.pph23 = '';
             this.sp2t.nominal_transfer = '';
+            this.sp2t.keterangan = '';
         },
         validate() {
             let condition = 0;
