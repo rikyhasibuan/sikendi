@@ -41,7 +41,7 @@ $_common = new Common();
                     <tr>
                         <td width="20%">Kepada</td>
                         <td width="1%">:</td>
-                        <td>Yth. Kepala Inspektur Provinsi Jawa Barat</td>
+                        <td>Yth. Inspektur Provinsi Jawa Barat</td>
                     </tr>
                     <tr>
                         <td width="20%"></td>
@@ -59,7 +59,7 @@ $_common = new Common();
                         <td>{!! $pelimpahan->nota_dinas !!}</td>
                     </tr>
                     <tr>
-                        <td></td>
+                        <td>Sifat</td>
                         <td>:</td>
                         <td>Biasa</td>
                     </tr>
@@ -69,24 +69,24 @@ $_common = new Common();
                         <td>-</td>
                     </tr>
                     <tr>
-                        <td></td>
+                        <td style="vertical-align:top;">Perihal</td>
                         <td style="vertical-align:top;">:</td>
                         <td style="vertical-align:top;">
                             @foreach ($detail as $v)
-                                Pengajuan Pelimpahan Uang Persediaan ({!! $v->jenis_pelimpahan !!}) dari BP kepada BPP Inspektorat Melalui IBC (Internet Banking Corporate) dengan nomor rekening {!! $v->pegawai->norek !!}
+                                <p style="text-align:justify;">Pengajuan Pelimpahan Uang Persediaan ({!! $v->jenis_pelimpahan !!}) dari BP kepada BPP Inspektorat Melalui IBC (Internet Banking Corporate) dengan nomor rekening {!! $v->pegawai->norek !!}.</p>
                             @endforeach
                         </td>
                     </tr>
                 </table>
                 <hr style="border-top: 5px double #8c8b8b;">
                 <div style="margin-bottom:15px;text-align:justify;">
-                    <p>Dipermaklumkan dengan hormat, sehubungan dengan pembiayaan pelaksanaan kegiatan APBD Tahun Anggaran 2020 pada Inspektorat
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dipermaklumkan dengan hormat, sehubungan dengan pembiayaan pelaksanaan kegiatan APBD Tahun Anggaran 2020 pada Inspektorat
                     Provinsi Jawa Barat, bersama ini kami mengajukan Pelimpahan Uang Persediaan dari Bendahara Pengeluaran an EKA BIDA BIDANI, A.Md untuk
-                    Kegiatan di Sub Bagian Perencanaan dan Pelaporan yang dikelola oleh
+                    Kegiatan yang dikelola oleh
                     @foreach ($detail as $v)
                         BPP Inspektorat an. {!! $v->pegawai->nama !!} sebesar Rp.{!! $_common->rupiah($v->jumlah_pelimpahan) !!} ({!! $_common->terbilang($v->jumlah_pelimpahan) !!} Rupiah) melalui IBC (Internet Banking Corporate)
                     @endforeach
-                    untuk kebutuhan pada bulan April 2020.<p>
+                    untuk kebutuhan pada bulan {!! $pelimpahan->tgl_nota_dinas->formatLocalized('%B %Y'); !!}.<p>
                 </div>
                 <div style="margin-bottom:15px;text-align:justify;">
                     <table class="table">
@@ -98,7 +98,7 @@ $_common = new Common();
                         </tr>
                         <?php $i = 0; ?>
                         @foreach ($detail as $v)
-                            @if ($i == 0) {
+                            @if ($i == 0)
                                 <tr>
                                     <td>Pelimpahan Uang Persediaan ({!! $v->jenis_pelimpahan !!}) dari BP kepada BPP Inspektorat tanggal {!! $pelimpahan->tgl_nota_dinas->formatLocalized('%d %B %Y'); !!} melalui IBC</td>
                                     <td style="text-align:right;">Rp. {!! $_common->rupiah($v->jumlah_pelimpahan) !!}</td>
@@ -121,7 +121,7 @@ $_common = new Common();
                         </tr>
                     </table>
                 </div>
-                <p>Demikian atas perhatian dan perkenannya diucapkan terima kasih.</p>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Demikian atas perhatian dan perkenannya diucapkan terima kasih.</p>
                 <div style="margin-bottom:15px;text-align:justify;">
                     <table width="100%">
                         <tr>
