@@ -65,26 +65,6 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body table-responsive">
-                        <loading :opacity="100" :active.sync="isLoading" :can-cancel="false" :is-full-page="false"></loading>
-                        <highcharts :options="pelimpahan_chart"></highcharts>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body table-responsive">
-                        <loading :opacity="100" :active.sync="isLoading" :can-cancel="false" :is-full-page="false"></loading>
-                        <highcharts :options="sp2t_chart"></highcharts>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </template>
 
@@ -156,23 +136,21 @@ export default {
                     this.pelimpahan = response.pelimpahan;
                     this.sp2t = response.sp2t;
 
-                    this.generateSp2dChart(response.sp2d_chart);
-                    this.generatePelimpahanChart(response.pelimpahan_chart);
-                    this.generateSp2tChart(response.sp2t_chart);
+                    this.generateSp2dChart(response.sp2d_chart, response.pelimpahan_chart, response.sp2t_chart);
                 }
             ).catch(error => {
                 this.isLoading = false;
                 console.log(error);
             });
         },
-        generateSp2dChart(response) {
+        generateSp2dChart(sp2d, pelimpahan, sp2t) {
             this.sp2d_chart = {
                 chart: {
                     type: 'column',
                     height: '40%'
                 },
                 title: {
-                    text: 'Data SP2D'
+                    text: 'Statistik Data'
                 },
                 yAxis: {
                     min: 0,
@@ -194,7 +172,7 @@ export default {
                         text: null
                     }
                 },
-                series: [{ name: 'Jumlah SP2D', data: response }],
+                series: [{ name: 'Jumlah SP2D', data: sp2d }, { name: 'Jumlah Pelimpahan', data: pelimpahan }, { name: 'Jumlah SP2T', data: sp2t }],
                 tooltip: {
                     headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
                     pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}:</td><td style="padding:0"><b>Rp.{point.y:.1f}</b></td></tr>',
@@ -213,106 +191,7 @@ export default {
                     enabled: false
                 }
             }
-        },
-        generatePelimpahanChart(response) {
-            this.pelimpahan_chart = {
-                chart: {
-                    type: 'column',
-                    height: '40%'
-                },
-                title: {
-                    text: 'Data Pelimpahan'
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: null
-                    },
-                    labels: {
-                        formatter: function() {
-                            if (this.value >= 1E6) {
-                                return (this.value / 1000000).toFixed(0) + ' Jt';
-                            }
-                            return this.value / 1000;
-                        }
-                    },
-                },
-                xAxis: {
-                    categories: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
-                    title: {
-                        text: null
-                    }
-                },
-                series: [{ name: 'Jumlah Pelimpahan', data: response }],
-                tooltip: {
-                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}:</td><td style="padding:0"><b>Rp.{point.y:.1f}</b></td></tr>',
-                    footerFormat: '</table>',
-                    shared: true,
-                    useHTML: true
-                },
-                plotOptions: {
-                    bar: {
-                        dataLabels: {
-                            enabled: true
-                        }
-                    }
-                },
-                legend: {
-                    enabled: false
-                }
-            }
-        },
-        generateSp2tChart(response) {
-            this.sp2t_chart = {
-                chart: {
-                    type: 'column',
-                    height: '40%'
-                },
-                title: {
-                    text: 'Data SP2T'
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: null
-                    },
-                    labels: {
-                        formatter: function() {
-                            if (this.value >= 1E6) {
-                                return (this.value / 1000000).toFixed(0) + ' Jt';
-                            }
-                            return this.value / 1000;
-                        }
-                    },
-                },
-                xAxis: {
-                    categories: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
-                    title: {
-                        text: null
-                    }
-                },
-                series: [{ name: 'Jumlah Transfer', data: response }],
-                tooltip: {
-                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}:</td><td style="padding:0"><b>Rp.{point.y:.1f}</b></td></tr>',
-                    footerFormat: '</table>',
-                    shared: true,
-                    useHTML: true
-                },
-                plotOptions: {
-                    bar: {
-                        dataLabels: {
-                            enabled: true
-                        }
-                    }
-                },
-                legend: {
-                    enabled: false
-                }
-            }
-        },
-
+        }
     }
 };
 </script>

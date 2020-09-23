@@ -21,7 +21,7 @@ class DashboardController extends Controller
             $tahun = ($request['tahun'] != '') ? $request['tahun'] : date('Y');
             $bulan = ($request['bulan'] != '') ? $request['bulan'] : '12';
 
-            $anggaran = Anggaran::where('tahun', date('Y'))->first();
+            $anggaran = Anggaran::where('tahun', date('Y'))->sum('jumlah');
             $sp2d = Sp2d::whereYear('tgl_sp2d', date('Y'))->sum('jumlah_sp2d');
             $pelimpahan = Pelimpahan::whereYear('tgl_nota_dinas', date('Y'))->sum('jumlah_pelimpahan');
             $sp2t = Sp2t::whereYear('tgl_nota_dinas', date('Y'))->sum('jumlah_transfer');
@@ -114,7 +114,7 @@ class DashboardController extends Controller
             ];
 
             return response()->json([
-                'anggaran' => $anggaran['jumlah'],
+                'anggaran' => $anggaran,
                 'sp2d' => $sp2d,
                 'pelimpahan' => $pelimpahan,
                 'sp2t' => $sp2t,

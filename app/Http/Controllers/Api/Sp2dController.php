@@ -41,9 +41,9 @@ class Sp2dController extends Controller
     {
         $check = Sp2d::where('nomor_sp2d', $request->input('nomor_sp2d'))->count();
         if ($check == 0) {
-            $anggaran = Anggaran::where('tahun', $request->input('tahun_anggaran'))->first();
+            $anggaran = Anggaran::where('tahun', $request->input('tahun_anggaran'))->sum('jumlah');
             $totalsp2d = Sp2d::sum('jumlah_sp2d');
-            $sisa_anggaran = $anggaran->jumlah - $totalsp2d;
+            $sisa_anggaran = $anggaran - $totalsp2d;
             $sp2d = new Sp2d();
             $sp2d->tahun_anggaran = $request->input('tahun_anggaran');
             $sp2d->sisa_anggaran = $sisa_anggaran - $request->input('jumlah_sp2d');

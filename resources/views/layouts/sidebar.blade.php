@@ -1,7 +1,7 @@
 <aside class="main-sidebar sidebar-dark-orange elevation-4">
     <a href="#" class="brand-link navbar-gray-dark">
-        <img class="brand-image" src="{{ asset('img/logo.png') }}" width="100%;">
-        
+        <img class="brand-image" src="{{ asset('img/logo-h.png') }}">
+
         <!-- <span class="brand-text font-weight-light">Inspektorat</span> -->
     </a>
     <div class="sidebar">
