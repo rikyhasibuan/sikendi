@@ -1,8 +1,7 @@
-<aside class="main-sidebar sidebar-dark-orange elevation-4">
-    <a href="#" class="brand-link navbar-gray-dark">
-        <img class="brand-image" src="{{ asset('img/logo-h.png') }}">
-
-        <!-- <span class="brand-text font-weight-light">Inspektorat</span> -->
+<aside class="main-sidebar sidebar-light-blue elevation-4">
+    <a href="#" class="brand-link logo-switch">
+      <img src="{{ asset('img/logo-h.png') }}" class="brand-image-xl logo-xs" style="display:none;">
+      <img src="{{ asset('img/logo-h.png') }}" class="brand-image-xs logo-xl" style="margin-top: -30px;width: 65%; max-height:none !important;">
     </a>
     <div class="sidebar">
         <nav class="mt-2">
