@@ -60,6 +60,29 @@
                 <div class="card">
                     <div class="card-body table-responsive">
                         <loading :opacity="100" :active.sync="isLoading" :can-cancel="false" :is-full-page="false"></loading>
+                        <form method="POST" v-on:submit.prevent="fetchData">
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                        </div>
+                                        <date-picker
+                                            id="periode"
+                                            name="periode"
+                                            v-model="periode"
+                                            :config="options"
+                                            class="form-control"
+                                            placeholder="Periode"
+                                            autocomplete="off">
+                                        </date-picker>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <button type="submit" class="btn btn-success"><i class="fa fa-search"></i> Tampikan Data</button>
+                                </div>
+                            </div>
+                        </form>
                         <highcharts :options="sp2d_chart"></highcharts>
                     </div>
                 </div>
@@ -100,11 +123,10 @@ export default {
                 serapan:''
             },
             options: {
-                format: 'YYYY-MM',
+                format: 'YYYY',
                 viewMode:'years',
                 useCurrent: false,
-                locale: 'id',
-                minDate:'2020/01/01'
+                locale: 'id'
             }
         }
     },
@@ -123,10 +145,10 @@ export default {
     methods: {
         fetchData() {
             this.isLoading = true;
-            let date  = this.periode.split('-');
-            let tahun = date[0];
-            let bulan = (typeof date[1] !== "undefined") ? parseInt(date[1]) : '';
-            service.fetchData(this.api)
+            if (this.periode != '') {
+                this.tahun = this.periode
+            }
+            service.fetchData(this.api + '?tahun='+ this.tahun)
             .then(
                 response => {
                     this.isLoading = false;
@@ -135,7 +157,6 @@ export default {
                     this.sp2d = response.sp2d;
                     this.pelimpahan = response.pelimpahan;
                     this.sp2t = response.sp2t;
-
                     this.generateSp2dChart(response.sp2d_chart, response.pelimpahan_chart, response.sp2t_chart);
                 }
             ).catch(error => {
@@ -149,8 +170,11 @@ export default {
                     type: 'column',
                     height: '40%'
                 },
+                credits: {
+                    enabled: false
+                },
                 title: {
-                    text: 'Statistik Data'
+                    text: 'Statistik Data ' + this.tahun
                 },
                 yAxis: {
                     min: 0,
