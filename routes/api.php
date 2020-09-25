@@ -76,7 +76,6 @@ Route::delete('sp2d', 'Api\Sp2dController@delete_data');
 
 // Pelimpahan
 Route::get('pelimpahan', 'Api\PelimpahanController@get_data');
-//Route::get('pelimpahan/{id}', 'Api\PelimpahanController@show_data');
 Route::post('pelimpahan', 'Api\PelimpahanController@post_data');
 Route::put('pelimpahan', 'Api\PelimpahanController@put_data');
 Route::delete('pelimpahan', 'Api\PelimpahanController@delete_data');
@@ -88,7 +87,6 @@ Route::get('pelimpahan/print', 'Api\PelimpahanController@get_print');
 
 // Sp2t
 Route::get('sp2t', 'Api\Sp2tController@get_data');
-//Route::get('sp2t/{id}', 'Api\Sp2tController@show_data');
 Route::post('sp2t', 'Api\Sp2tController@post_data');
 Route::put('sp2t', 'Api\Sp2tController@put_data');
 Route::delete('sp2t', 'Api\Sp2tController@delete_data');

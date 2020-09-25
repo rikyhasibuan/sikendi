@@ -72,15 +72,16 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-<!--                                        <tr>
-                                                <td colspan="5" style="text-align: right;vertical-align: middle;">
-                                                    <b>Saldo Bank Bendahara Pengeluaran sebelum pelimpahan uang</b>
+                                            <tr>
+                                                <td colspan="2" style="text-align: right;vertical-align: middle;">
+                                                    <b>Jumlah Uang Pelimpahan</b>
                                                 </td>
                                                 <td style="text-align:right;vertical-align: middle;">
-                                                    <b>Rp.{{ pelimpahan.jumlah_sp2d | rupiah }}</b>
+                                                    <b>Rp.{{ sp2t.jumlah_pelimpahan | rupiah }}</b>
                                                 </td>
+                                                <td colspan="2" style="text-align: center;vertical-align: middle;"></td>
                                                 <td style="text-align: center;vertical-align: middle;"></td>
-                                            </tr> -->
+                                            </tr>
                                             <tr v-for="v in sp2tdetail" :key="v.id">
                                                 <td style="vertical-align: middle;">
                                                     {{ v.program.kode_program }}<br>
@@ -101,11 +102,10 @@
                                                 <td style="text-align:right;vertical-align: middle;">
                                                     <br><br><br>
                                                     <span v-if="v.ppn !== 0">PPN Rp.{{ v.ppn | rupiah }}</span>
-                                                    <span v-else-if="v.pph22 !== 0">PPh Pasal 22 Rp.{{ v.pph22 | rupiah }}</span>
-                                                    <span v-else-if="v.pph4 !== 0">PPh Final Pasal 4 ayat 2 Rp.{{ v.pph4 | rupiah }}</span>
-                                                    <span v-else-if="v.pph21 !== 0">PPh Pasal 21 Rp.{{ v.pph21 | rupiah }}</span>
-                                                    <span v-else-if="v.pph23 !== 0">PPh Pasal 23 Rp.{{ v.pph23 | rupiah }}</span>
-                                                    <span v-else></span>
+                                                    <span v-if="v.pph22 !== 0">PPh Pasal 22 Rp.{{ v.pph22 | rupiah }}</span>
+                                                    <span v-if="v.pph4 !== 0">PPh Final Pasal 4 ayat 2 Rp.{{ v.pph4 | rupiah }}</span>
+                                                    <span v-if="v.pph21 !== 0">PPh Pasal 21 Rp.{{ v.pph21 | rupiah }}</span>
+                                                    <span v-if="v.pph23 !== 0">PPh Pasal 23 Rp.{{ v.pph23 | rupiah }}</span>
                                                 </td>
                                                 <td style="text-align:right;vertical-align: middle;">
                                                     <br><br><br>
@@ -126,10 +126,16 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td colspan="4" style="text-align: right;vertical-align: middle;">
+                                                <td colspan="2" style="text-align: right;vertical-align: middle;">
                                                     <b>Jumlah Pencairan Transfer</b>
                                                 </td>
                                                 <td style="text-align:right;vertical-align: middle;">
+                                                    <b>Rp.{{ totalbruto | rupiah }}</b>
+                                                </td>
+                                                <td style="text-align: right;vertical-align: middle;">
+                                                    <b>Rp.{{ totalpajak | rupiah }}</b>
+                                                </td>
+                                                <td style="text-align: right;vertical-align: middle;">
                                                     <b>Rp.{{ sp2t.jumlah_transfer | rupiah }}</b>
                                                 </td>
                                                 <td style="text-align: center;vertical-align: middle;"></td>
@@ -170,6 +176,9 @@
                     empty:false,
                     delete:false
                 },
+                totalbruto:0,
+                totalpajak:0,
+                totaltransfer:0,
                 saldo: 0,
                 showForm: false,
                 showTable: false
@@ -226,6 +235,14 @@
                 this.showTable = false;
             } else {
                 this.showTable = true;
+                let sumbruto = 0;
+                let sumpajak = 0;
+                for (let i = 0; i < this.sp2tdetail.length; i++) {
+                    sumbruto += this.sp2tdetail[i].nominalbruto;
+                    sumpajak += (this.sp2tdetail[i].ppn + this.sp2tdetail[i].pph22 + this.sp2tdetail[i].pph4 + this.sp2tdetail[i].pph21 + this.sp2tdetail[i].pph23);
+                }
+                this.totalbruto = sumbruto;
+                this.totalpajak = sumpajak;
             }
             this.saldo = this.sp2d
         },

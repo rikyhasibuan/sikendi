@@ -255,7 +255,7 @@ export default {
             let validasi = this.validate();
             if (validasi === true) {
                 let total = this.sp2t.nominalbruto - (this.sp2t.ppn - this.sp2t.pph22 + this.sp2t.pph4 + this.sp2t.pph21 + this.sp2t.pph23);
-                if (total >= this.sp2t_data.sisa_pelimpahan) {
+                if (total > this.sp2t_data.sisa_pelimpahan) {
                     alert('Jumlah Nominal Transfer Melebihi Jumlah Pelimpahan');
                 } else {
                     this.sp2t.nama_penerima_sp2t = this.nama_penerima_sp2t;
