@@ -21,7 +21,7 @@ $_common = new Common();
 
         * {
             font-family: 'Times New Roman', Times, serif;
-            font-size: 12pt;
+            font-size: 1rem;
         }
 
         h4 {
@@ -59,7 +59,7 @@ $_common = new Common();
                     <tr>
                         <td width="10%" style="vertical-align:top;">Kepada Yth.</td>
                         <td width="1%"></td>
-                        <td style="vertical-align:top;"> Kuasa Pengguna Anggaran Inspektorat Provinsi Jawa Barat</td>
+                        <td style="vertical-align:top;">Kuasa Pengguna Anggaran Inspektorat Provinsi Jawa Barat</td>
                     </tr>
                     <tr>
                         <td width="10%"></td>
@@ -72,16 +72,16 @@ $_common = new Common();
                         <td style="vertical-align:top;">Di  Tempat</td>
                     </tr>
                 </table>
-                <br><br>
+                <br>
                 <div style="margin-bottom:15px;text-align:justify;">
-                    <p>Dengan ini kami mohon bantuan Bapak untuk melakukan pelimpahan uang melalui IBC (Internet Banking Corporate) :.<p>
+                    <p>Dengan ini kami mohon bantuan Bapak untuk melakukan pelimpahan uang melalui IBC (Internet Banking Corporate) :<p>
                 </div>
                 <div style="margin-bottom:15px;text-align:justify;">
                     <table cellspacing="3" cellpadding="3">
                         <tr>
                             <td width="25%">Dari Nomor Rekening</td>
                             <td width="1%">:</td>
-                            <td>0083748990001 INSPEKTORAT</td>
+                            <td>{!! $sp2t->pegawai->norek !!} {!! $sp2t->pegawai->keterangan !!}</td>
                         </tr>
                         <tr>
                             <td>Nominal</td>
@@ -184,7 +184,7 @@ $_common = new Common();
                         </tbody>
                     </table>
                 </div>
-                <p>Demikian atas bantuan dan kerjasamanya yang baik kami sampaikan terima kasih</p>
+                <p>Demikian atas bantuan dan kerjasamanya yang baik kami sampaikan terima kasih.</p>
                 <div style="margin-bottom:15px;text-align:justify;">
                     {{-- <table width="100%">
                         <tr>
