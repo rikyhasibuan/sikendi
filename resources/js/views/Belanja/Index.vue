@@ -216,7 +216,7 @@ export default {
         onChangeProgram(evt) {
             const program = evt.target.value;
             if (program !== '') {
-                service.fetchData('./api/ajax/kegiatan/' + program)
+                service.fetchData('./api/ajax/kegiatan?program=' + program)
                 .then(response => {
                     this.kegiatan = response;
                     this.search.kegiatan = '';

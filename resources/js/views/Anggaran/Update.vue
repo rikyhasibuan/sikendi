@@ -104,7 +104,7 @@
             },
             onChangeProgram(evt) {
                 const program = evt.target.value;
-                service.fetchData('../api/ajax/kegiatan/' + program)
+                service.fetchData('../api/ajax/kegiatan?program=' + program)
                 .then(response => {
                     this.anggaran.kegiatan_id = '';
                     this.anggaran.belanja_id = '';
@@ -117,7 +117,7 @@
             },
             onChangeKegiatan(evt) {
                 const kegiatan = evt.target.value;
-                service.fetchData('../api/ajax/belanja/' + kegiatan)
+                service.fetchData('../api/ajax/belanja?kegiatan=' + kegiatan)
                 .then(response => {
                     this.anggaran.belanja_id = '';
                     this.belanja = response;
@@ -206,7 +206,7 @@
             this.kegiatan = this.kegiatan_data;
             this.belanja = this.belanja_data;
 
-            service.fetchData('../api/ajax/kegiatan/' + this.anggaran.program_id)
+            service.fetchData('../api/ajax/kegiatan?program=' + this.anggaran.program_id)
             .then(response => {
                 this.kegiatan = response;
             })
@@ -214,7 +214,7 @@
                 console.log(error);
             });
 
-            service.fetchData('../api/ajax/belanja/' + this.anggaran.kegiatan_id)
+            service.fetchData('../api/ajax/belanja?kegiatan=' + this.anggaran.kegiatan_id)
             .then(response => {
                 this.belanja = response;
             })

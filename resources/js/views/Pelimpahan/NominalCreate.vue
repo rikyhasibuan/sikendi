@@ -4,32 +4,52 @@
             <div class="card">
                 <div class="card-body">
                     <v-alert :alert=alert></v-alert>
-                    <loading :opacity="100" :active.sync="isLoading" :can-cancel="false" :is-full-page="false">
-                    </loading>
+                    <loading :opacity="100" :active.sync="isLoading" :can-cancel="false" :is-full-page="false"></loading>
                     <form autocomplete="off" method="POST" v-on:submit.prevent="onSubmit">
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>Bendahara *</label>
-                                <select v-model="pelimpahan.bendahara" class="form-control" @change="onChangeBendahara" :class="{ 'is-invalid': validasi.bendahara }">
+                                <select
+                                    v-model="pelimpahan.bendahara"
+                                    class="form-control"
+                                    @change="onChangeBendahara"
+                                    :class="{ 'is-invalid': validasi.bendahara }"
+                                >
                                     <option value="">Pilih Bendahara</option>
-                                    <option v-for="v in this.bendahara_data" :value="v.pegawai.id" :key="v.pegawai.id">{{ v.pegawai.nama }}</option>
+                                    <option v-for="v in this.bendahara_data" :value="v.pegawai.id" :key="v.pegawai.id">
+                                        {{ v.pegawai.nama }}
+                                    </option>
                                 </select>
                             </div>
                             <div class="form-group col-md-6">
                                 <label>Sisa Anggaran Kegiatan BPP keseluruhan *</label>
-                                <money type="text" 
-                                  placeholder="Sisa Anggaran Kegiatan BPP keseluruhan" v-model="pelimpahan.sisa_anggaran" class="form-control" readonly="true" />
+                                <money 
+                                    type="text" 
+                                    placeholder="Sisa Anggaran Kegiatan BPP keseluruhan"
+                                    v-model="pelimpahan.sisa_anggaran" 
+                                    class="form-control" 
+                                    readonly="true"
+                                />
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>Jumlah Pelimpahan Uang *</label>
-                                <money type="text" 
-                                  placeholder="Jumlah Pelimpahan Uang" v-model="pelimpahan.jumlah_pelimpahan" class="form-control" :class="{ 'is-invalid': validasi.jumlah_pelimpahan }" />
+                                <money
+                                    type="text" 
+                                    placeholder="Jumlah Pelimpahan Uang"
+                                    v-model="pelimpahan.jumlah_pelimpahan"
+                                    class="form-control"
+                                    :class="{ 'is-invalid': validasi.jumlah_pelimpahan }" 
+                                />
                             </div>
                             <div class="form-group col-md-6">
                                 <label>Kategori Pelimpahan *</label>
-                                <select v-model="pelimpahan.jenis_pelimpahan" class="form-control" :class="{ 'is-invalid': validasi.jenis_pelimpahan }">
+                                <select 
+                                    v-model="pelimpahan.jenis_pelimpahan" 
+                                    class="form-control" 
+                                    :class="{ 'is-invalid': validasi.jenis_pelimpahan }"
+                                >
                                     <option value="">Pilih Kategori Pelimpahan</option>
                                     <option value="UP">UP</option>
                                     <option value="GU">GU</option>

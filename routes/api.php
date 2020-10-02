@@ -15,13 +15,14 @@ Route::get('logaktifitas', 'Api\LogActivityController@get_data');
 Route::get('report', 'Api\ReportController@print_data');
 
 // AJAX request
-Route::get('ajax/penerimasp2t/{query}', 'Api\AjaxController@show_nama_penerima_sp2t');
-Route::get('ajax/kegiatan/{program}', 'Api\AjaxController@show_kegiatan_by_program');
-Route::get('ajax/belanja/{kegiatan}', 'Api\AjaxController@show_belanja_by_kegiatan');
+Route::get('ajax/penerimasp2t', 'Api\AjaxController@show_nama_penerima_sp2t');
+Route::get('ajax/kegiatan', 'Api\AjaxController@show_kegiatan_by_program');
+Route::get('ajax/belanja', 'Api\AjaxController@show_belanja_by_kegiatan');
 Route::post('ajax/sisa_anggaran', 'Api\AjaxController@show_sisa_anggaran');
 Route::post('ajax/total_anggaran', 'Api\AjaxController@show_total_anggaran');
 Route::post('ajax/golongan', 'Api\AjaxController@show_golongan_by_pangkat');
 Route::get('ajax/anggaran/bendahara/{bendahara}', 'Api\AjaxController@show_anggaran_by_bendahara');
+Route::get('ajax/anggaran_belanja', 'Api\AjaxController@show_anggaran_by_belanja_bendahara');
 
 // program
 Route::get('program', 'Api\ProgramController@get_data');

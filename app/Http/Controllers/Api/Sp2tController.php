@@ -76,19 +76,8 @@ class Sp2tController extends Controller
         $detail = new Sp2tDetail();
 
         $tf = 0;
-        if ($request->input('ppn') != 0) {
-            $tf = $request->input('nominalbruto') - $request->input('ppn');
-        } elseif ($request->input('pph22') != 0) {
-            $tf = $request->input('nominalbruto') - $request->input('pph22');
-        } elseif ($request->input('pph4') != 0) {
-            $tf = $request->input('nominalbruto') - $request->input('pph4');
-        } elseif ($request->input('pph21') != 0) {
-            $tf = $request->input('nominalbruto') - $request->input('pph21');
-        } elseif ($request->input('pph23') != 0) {
-            $tf = $request->input('nominalbruto') - $request->input('pph23');
-        } else {
-            $tf = $request->input('nominalbruto');
-        }
+        $tf = $request->input('nominalbruto') - ($request->input('ppn') + $request->input('pph22') + $request->input('pph4') + $request->input('pph21') + $request->input('pph23'));
+        
         $detail->sp2t_id = $request['sp2t'];
         $detail->program_id = $request->input('program_id');
         $detail->kegiatan_id = $request->input('kegiatan_id');

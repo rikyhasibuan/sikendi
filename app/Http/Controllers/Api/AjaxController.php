@@ -8,6 +8,7 @@ use App\Models\Kegiatan;
 use App\Models\Belanja;
 use App\Models\PelimpahanDetail;
 use App\Models\Penerima;
+use App\Models\Pegawai;
 use App\Libraries\Common;
 use App\Libraries\KasAnggaran;
 use Illuminate\Http\JsonResponse;
@@ -32,6 +33,15 @@ class AjaxController extends Controller
         return $total_anggaran;
     }
 
+    public function show_anggaran_by_belanja_bendahara(Request $request)
+    {
+        $bendahara  = Pegawai::where('nip', $request['bendahara'])->first();
+        $pelimpahan = PelimpahanDetail::where('bendahara', $bendahara['id'])->sum('jumlah_pelimpahan');
+        $anggaran   = Anggaran::where('belanja_id', $request['belanja'])->sum('jumlah');
+        $total_anggaran = $anggaran - $pelimpahan;
+        return $total_anggaran;
+    }
+
     public function show_nama_penerima_sp2t(Request $request)
     {
         $penerima = Penerima::where('nama_penerima', 'LIKE', '%'.$request['query'].'%')->get();
@@ -44,7 +54,13 @@ class AjaxController extends Controller
 
     public function show_kegiatan_by_program(Request $request)
     {
-        return response()->json(Kegiatan::where('program_id', $request['program'])->get(), 200);
+        if (isset($request['bendahara'])) {
+            $pegawai = Pegawai::where('nip', $request['bendahara'])->first();
+            $kegiatan = Kegiatan::where('program_id', $request['program'])->where('bendahara', $pegawai['id'])->get();
+        } else {
+            $kegiatan = Kegiatan::where('program_id', $request['program'])->get();
+        }
+        return response()->json($kegiatan, 200);
     }
 
     public function show_belanja_by_kegiatan(Request $request)

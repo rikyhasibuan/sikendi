@@ -114,14 +114,20 @@ $_common = new Common();
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th style="width:8%;vertical-align: middle;text-align:center;" rowspan="2">Nama & No. Rek. Penerima</th>
-                                <th style="width:5%;vertical-align: middle;text-align:center;" colspan="3">Nominal</th>
-                                <th style="width:10%;vertical-align: middle;text-align:center;" rowspan="2">Keterangan</th>
+                                <th style="width:20%;vertical-align: middle;text-align:center;font-size: 0.80rem;" rowspan="2">
+                                    Nama & No. Rek. Penerima
+                                </th>
+                                <th style="width:5%;vertical-align: middle;text-align:center;font-size: 0.80rem;" colspan="3">
+                                    Nominal
+                                </th>
+                                <th style="width:5%;vertical-align: middle;text-align:center;font-size: 0.80rem;" rowspan="2">
+                                    Keterangan
+                                </th>
                             </tr>
                             <tr>
-                                <th style="width:2%;text-align:center;">Jumlah Bruto</th>
-                                <th style="width:2%;text-align:center;">Pajak</th>
-                                <th style="width:3%;text-align:center;">Jumlah Transfer</th>
+                                <th style="width:3%;text-align:center;font-size: 0.80rem;">Bruto</th>
+                                <th style="width:7%;text-align:center;font-size: 0.80rem;">Pajak</th>
+                                <th style="width:3%;text-align:center;font-size: 0.80rem;">Transfer</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -131,13 +137,14 @@ $_common = new Common();
                             ?>
                             @foreach($detail as $v)
                                 <tr>
-                                    <td style="text-align: center;">
-                                        {!! $v->nomor_penerima_sp2t !!} / {!! $v->nama_penerima_sp2t !!}
+                                    <td style="font-size: 0.80rem;">
+                                        {!! $v->nomor_penerima_sp2t !!} / {!! $v->nama_penerima_sp2t !!}<br>
+                                        {!! $v->belanja->kode_belanja !!} Belanja {!! $v->belanja->nama_belanja !!}
                                     </td>
-                                    <td style="text-align:right;vertical-align: middle;">
+                                    <td style="text-align:right;vertical-align: middle;font-size: 0.80rem;">
                                         Rp. {!! $_common->rupiah($v->nominalbruto) !!}
                                     </td>
-                                    <td style="text-align:right;vertical-align: middle;">
+                                    <td style="text-align:right;vertical-align: middle;font-size: 0.80rem;">
                                         @if($v->ppn != 0)
                                             PPN - Rp. {!! $_common->rupiah($v->ppn) !!}<br>
                                         @endif
@@ -154,10 +161,10 @@ $_common = new Common();
                                             PPH23 - Rp. {!! $_common->rupiah($v->pph23) !!}<br>
                                         @endif
                                     </td>
-                                    <td style="text-align:right;vertical-align: middle;">
+                                    <td style="text-align:right;vertical-align: middle;font-size: 0.80rem;">
                                         Rp. {!! $_common->rupiah($v->nominal_transfer) !!}
                                     </td>
-                                    <td style="text-align: justify;vertical-align: middle;">
+                                    <td style="text-align: justify;vertical-align: middle;font-size: 0.80rem;">
                                         {!! $v->keterangan !!}
                                     </td>
                                 </tr>
@@ -167,26 +174,27 @@ $_common = new Common();
                                 ?>
                             @endforeach
                             <tr>
-                                <td style="text-align:center;vertical-align: middle;">
+                                <td style="text-align:center;vertical-align: middle;font-size: 0.80rem;">
                                     <b>JUMLAH</b>
                                 </td>
-                                <td style="text-align:right;vertical-align: middle;">
+                                <td style="text-align:right;vertical-align: middle;font-size: 0.80rem;">
                                     <b>Rp. {!! $_common->rupiah($totalbruto) !!}</b>
                                 </td>
-                                <td style="text-align:right;vertical-align: middle;">
+                                <td style="text-align:right;vertical-align: middle;font-size: 0.80rem;">
                                     <b>Rp. {!! $_common->rupiah($totalpajak) !!}</b>
                                 </td>
-                                <td style="text-align:right;vertical-align: middle;">
-                                    <b>Rp. {!! $sp2t->jumlah_transfer !!}</b>
+                                <td style="text-align:right;vertical-align: middle;font-size: 0.80rem;">
+                                    <b>Rp. {!! $_common->rupiah($sp2t->jumlah_transfer) !!}</b>
                                 </td>
-                                <td style="text-align: center;vertical-align: middle;"></td>
+                                <td style="text-align: center;vertical-align: middle;font-size: 0.80rem;"></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 <p>Demikian atas bantuan dan kerjasamanya yang baik kami sampaikan terima kasih.</p>
                 <div style="margin-bottom:15px;text-align:justify;">
-                    {{-- <table width="100%">
+                    {{-- 
+                    <table width="100%">
                         <tr>
                             <td width="50%"></td>
                             <td width="25%">
@@ -209,7 +217,8 @@ $_common = new Common();
                                 </table>
                             </td>
                         </tr>
-                    </table> --}}
+                    </table> 
+                    --}}
                     <table width="100%">
                         <tr>
                             <td width="25%">

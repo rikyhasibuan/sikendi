@@ -228,7 +228,7 @@ export default {
         onChangeProgram(evt) {
             const program = evt.target.value;
             if (program !== '') {
-                service.fetchData('./api/ajax/kegiatan/' + program)
+                service.fetchData('./api/ajax/kegiatan?program=' + program)
                 .then(response => {
                     this.kegiatan = response;
                     this.belanja = [];
@@ -248,7 +248,7 @@ export default {
         onChangeKegiatan(evt) {
             const kegiatan = evt.target.value;
             if (kegiatan !== '') {
-                service.fetchData('./api/ajax/belanja/' + kegiatan)
+                service.fetchData('./api/ajax/belanja?kegiatan=' + kegiatan)
                 .then(response => {
                     this.belanja = response;
                     this.search.belanja = '';

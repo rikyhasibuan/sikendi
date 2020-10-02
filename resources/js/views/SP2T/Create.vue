@@ -15,7 +15,6 @@
                                 </select>
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>Kegiatan *</label>
@@ -25,11 +24,10 @@
                                 </select>
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>Belanja *</label>
-                                <select v-model="sp2t.belanja_id" class="form-control" :class="{ 'is-invalid': validasi.belanja_id }">
+                                <select v-model="sp2t.belanja_id" class="form-control" @change="onChangeBelanja($event)" :class="{ 'is-invalid': validasi.belanja_id }">
                                     <option value="">Pilih Belanja</option>
                                     <option v-for="v in this.belanja" :value="v.id" :key="v.id">{{ v.nama_belanja }}</option>
                                 </select>
@@ -58,6 +56,18 @@
                                 v-model="nomor_penerima_sp2t"
                                 :class="{ 'is-invalid': validasi.nomor_penerima_sp2t }"
                                 >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label>Anggaran Belanja BPP *</label>
+                                <money 
+                                    type="text" 
+                                    placeholder="Anggaran Belanja BPP" 
+                                    v-model="sisa_anggaran" 
+                                    class="form-control" 
+                                    readonly="true" 
+                                />
                             </div>
                         </div>
                         <div class="row">
@@ -144,6 +154,7 @@ export default {
             nama_sp2t: [],
             nama_penerima_sp2t: '',
             nomor_penerima_sp2t: '',
+            sisa_anggaran: '',
             sp2t: {
                 'program_id': '',
                 'kegiatan_id': '',
@@ -179,7 +190,8 @@ export default {
                 save: false,
                 validate: false
             },
-            isLoading: false
+            isLoading: false,
+            usernip:''
         }
     },
     props: [
@@ -211,7 +223,7 @@ export default {
             // this.sp2t.nominal_transfer = this.sp2t.nominalbruto - this.sp2t.ppn - this.sp2t.pph21 - this.sp2t.pph4;
         },
         getNamaPenerimaSp2t(query) {
-            service.fetchData('../api/ajax/penerimasp2t/' + query)
+            service.fetchData('../api/ajax/penerimasp2t?q=' + query)
             .then(response => {
                 this.nama_sp2t = response;
                 console.log(this.nama_sp2t);
@@ -222,7 +234,13 @@ export default {
         },
         onChangeProgram(evt) {
             const program = evt.target.value;
-            service.fetchData('../api/ajax/kegiatan/' + program)
+            let url = '';
+            if (this.usernip != 'admin') {
+                url = '../api/ajax/kegiatan?bendahara='+this.usernip+'&program=' + program;
+            } else {
+                url = '../api/ajax/kegiatan?program=' + program;
+            }
+            service.fetchData(url)
             .then(response => {
                 this.sp2t.kegiatan_id = '';
                 this.sp2t.belanja_id = '';
@@ -235,10 +253,20 @@ export default {
         },
         onChangeKegiatan(evt) {
             const kegiatan = evt.target.value;
-            service.fetchData('../api/ajax/belanja/' + kegiatan)
+            service.fetchData('../api/ajax/belanja?kegiatan=' + kegiatan)
             .then(response => {
                 this.sp2t.belanja_id = '';
                 this.belanja = response;
+            })
+            .catch(error => {
+                console.log(error);
+            });
+        },
+        onChangeBelanja(evt) {
+            const belanja = evt.target.value;
+            service.fetchData('./../api/ajax/anggaran_belanja?bendahara='+this.usernip+'&belanja=' + belanja)
+            .then(response => {
+                this.sisa_anggaran = response;
             })
             .catch(error => {
                 console.log(error);
@@ -257,6 +285,8 @@ export default {
                 let total = this.sp2t.nominalbruto - (this.sp2t.ppn - this.sp2t.pph22 + this.sp2t.pph4 + this.sp2t.pph21 + this.sp2t.pph23);
                 if (total > this.sp2t_data.sisa_pelimpahan) {
                     alert('Jumlah Nominal Transfer Melebihi Jumlah Pelimpahan');
+                } else if (total > this.sisa_anggaran) {
+                    alert('Jumlah Nominal Transfer Melebihi Jumlah Anggaran BPP');
                 } else {
                     this.sp2t.nama_penerima_sp2t = this.nama_penerima_sp2t;
                     this.sp2t.nomor_penerima_sp2t = this.nomor_penerima_sp2t;
@@ -357,10 +387,11 @@ export default {
         nama_penerima_sp2t: _.debounce(function(v) { this.getNamaPenerimaSp2t(v) }, 500)
     },
     created() {
-        this.isLoading = true;
-        this.program = this.program_data;
-        this.belanja = this.belanja_data;
-        this.kegiatan = this.kegiatan_data;
+        this.isLoading  = true;
+        this.program    = this.program_data;
+        this.belanja    = this.belanja_data;
+        this.kegiatan   = this.kegiatan_data;
+        this.usernip    = this.$cookies.get('nip');
     },
     mounted() {
         setTimeout(() => { this.isLoading = false }, 1000);

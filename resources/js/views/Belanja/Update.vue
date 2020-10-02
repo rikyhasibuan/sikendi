@@ -115,7 +115,7 @@
             },
             onChangeProgram(evt) {
                 const program = evt.target.value;
-                service.fetchData('../api/ajax/kegiatan/' + program)
+                service.fetchData('../api/ajax/kegiatan?program=' + program)
                 .then(response => {
                     this.belanja.kegiatan_id = '';
                     this.kegiatan = response;

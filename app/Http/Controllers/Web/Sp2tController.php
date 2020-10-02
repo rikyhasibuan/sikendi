@@ -10,6 +10,7 @@ use App\Models\Sp2t;
 use App\Models\Sp2tDetail;
 use App\Models\Anggaran;
 use App\Models\Kegiatan;
+use App\Models\Pegawai;
 use App\Models\Program;
 use App\Models\Belanja;
 use App\Libraries\Access;
@@ -66,9 +67,21 @@ class Sp2tController extends Controller
         $breadcrumb[1] = '<a href="' . url($this->route) . '"><i class="fa fa-database"></i> ' . $this->title . '</a>';
         $breadcrumb[2] = '<i class="fa fa-plus"></i> Tambah Data';
 
-        $program = Program::all();
-        $kegiatan = [];
-        $belanja = [];
+        if (Cookie::get('level') == 3) {
+            $pegawai = Pegawai::where('nip', $this->_nip)->first();
+            $bppkegiatan = Kegiatan::where('bendahara', $pegawai['id'])->get();
+            $program_list = [];
+            foreach ($bppkegiatan as $v) {
+                $program_list[] = $v->program_id;
+            }
+            $program = Program::whereIn('id', array_unique($program_list))->get();
+            $kegiatan = [];
+            $belanja = [];
+        } else {
+            $program = Program::all();
+            $kegiatan = [];
+            $belanja = [];
+        }
 
         $sp2t = Sp2t::find($request['sp2t']);
 

@@ -116,7 +116,7 @@
             },
             onChangeProgram(evt) {
                 const program = evt.target.value;
-                service.fetchData('../api/ajax/kegiatan/' + program)
+                service.fetchData('../api/ajax/kegiatan?program=' + program)
                 .then(response => {
                     this.anggaran.kegiatan_id = '';
                     this.anggaran.belanja_id = '';
@@ -129,7 +129,7 @@
             },
             onChangeKegiatan(evt) {
                 const kegiatan = evt.target.value;
-                service.fetchData('../api/ajax/belanja/' + kegiatan)
+                service.fetchData('../api/ajax/belanja?kegiatan=' + kegiatan)
                 .then(response => {
                     this.anggaran.belanja_id = '';
                     this.belanja = response;
@@ -142,7 +142,6 @@
                 evt.preventDefault();
                 this.clearAlert();
                 let validasi = this.validate();
-
                 if (validasi === true) {
                     service.postData(this.api, this.anggaran)
                         .then(result => {

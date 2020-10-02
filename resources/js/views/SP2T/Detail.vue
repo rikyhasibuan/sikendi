@@ -57,91 +57,103 @@
                             <v-alert :alert="alert"></v-alert>
                             <transition name="fade">
                                 <div class="table-responsive" v-if="showTable === true">
-                                    <table class="table table-hover table-striped table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th style="width:3%;text-align:center;" rowspan="2">Kode Rekening</th>
-                                                <th style="width:20%;text-align:center;" rowspan="2">Program / Kegiatan / Belanja / Nama Penerima</th>
-                                                <th style="width:10%;text-align:center;" colspan="3">Nominal</th>
-                                                <th style="width:8%;text-align:center;" rowspan="2">Action</th>
-                                            </tr>
-                                            <tr>
-                                                <th style="width:3%;text-align:center;">Jumlah Bruto</th>
-                                                <th style="width:10%;text-align:center;">Potongan Pajak</th>
-                                                <th style="width:3%;text-align:center;">Jumlah Transfer</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td colspan="2" style="text-align: right;vertical-align: middle;">
-                                                    <b>Jumlah Uang Pelimpahan</b>
-                                                </td>
-                                                <td style="text-align:right;vertical-align: middle;">
-                                                    <b>Rp.{{ sp2t.jumlah_pelimpahan | rupiah }}</b>
-                                                </td>
-                                                <td colspan="2" style="text-align: center;vertical-align: middle;"></td>
-                                                <td style="text-align: center;vertical-align: middle;"></td>
-                                            </tr>
-                                            <tr v-for="v in sp2tdetail" :key="v.id">
-                                                <td style="vertical-align: middle;">
-                                                    {{ v.program.kode_program }}<br>
-                                                    {{ v.kegiatan.kode_kegiatan }}<br>
-                                                    {{ v.belanja.kode_belanja }}<br>
-                                                    {{ v.nomor_penerima_sp2t }}
-                                                </td>
-                                                <td style="vertical-align: middle;">
-                                                    {{ v.program.nama_program }}<br>
-                                                    {{ v.kegiatan.nama_kegiatan }}<br>
-                                                    {{ v.belanja.nama_belanja }}<br>
-                                                    {{ v.nama_penerima_sp2t }}
-                                                </td>
-                                                <td style="text-align:right;vertical-align: middle;">
-                                                    <br><br><br>
-                                                    Rp.{{ v.nominalbruto | rupiah }}
-                                                </td>
-                                                <td style="text-align:right;vertical-align: middle;">
-                                                    <br><br><br>
-                                                    <span v-if="v.ppn !== 0">PPN Rp.{{ v.ppn | rupiah }}</span>
-                                                    <span v-if="v.pph22 !== 0">PPh Pasal 22 Rp.{{ v.pph22 | rupiah }}</span>
-                                                    <span v-if="v.pph4 !== 0">PPh Final Pasal 4 ayat 2 Rp.{{ v.pph4 | rupiah }}</span>
-                                                    <span v-if="v.pph21 !== 0">PPh Pasal 21 Rp.{{ v.pph21 | rupiah }}</span>
-                                                    <span v-if="v.pph23 !== 0">PPh Pasal 23 Rp.{{ v.pph23 | rupiah }}</span>
-                                                </td>
-                                                <td style="text-align:right;vertical-align: middle;">
-                                                    <br><br><br>
-                                                    Rp.{{ v.nominal_transfer | rupiah }}
-                                                </td>
-                                                <td style="text-align: center;vertical-align: middle;">
-                                                    <div>
-                                                        <a v-if="(access.update === 1)" :href="route + '/edit?sp2t='+ v.sp2t_id +'&id=' + v.id" class="btn btn-sm btn-warning mr-sm-1">
-                                                            <i class="fa fa-wrench"></i> Ubah
-                                                        </a>
-                                                        <button v-else class="btn btn-sm btn-warning disabled mr-sm-1"><i class="fa fa-wrench"></i> Ubah</button>
-                                                        <a v-if="(access.delete === 1)" href="#" @click="toggleModal(v.id)"
-                                                            class="btn btn-sm btn-danger">
-                                                            <i class="fa fa-trash-o"></i> Hapus
-                                                        </a>
-                                                        <button v-else class="btn btn-sm btn-danger disabled"><i class="fa fa-trash-o"></i> Hapus</button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2" style="text-align: right;vertical-align: middle;">
-                                                    <b>Jumlah Pencairan Transfer</b>
-                                                </td>
-                                                <td style="text-align:right;vertical-align: middle;">
-                                                    <b>Rp.{{ totalbruto | rupiah }}</b>
-                                                </td>
-                                                <td style="text-align: right;vertical-align: middle;">
-                                                    <b>Rp.{{ totalpajak | rupiah }}</b>
-                                                </td>
-                                                <td style="text-align: right;vertical-align: middle;">
-                                                    <b>Rp.{{ sp2t.jumlah_transfer | rupiah }}</b>
-                                                </td>
-                                                <td style="text-align: center;vertical-align: middle;"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    <div style="overflow-x: auto;">
+                                        <div style="min-width: 25%;">
+                                        <table class="table table-hover table-striped table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:3%;text-align:center;" rowspan="2">Kode Rekening</th>
+                                                    <th style="width:20%;text-align:center;" rowspan="2">Program / Kegiatan / Belanja / Nama Penerima</th>
+                                                    <th style="width:10%;text-align:center;" colspan="3">Nominal</th>
+                                                    <th style="width:10%;text-align:center;">Keterangan</th>
+                                                    <th style="width:8%;text-align:center;" rowspan="2">Action</th>
+                                                </tr>
+                                                <tr>
+                                                    <th style="width:3%;text-align:center;">Jumlah Bruto</th>
+                                                    <th style="width:10%;text-align:center;">Potongan Pajak</th>
+                                                    <th style="width:3%;text-align:center;">Jumlah Transfer</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td colspan="2" style="text-align: right;vertical-align: middle;">
+                                                        <b>Jumlah Uang Pelimpahan</b>
+                                                    </td>
+                                                    <td style="text-align:right;vertical-align: middle;">
+                                                        <b>Rp.{{ sp2t.jumlah_pelimpahan | rupiah }}</b>
+                                                    </td>
+                                                    <td colspan="2" style="text-align: center;vertical-align: middle;"></td>
+                                                    <td style="text-align: center;vertical-align: middle;"></td>
+                                                    <td style="text-align: center;vertical-align: middle;"></td>
+                                                </tr>
+                                                <tr v-for="v in sp2tdetail" :key="v.id">
+                                                    <td style="vertical-align: middle;">
+                                                        {{ v.program.kode_program }}<br>
+                                                        {{ v.kegiatan.kode_kegiatan }}<br>
+                                                        {{ v.belanja.kode_belanja }}<br><br>
+                                                    </td>
+                                                    <td style="vertical-align: middle;">
+                                                        {{ v.program.nama_program }}<br>
+                                                        {{ v.kegiatan.nama_kegiatan }}<br>
+                                                        {{ v.belanja.nama_belanja }}<br>
+                                                        {{ v.nama_penerima_sp2t }} / {{ v.nomor_penerima_sp2t }}
+                                                    </td>
+                                                    <td style="text-align:right;vertical-align: middle;">
+                                                        <br><br><br>
+                                                        Rp.{{ v.nominalbruto | rupiah }}
+                                                    </td>
+                                                    <td style="text-align:right;vertical-align: middle;">
+                                                        <br><br><br>
+                                                        <span v-if="v.ppn !== 0">PPN Rp.{{ v.ppn | rupiah }}<br></span>
+                                                        <span v-if="v.pph22 !== 0">PPh Pasal 22 Rp.{{ v.pph22 | rupiah }}<br></span>
+                                                        <span v-if="v.pph4 !== 0">PPh Final Pasal 4 ayat 2 Rp.{{ v.pph4 | rupiah }}<br></span>
+                                                        <span v-if="v.pph21 !== 0">PPh Pasal 21 Rp.{{ v.pph21 | rupiah }}<br></span>
+                                                        <span v-if="v.pph23 !== 0">PPh Pasal 23 Rp.{{ v.pph23 | rupiah }}</span>
+                                                    </td>
+                                                    <td style="text-align:right;vertical-align: middle;">
+                                                        <br><br><br>
+                                                        Rp.{{ v.nominal_transfer | rupiah }}
+                                                    </td>
+                                                    <td style="vertical-align: middle;">{{ v.keterangan }}</td>
+                                                    <td style="text-align: center;vertical-align: middle;">
+                                                        <div>
+                                                            <a 
+                                                                v-if="(access.update === 1)" 
+                                                                :href="route + '/edit?sp2t='+ v.sp2t_id +'&id=' + v.id"
+                                                                class="btn btn-sm btn-warning mr-sm-1">
+                                                                    <i class="fa fa-wrench"></i> Ubah
+                                                            </a>
+                                                            <button 
+                                                                v-else class="btn btn-sm btn-warning disabled mr-sm-1">
+                                                                <i class="fa fa-wrench"></i> Ubah</button>
+                                                            <a v-if="(access.delete === 1)" href="#" @click="toggleModal(v.id)"
+                                                                class="btn btn-sm btn-danger">
+                                                                <i class="fa fa-trash-o"></i> Hapus
+                                                            </a>
+                                                            <button v-else class="btn btn-sm btn-danger disabled"><i class="fa fa-trash-o"></i> Hapus</button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2" style="text-align: right;vertical-align: middle;">
+                                                        <b>Jumlah Pencairan Transfer</b>
+                                                    </td>
+                                                    <td style="text-align:right;vertical-align: middle;">
+                                                        <b>Rp.{{ totalbruto | rupiah }}</b>
+                                                    </td>
+                                                    <td style="text-align: right;vertical-align: middle;">
+                                                        <b>Rp.{{ totalpajak | rupiah }}</b>
+                                                    </td>
+                                                    <td style="text-align: right;vertical-align: middle;">
+                                                        <b>Rp.{{ sp2t.jumlah_transfer | rupiah }}</b>
+                                                    </td>
+                                                    <td style="text-align: center;vertical-align: middle;"></td>
+                                                    <td style="text-align: center;vertical-align: middle;"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </transition>
                             <transition name="fade">

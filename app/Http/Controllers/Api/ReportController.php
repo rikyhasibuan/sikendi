@@ -25,7 +25,6 @@ class ReportController extends Controller
             } else {
                 return View::make('404');
             }
-            
         } catch (Exception $e) {
 
         }
