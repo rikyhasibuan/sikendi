@@ -107,9 +107,31 @@ class Sp2tController extends Controller
         $breadcrumb[2] = '<i class="fa fa-wrench"></i> Ubah Data';
 
         $sp2t = Sp2tDetail::find($request['id']);
-        $program = Program::all();
-        $kegiatan = [];
-        $belanja = [];
+        $sp2t_data = Sp2t::find($sp2t->sp2t_id);
+
+        if (Cookie::get('level') == 3) {
+            $pegawai = Pegawai::where('nip', $this->_nip)->first();
+            $bppkegiatan = Kegiatan::where('bendahara', $pegawai['id'])->get();
+            $program_list = [];
+            $kegiatan_list = [];
+            $belanja_list = [];
+            foreach ($bppkegiatan as $v) {
+                $program_list[] = $v->program_id;
+            }
+            foreach ($bppkegiatan as $v) {
+                $kegiatan_list[] = $v->id;
+            }
+            foreach ($bppkegiatan as $v) {
+                $kegiatan_list[] = $v->id;
+            }
+            $program = Program::whereIn('id', array_unique($program_list))->get();
+            $kegiatan = Kegiatan::whereIn('program_id',array_unique($program_list))->get();
+            $belanja = Belanja::whereIn('kegiatan_id',array_unique($kegiatan_list))->get();
+        } else {
+            $program = Program::all();
+            $kegiatan = [];
+            $belanja = [];
+        }
 
         $data = [];
         $data['title']  = $this->title;
@@ -121,6 +143,8 @@ class Sp2tController extends Controller
         $data['breadcrumb'] = $breadcrumb;
         $data['api'] = url($this->api . '?nip='.$this->_nip.'&sp2t='.$sp2t->sp2t_id.'&id=' . $sp2t->id);
         $data['act'] = 'edit';
+        $data['sp2t'] = $sp2t;
+        $data['sp2t_data'] = $sp2t_data;
         $data['route'] = url($this->route . '/detail?id=' . $sp2t->sp2t_id);
         return View::make('sp2t.form', $data);
     }

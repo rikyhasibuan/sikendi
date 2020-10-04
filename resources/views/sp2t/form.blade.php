@@ -13,6 +13,7 @@
         @else
             <sp2t-update
                 :sp2t='{!! json_encode($sp2t) !!}'
+                :sp2t_data='{!! json_encode($sp2t_data) !!}'
                 :program_data='{!! json_encode($program) !!}'
                 :kegiatan_data='{!! json_encode($kegiatan) !!}'
                 :belanja_data='{!! json_encode($belanja) !!}'

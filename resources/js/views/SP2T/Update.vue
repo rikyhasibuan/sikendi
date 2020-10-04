@@ -29,7 +29,7 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label>Belanja *</label>
-                                <select v-model="sp2t.belanja_id" class="form-control" :class="{ 'is-invalid': validasi.belanja_id }">
+                                <select v-model="sp2t.belanja_id" class="form-control" @change="onChangeBelanja($event)" :class="{ 'is-invalid': validasi.belanja_id }">
                                     <option value="">Pilih Belanja</option>
                                     <option v-for="v in this.belanja" :value="v.id" :key="v.id">{{ v.nama_belanja }}</option>
                                 </select>
@@ -59,6 +59,30 @@
                                     v-model="nomor_penerima_sp2t"
                                     :class="{ 'is-invalid': validasi.nomor_penerima_sp2t }"
                                 >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label>Anggaran Belanja BPP *</label>
+                                <money
+                                    type="text"
+                                    placeholder="Anggaran Belanja BPP"
+                                    v-model="sisa_anggaran"
+                                    class="form-control"
+                                    readonly="true"
+                                />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label>Jumlah Pelimpahan Uang *</label>
+                                <money
+                                type="text"
+                                class="form-control"
+                                placeholder="Jumlah Pelimpahan Uang"
+                                v-model="sp2t_data.sisa_pelimpahan"
+                                readonly="readonly"
+                                />
                             </div>
                         </div>
                         <div class="row">
@@ -130,6 +154,7 @@ export default {
             nama_sp2t: [],
             nama_penerima_sp2t: '',
             nomor_penerima_sp2t: '',
+            sisa_anggaran: '',
             validasi: {
                 'program_id': '',
                 'kegiatan_id': '',
@@ -156,6 +181,7 @@ export default {
     },
     props: [
         'sp2t',
+        'sp2t_data',
         'program_data',
         'kegiatan_data',
         'belanja_data',
@@ -182,7 +208,7 @@ export default {
             // this.sp2t.nominal_transfer = this.sp2t.nominalbruto - this.sp2t.ppn - this.sp2t.pph21 - this.sp2t.pph4;
         },
         getNamaPenerimaSp2t(query) {
-            service.fetchData('../api/ajax/penerimasp2t/' + query)
+            service.fetchData('../api/ajax/penerimasp2t?q=' + query)
             .then(response => {
                 this.nama_sp2t = response;
                 console.log(this.nama_sp2t);
@@ -193,7 +219,7 @@ export default {
         },
         onChangeProgram(evt) {
             const program = evt.target.value;
-            service.fetchData('../api/ajax/kegiatan/' + program)
+            service.fetchData('../api/ajax/kegiatan?program=' + program)
             .then(response => {
                 this.sp2t.kegiatan_id = '';
                 this.sp2t.belanja_id = '';
@@ -206,10 +232,20 @@ export default {
         },
         onChangeKegiatan(evt) {
             const kegiatan = evt.target.value;
-            service.fetchData('../api/ajax/belanja/' + kegiatan)
+            service.fetchData('../api/ajax/belanja?kegiatan=' + kegiatan)
             .then(response => {
                 this.sp2t.belanja_id = '';
                 this.belanja = response;
+            })
+            .catch(error => {
+                console.log(error);
+            });
+        },
+        onChangeBelanja(evt) {
+            const belanja = evt.target.value;
+            service.fetchData('./../api/ajax/anggaran_belanja?bendahara='+this.usernip+'&belanja=' + belanja)
+            .then(response => {
+                this.sisa_anggaran = response;
             })
             .catch(error => {
                 console.log(error);
@@ -225,18 +261,25 @@ export default {
             this.clearAlert();
             let validasi = this.validate();
             if (validasi === true) {
-                this.sp2t.nama_penerima_sp2t  = this.nama_penerima_sp2t;
-                this.sp2t.nomor_penerima_sp2t = this.nomor_penerima_sp2t;
-                this.isLoading = true;
-                service.putData(this.api, this.sp2t)
-                    .then(result => {
-                        this.response(result);
-                    }).catch(error => {
-                        setTimeout(() => { this.isLoading = false }, 1000);
-                        this.alert.error = true;
-                        window.scroll({top: 0, left: 0, behavior: 'smooth'});
-                        console.log(error);
-                    });
+                let total = this.sp2t.nominalbruto - (this.sp2t.ppn - this.sp2t.pph22 + this.sp2t.pph4 + this.sp2t.pph21 + this.sp2t.pph23);
+                if (total > this.sp2t_data.sisa_pelimpahan) {
+                    alert('Jumlah Nominal Transfer Melebihi Jumlah Pelimpahan');
+                } else if (total > this.sisa_anggaran) {
+                    alert('Jumlah Nominal Transfer Melebihi Jumlah Anggaran BPP');
+                } else {
+                    this.sp2t.nama_penerima_sp2t  = this.nama_penerima_sp2t;
+                    this.sp2t.nomor_penerima_sp2t = this.nomor_penerima_sp2t;
+                    this.isLoading = true;
+                    service.putData(this.api, this.sp2t)
+                        .then(result => {
+                            this.response(result);
+                        }).catch(error => {
+                            setTimeout(() => { this.isLoading = false }, 1000);
+                            this.alert.error = true;
+                            window.scroll({top: 0, left: 0, behavior: 'smooth'});
+                            console.log(error);
+                        });
+                }
             }
         },
         response(result) {
@@ -314,7 +357,7 @@ export default {
         this.nama_penerima_sp2t = this.sp2t.nama_penerima_sp2t;
         this.nomor_penerima_sp2t = this.sp2t.nomor_penerima_sp2t;
 
-        service.fetchData('../api/ajax/kegiatan/' + this.sp2t.program_id)
+        service.fetchData('../api/ajax/kegiatan?program=' + this.sp2t.program_id)
         .then(response => {
             this.kegiatan = response;
         })
@@ -322,9 +365,17 @@ export default {
             console.log(error);
         });
 
-        service.fetchData('../api/ajax/belanja/' + this.sp2t.kegiatan_id)
+        service.fetchData('../api/ajax/belanja?kegiatan=' + this.sp2t.kegiatan_id)
         .then(response => {
             this.belanja = response;
+        })
+        .catch(error => {
+            console.log(error);
+        });
+
+        service.fetchData('./../api/ajax/anggaran_belanja?bendahara='+this.sp2t_data.bendahara+'&belanja=' + this.sp2t.belanja_id)
+        .then(response => {
+            this.sisa_anggaran = response;
         })
         .catch(error => {
             console.log(error);
@@ -332,7 +383,6 @@ export default {
     },
     mounted() {
         setTimeout(() => { this.isLoading = false }, 1000);
-        console.log(this.sp2t)
     }
 };
 </script>
