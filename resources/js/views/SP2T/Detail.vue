@@ -117,13 +117,13 @@
                                                     <td style="vertical-align: middle;">{{ v.keterangan }}</td>
                                                     <td style="text-align: center;vertical-align: middle;">
                                                         <div>
-                                                            <a 
-                                                                v-if="(access.update === 1)" 
+                                                            <a
+                                                                v-if="(access.update === 1)"
                                                                 :href="route + '/edit?sp2t='+ v.sp2t_id +'&id=' + v.id"
                                                                 class="btn btn-sm btn-warning mr-sm-1">
                                                                     <i class="fa fa-wrench"></i> Ubah
                                                             </a>
-                                                            <button 
+                                                            <button
                                                                 v-else class="btn btn-sm btn-warning disabled mr-sm-1">
                                                                 <i class="fa fa-wrench"></i> Ubah</button>
                                                             <a v-if="(access.delete === 1)" href="#" @click="toggleModal(v.id)"
@@ -145,7 +145,7 @@
                                                         <b>Rp.{{ totalpajak | rupiah }}</b>
                                                     </td>
                                                     <td style="text-align: right;vertical-align: middle;">
-                                                        <b>Rp.{{ sp2t.jumlah_transfer | rupiah }}</b>
+                                                        <b>Rp.{{ totaltransfer | rupiah }}</b>
                                                     </td>
                                                     <td style="text-align: center;vertical-align: middle;"></td>
                                                     <td style="text-align: center;vertical-align: middle;"></td>
@@ -255,6 +255,7 @@
                 }
                 this.totalbruto = sumbruto;
                 this.totalpajak = sumpajak;
+                this.totaltransfer = sumbruto - sumpajak;
             }
             this.saldo = this.sp2d
         },
