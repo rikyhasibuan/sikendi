@@ -6,6 +6,11 @@ body {
     line-height: 22px;
     font-weight: 400;
 }
+
+a {
+    color:#17a2b8;
+}
+
 h2 {
     font-size: 1.5rem;
 }

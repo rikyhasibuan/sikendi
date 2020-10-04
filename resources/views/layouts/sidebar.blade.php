@@ -1,4 +1,4 @@
-<aside class="main-sidebar sidebar-light-blue elevation-4">
+<aside class="main-sidebar sidebar-light-info elevation-4">
     <a href="#" class="brand-link logo-switch">
       <img src="{{ asset('img/logo-h.png') }}" class="brand-image-xl logo-xs" style="display:none;">
       <img src="{{ asset('img/logo-h.png') }}" class="brand-image-xs logo-xl" style="margin-top: -30px;width: 65%; max-height:none !important;">
@@ -14,7 +14,7 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
-                <li @if (in_array($link, ['pelimpahan','sp2t', 'sp2d'])) class="nav-item has-treeview" @else
+                <li @if (in_array($link, ['pelimpahan','sp2t', 'sp2d'])) class="nav-item has-treeview active" @else
                 class="nav-item has-treeview" @endif>
                     <a class="nav-link" href="#"><i class="nav-icon fa fa-money"></i>
                         <p>Data Kendali Keuangan <i class="fa fa-angle-left right"></i></p>
