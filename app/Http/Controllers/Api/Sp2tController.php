@@ -9,6 +9,7 @@ use App\Models\Sp2tDetail;
 use App\Models\Pelimpahan;
 use App\Models\PelimpahanDetail;
 use App\Models\Pegawai;
+use App\Models\Penerima;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Exception;
@@ -77,7 +78,7 @@ class Sp2tController extends Controller
 
         $tf = 0;
         $tf = $request->input('nominalbruto') - ($request->input('ppn') + $request->input('pph22') + $request->input('pph4') + $request->input('pph21') + $request->input('pph23'));
-        
+
         $detail->sp2t_id = $request['sp2t'];
         $detail->program_id = $request->input('program_id');
         $detail->kegiatan_id = $request->input('kegiatan_id');
@@ -101,11 +102,17 @@ class Sp2tController extends Controller
             $sp2t->sisa_anggaran = $anggaran - $detail->nominal_transfer;
             $sp2t->sisa_pelimpahan = $sisa - ($jml + $detail->nominal_transfer);
             $sp2t->save();
+
             $payload = [
                 'page' => 'SP2T',
                 'message' => 'User dengan NIP '.$request->query('nip').' menambahkan data SP2T baru'
             ];
             $this->_common->generate_log($payload);
+
+            $penerima = new Penerima();
+            $penerima->nama_penerima = $request->input('nama_penerima_sp2t');
+            $penerima->norek = $request->input('nomor_penerima_sp2t');
+            $penerima->save();
             return response()->json(['status'=>'ok'], 200);
         } else {
             return response()->json(['status'=>'failed'], 500);
@@ -159,6 +166,11 @@ class Sp2tController extends Controller
                 'message' => 'User dengan NIP '.$request->query('nip').' melakukan ubah data pada SP2T'
             ];
             $this->_common->generate_log($payload);
+
+            Penerima::updateOrCreate(
+                ['nama_penerima_sp2t' => $request->input('nama_penerima_sp2t'), 'nomor_penerima_sp2t' => $request->input('nama_penerima_sp2t')],
+                ['nama_penerima_sp2t' => $request->input('nama_penerima_sp2t'), 'nomor_penerima_sp2t' => $request->input('nama_penerima_sp2t')]
+            );
             return response()->json(['status'=>'ok'], 200);
         } else {
             return response()->json(['status'=>'failed'], 500);
