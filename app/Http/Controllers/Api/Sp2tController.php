@@ -51,7 +51,7 @@ class Sp2tController extends Controller
     public function delete_data(Request $request)
     {
         $detail = Sp2tDetail::find($request['id']);
-        $old_jml = $detail->nominal_transfer;
+        $old_jml = $detail->nominalbruto;
         $parent_id = $detail->sp2t_id;
         if ($detail->delete()) {
             $sp2t = Sp2t::find($parent_id);
@@ -61,8 +61,8 @@ class Sp2tController extends Controller
             $sp2t->sisa_pelimpahan = $sisa + $old_jml;
             $sp2t->save();
             $payload = [
-            'page' => 'SP2T',
-            'message' => 'User dengan NIP '.$request->query('nip').' melakukan hapus data pada SP2T'
+                'page' => 'SP2T',
+                'message' => 'User dengan NIP '.$request->query('nip').' melakukan hapus data pada SP2T'
             ];
             $this->_common->generate_log($payload);
             return response()->json(['status' => 'ok'], 200);
@@ -179,27 +179,17 @@ class Sp2tController extends Controller
 
     public function delete_nominal_data(Request $request)
     {
-        $pelimpahan = PelimpahanDetail::find($request['id']);
-        $jenis = $pelimpahan->jenis_pelimpahan;
-        $jumlah = $pelimpahan->jumlah_pelimpahan;
-        $pelimpahan_id = $pelimpahan->pelimpahan_id;
+        $sp2t = Sp2tDetail::find($request['id']);
+        $bruto = $sp2t->nominalbruto;
+        $net = $sp2t->nominal_transfer;
+        $sp2t_id = $sp2t->nominalbruto;
         if ($pelimpahan->delete()) {
-            $parent = Pelimpahan::find($pelimpahan_id);
-            if ($jenis == 'UP') {
-                $parent->up = $parent->up - $jumlah;
-            } elseif ($jenis == 'GU') {
-                $parent->gu = $parent->gu - $jumlah;
-            } elseif ($jenis == 'TU') {
-                $parent->tu = $parent->tu - $jumlah;
-            } elseif ($jenis == 'LS') {
-                $parent->ls = $parent->ls - $jumlah;
-            }
-            $parent->jumlah_pelimpahan = $parent->jumlah_pelimpahan - $jumlah;
-            $parent->sisa_sp2d = $parent->sisa_sp2d + $jumlah;
+            $parent = Sp2t::find($sp2t_id);
+            $parent->jumlah_transfer = $parent->jumlah_transfer - $bruto;
             $parent->save();
             $payload = [
-                'page' => 'Pelimpahan',
-                'message' => 'User dengan NIP '.$request->query('nip').' melakukan hapus data pada Pelimpahan'
+                'page' => 'SP2T',
+                'message' => 'User dengan NIP '.$request->query('nip').' melakukan hapus data pada SP2T'
             ];
             $this->_common->generate_log($payload);
             return response()->json(['status' => 'ok'], 200);
