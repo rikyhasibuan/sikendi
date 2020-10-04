@@ -183,27 +183,31 @@
         ],
         methods: {
             sendPelimpahan() {
-                service.postData(this.send_api)
-                .then(response => {
-                    if(response.status === 'ok') {
-                        /*this.alert.delete = true;*/
-                        alert('sukses');
-                        location.reload();
-                       /* window.scroll({ top: 0, left: 0, behavior: 'smooth' });
-                        setTimeout(function() {
-                            this.alert.delete=false;
+                if (this.sisa_sp2d >= 0) {
+                    service.postData(this.send_api)
+                    .then(response => {
+                        if(response.status === 'ok') {
+                            /*this.alert.delete = true;*/
+                            alert('Pengiriman Data Pada BPP Berhasil!');
                             location.reload();
-                        }, 1000);*/
-                    } else {
-                        alert('error');
-                    }
-                }).catch(error => {
-                    this.alert.delete = false;
-                    this.alert.error = true;
-                    $('#pelimpahandetail_delete_modal').modal('hide');
-                    window.scroll({ top: 0, left: 0, behavior: 'smooth' });
-                    console.log(error);
-                });
+                           /* window.scroll({ top: 0, left: 0, behavior: 'smooth' });
+                            setTimeout(function() {
+                                this.alert.delete=false;
+                                location.reload();
+                            }, 1000);*/
+                        } else {
+                            alert('error');
+                        }
+                    }).catch(error => {
+                        this.alert.delete = false;
+                        this.alert.error = true;
+                        $('#pelimpahandetail_delete_modal').modal('hide');
+                        window.scroll({ top: 0, left: 0, behavior: 'smooth' });
+                        console.log(error);
+                    });
+                } else {
+                    alert('Jumlah Pelimpahan Uang Melebihi Saldo Bank Bendahara Pengeluaran');
+                }
             },
             cetakPelimpahan(id) {
                 let newWindow = window.open();

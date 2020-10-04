@@ -7,7 +7,7 @@
     <title>SIKENDI | {!! $title !!}</title>
     <link href="{!! asset(mix('css/app.css')) !!}" rel="stylesheet">
 </head>
-<body class="hold-transition sidebar-mini layout-navbar-fixed sidebar-collapse">
+<body class="hold-transition sidebar-mini sidebar-collapse">
     <div class="wrapper">
         @include('layouts.topmenu')
         @include('layouts.sidebar')
