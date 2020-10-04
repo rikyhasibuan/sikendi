@@ -1,20 +1,24 @@
 <?php
 use App\Libraries\Common;
+use App\Models\Sp2d;
 $_common = new Common();
+$sp2d = Sp2d::where('nomor_sp2d' , $pelimpahan->nomor_sp2d)->first();
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Nota Dinas</title>
     <link rel="stylesheet" href="{!! asset('css/bootstrap.min.css') !!}">
     <style>
-        @page  {
+        @page {
             size: auto;
             margin: 2.54cm 2.54cm 25cm 25cm;
         }
+
         body {
             margin: 0px;
         }
@@ -29,6 +33,7 @@ $_common = new Common();
         }
     </style>
 </head>
+
 <body onload="window.print()">
     <div class="container-fluid">
         <div class="row">
@@ -43,7 +48,7 @@ $_common = new Common();
                         <td>Yth. Inspektur Provinsi Jawa Barat</td>
                     </tr>
                     <tr>
-                        <td width="10%"></td>
+                        <td width="10%">Dari</td>
                         <td width="1%">:</td>
                         <td>Kepala Sub Bagian Keuangan dan Aset Inspektorat Provinsi Jawa Barat</td>
                     </tr>
@@ -72,26 +77,29 @@ $_common = new Common();
                         <td style="vertical-align:top;">:</td>
                         <td style="vertical-align:top;">
                             @foreach ($detail as $v)
-                                <p style="text-align:justify;">Pengajuan Pelimpahan Uang Persediaan ({!! $v->jenis_pelimpahan !!}) dari BP kepada {!! $v->pegawai->keterangan !!} Melalui IBC (Internet Banking Corporate) dengan nomor rekening {!! $v->pegawai->norek !!}.</p>
+                                <p style="text-align:justify;">Pengajuan Pelimpahan Uang Persediaan ({!! $v->jenis_pelimpahan !!}) dari BP kepada {!! $v->pegawai->keterangan !!} melalui IBC (Internet Banking Corporate) dengan nomor rekening {!! $v->pegawai->norek !!}.</p>
                             @endforeach
                         </td>
                     </tr>
                 </table>
                 <hr style="border-top: 5px double #8c8b8b;">
                 <div style="margin-bottom:15px;text-align:justify;">
-                    <p><span style="margin-left:50px;"></span>Dipermaklumkan dengan hormat, sehubungan dengan pembiayaan pelaksanaan kegiatan APBD Tahun Anggaran 2020 pada Inspektorat
-                    Provinsi Jawa Barat, bersama ini kami mengajukan Pelimpahan Uang Persediaan dari Bendahara Pengeluaran an EKA BIDA BIDANI, A.Md untuk
-                    Kegiatan yang dikelola oleh
-                    @foreach ($detail as $v)
-                        {!! $v->pegawai->keterangan !!} an. {!! $v->pegawai->nama !!} sebesar Rp.{!! $_common->rupiah($v->jumlah_pelimpahan) !!} ({!! $_common->terbilang($v->jumlah_pelimpahan) !!} Rupiah) melalui IBC (Internet Banking Corporate)
-                    @endforeach
-                    untuk kebutuhan pada bulan {!! $pelimpahan->tgl_nota_dinas->formatLocalized('%B %Y'); !!}.<p>
+                    <p>
+                        <span style="margin-left:50px;"></span>
+                        Dipermaklumkan dengan hormat, sehubungan dengan pembiayaan pelaksanaan kegiatan APBD Tahun Anggaran 2020 pada Inspektorat
+                        Provinsi Jawa Barat, bersama ini kami mengajukan Pelimpahan Uang Persediaan dari Bendahara Pengeluaran an. EKA BIDA BIDANI, A.Md untuk
+                        Kegiatan yang dikelola oleh
+                        @foreach ($detail as $v)
+                            {!! $v->pegawai->keterangan !!} an. {!! $v->pegawai->nama !!} sebesar Rp.{!! $_common->rupiah($v->jumlah_pelimpahan) !!} ({!! $_common->terbilang($v->jumlah_pelimpahan) !!} Rupiah)
+                        @endforeach
+                        melalui IBC (Internet Banking Corporate) untuk kebutuhan pada bulan {!! $pelimpahan->tgl_nota_dinas->formatLocalized('%B %Y'); !!}.
+                    <p>
                 </div>
                 <div style="margin-bottom:15px;text-align:justify;">
                     <table class="table">
                         <tr>
                             <td style="border-top: 0px;">
-                                Saldo Bank BP tanggal {!! $pelimpahan->tgl_nota_dinas->formatLocalized('%d %B %Y'); !!}
+                                Saldo Bank BP tanggal {!! $sp2d['tgl_sp2d']->formatLocalized('%d %B %Y'); !!}
                             </td>
                             <td style="border-top: 0px; text-align:right;">Rp. {!! $_common->rupiah($pelimpahan->jumlah_sp2d) !!}</td>
                         </tr>
@@ -120,7 +128,7 @@ $_common = new Common();
                         </tr>
                     </table>
                 </div>
-                <p><span style="margin-left:50px;"></span>Demikian atas perhatian dan perkenannya diucapkan terima kasih.</p>
+                <p><span style="margin-left:50px;"></span>Demikian, atas perhatian dan perkenannya diucapkan terima kasih.</p>
                 <div style="margin-bottom:15px;text-align:justify;">
                     <table width="100%">
                         <tr>
@@ -152,4 +160,5 @@ $_common = new Common();
         </div>
     </div>
 </body>
+
 </html>
