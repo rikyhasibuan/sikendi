@@ -4,15 +4,13 @@ use App\Models\Kegiatan;
 use App\Models\Belanja;
 use App\Models\Anggaran;
 use App\Models\Pegawai;
+use App\Models\Pelimpahan;
+use App\Models\PelimpahanDetail;
 use App\Models\Sp2d;
 $common = new Common();
-
-
 $pegawai = Pegawai::where('norek', '!=', '')->get();
 $anggaran_tahun = Anggaran::where('tahun', $tahun)->sum('jumlah');
-//$pegawai = Pegawai::find($bendahara);
 $total_anggaran = 0;
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -58,29 +56,29 @@ $total_anggaran = 0;
                 <td rowspan="2" style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>SALDO<br>BANK DI REKENING<br>BP</b></td>
             </tr>
             <tr>
-                <td style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>KODERING</b></td>
-                <td style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>NAMA KEGIATAN</b></td>
-                <td style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>NOMOR SP2D</b></td>
-                <td style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>TANGGAL SP2D</b></td>
-                <td style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>UP</b></td>
-                <td style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>GU</b></td>
-                <td style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>TU</b></td>
-                <td style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>LS</b></td>
-                <td style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>JUMLAH</b></td>
+                <td width="auto" style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>KODERING</b></td>
+                <td width="auto" style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>NAMA KEGIATAN</b></td>
+                <td width="auto" style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>NOMOR SP2D</b></td>
+                <td width="auto" style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>TANGGAL SP2D</b></td>
+                <td width="auto" style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>UP</b></td>
+                <td width="auto" style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>GU</b></td>
+                <td width="auto" style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>TU</b></td>
+                <td width="auto" style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>LS</b></td>
+                <td width="auto" style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>JUMLAH</b></td>
 
-                <td style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>NOMOR NOTA DINAS</b></td>
-                <td style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>TANGGAL NOTA DINAS</b></td>
-                <td style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>UP</b></td>
-                <td style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>GU</b></td>
-                <td style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>TU</b></td>
-                <td style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>LS</b></td>
-                <td style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>JUMLAH</b></td>
-                <td style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>SISA ANGGARAN DI<br>BANK BP</b></td>
+                <td width="auto" style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>NOMOR NOTA DINAS</b></td>
+                <td width="auto" style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>TANGGAL NOTA DINAS</b></td>
+                <td width="auto" style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>UP</b></td>
+                <td width="auto" style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>GU</b></td>
+                <td width="auto" style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>TU</b></td>
+                <td width="auto" style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>LS</b></td>
+                <td width="auto" style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>JUMLAH</b></td>
+                <td width="auto" style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>SISA ANGGARAN DI<br>BANK BP</b></td>
 
-                <td style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>UP</b></td>
-                <td style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>GU</b></td>
-                <td style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>TU</b></td>
-                <td style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>LS</b></td>
+                <td width="auto" style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>UP</b></td>
+                <td width="auto" style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>GU</b></td>
+                <td width="auto" style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>TU</b></td>
+                <td width="auto" style="border: 1px solid #000000;text-align:center;vertical-align:middle;"><b>LS</b></td>
             </tr>
         </thead>
         <tbody>
@@ -112,7 +110,10 @@ $total_anggaran = 0;
                 <td width="auto" style="border: 1px solid #000000;vertical-align:middle;"></td>
             </tr>
 
-            <?php $sp2d = Sp2d::whereMonth('tgl_sp2d', $dari)->where('tahun_anggaran', $tahun)->get(); ?>
+            <?php
+            $sp2d = Sp2d::whereMonth('tgl_sp2d', $dari)->where('tahun_anggaran', $tahun)->get();
+            $pelimpahan = Pelimpahan::whereMonth('tgl_nota_dinas', $dari)->first();
+            ?>
             @foreach($sp2d as $s)
                 <tr>
                     <td width="15%" style="border: 1px solid #000000;vertical-align:middle;"></td>
@@ -126,7 +127,7 @@ $total_anggaran = 0;
                     <td width="15%" style="border: 1px solid #000000;vertical-align:middle;">@if($s->jenis_sp2d == 'TU') {{ $s->jumlah_sp2d }} @endif</td>
                     <td width="15%" style="border: 1px solid #000000;vertical-align:middle;">@if($s->jenis_sp2d == 'LS') {{ $s->jumlah_sp2d }} @endif</td>
                     <td width="15%" style="border: 1px solid #000000;vertical-align:middle;">{{ $s->jumlah_sp2d }}</td>
-                    <td width="15%" style="border: 1px solid #000000;vertical-align:middle;"> {{ $s->sisa_anggaran }}</td>
+                    <td width="15%" style="border: 1px solid #000000;vertical-align:middle;">{{ $s->sisa_anggaran }}</td>
                     <td width="15%" style="border: 1px solid #000000;vertical-align:middle;"></td>
                     <td width="15%" style="border: 1px solid #000000;vertical-align:middle;"></td>
                     <td width="15%" style="border: 1px solid #000000;vertical-align:middle;"></td>
@@ -150,6 +151,7 @@ $total_anggaran = 0;
                 $kegiatan_list = [];
                 foreach ($kegiatan as $v) { $kegiatan_list[] = $v->id; }
                 $anggaran = Anggaran::whereIn('kegiatan_id', $kegiatan_list)->sum('jumlah');
+                $pdetail = PelimpahanDetail::where('bendahara', $p->id)->where('pelimpahan_id', $pelimpahan['id'])->first();
                 ?>
                 <tr>
                     <td colspan="3" style="vertical-align:middle; height:35px; border:1px solid #000000;">
@@ -165,13 +167,13 @@ $total_anggaran = 0;
                     <td style="border: 1px solid #000000;"></td>
                     <td style="border: 1px solid #000000;"></td>
                     <td style="border: 1px solid #000000;"></td>
-                    <td style="border: 1px solid #000000;"></td>
-                    <td style="border: 1px solid #000000;"></td>
-                    <td style="border: 1px solid #000000;"></td>
-                    <td style="border: 1px solid #000000;"></td>
-                    <td style="border: 1px solid #000000;"></td>
-                    <td style="border: 1px solid #000000;"></td>
-                    <td style="border: 1px solid #000000;"></td>
+                    <td style="border: 1px solid #000000;">{{ ($pdetail) ? $pelimpahan['nota_dinas'] : '' }}</td>
+                    <td style="border: 1px solid #000000;">{{ ($pdetail) ? $pelimpahan['tgl_nota_dinas'] : '' }}</td>
+                    <td width="15%" style="border: 1px solid #000000;">@if($pdetail['jenis_pelimpahan'] == 'UP') {{ $pdetail['jumlah_pelimpahan'] }} @endif</td>
+                    <td width="15%" style="border: 1px solid #000000;">@if($pdetail['jenis_pelimpahan'] == 'GU') {{ $pdetail['jumlah_pelimpahan'] }} @endif</td>
+                    <td width="15%" style="border: 1px solid #000000;">@if($pdetail['jenis_pelimpahan'] == 'TU') {{ $pdetail['jumlah_pelimpahan'] }} @endif</td>
+                    <td width="15%" style="border: 1px solid #000000;">@if($pdetail['jenis_pelimpahan'] == 'LS') {{ $pdetail['jumlah_pelimpahan'] }} @endif</td>
+                    <td style="border: 1px solid #000000;">{{ ($pdetail) ? $pdetail['jumlah_pelimpahan'] : '' }}</td>
                     <td style="border: 1px solid #000000;"></td>
                     <td style="border: 1px solid #000000;"></td>
                     <td style="border: 1px solid #000000;"></td>
@@ -216,59 +218,59 @@ $total_anggaran = 0;
                     @foreach($sql_belanja as $k)
                         <?php $anggaran_belanja = Anggaran::where('belanja_id', $k->id)->sum('jumlah'); ?>
                         <tr>
-                            <td style="border: 1px solid #000000;"></td>
-                            <td style="border: 1px solid #000000;">{{ $k->kode_belanja }}</td>
-                            <td style="border: 1px solid #000000;">{{ $k->nama_belanja}}</td>
-                            <td style="border: 1px solid #000000;">{{ ($anggaran_belanja != 0) ? $anggaran_belanja : '' }}</td>
-                            <td style="border: 1px solid #000000;"></td>
-                            <td style="border: 1px solid #000000;"></td>
-                            <td style="border: 1px solid #000000;"></td>
-                            <td style="border: 1px solid #000000;"></td>
-                            <td style="border: 1px solid #000000;"></td>
-                            <td style="border: 1px solid #000000;"></td>
-                            <td style="border: 1px solid #000000;"></td>
-                            <td style="border: 1px solid #000000;"></td>
-                            <td style="border: 1px solid #000000;"></td>
-                            <td style="border: 1px solid #000000;"></td>
-                            <td style="border: 1px solid #000000;"></td>
-                            <td style="border: 1px solid #000000;"></td>
-                            <td style="border: 1px solid #000000;"></td>
-                            <td style="border: 1px solid #000000;"></td>
-                            <td style="border: 1px solid #000000;"></td>
-                            <td style="border: 1px solid #000000;"></td>
-                            <td style="border: 1px solid #000000;"></td>
-                            <td style="border: 1px solid #000000;"></td>
-                            <td style="border: 1px solid #000000;"></td>
-                            <td style="border: 1px solid #000000;"></td>
-                            <td style="border: 1px solid #000000;"></td>
+                            <td style="border:1px solid #000000;"></td>
+                            <td style="border:1px solid #000000;">{{ $k->kode_belanja }}</td>
+                            <td style="border:1px solid #000000;">{{ $k->nama_belanja}}</td>
+                            <td style="border:1px solid #000000;">{{ ($anggaran_belanja != 0) ? $anggaran_belanja : '' }}</td>
+                            <td style="border:1px solid #000000;"></td>
+                            <td style="border:1px solid #000000;"></td>
+                            <td style="border:1px solid #000000;"></td>
+                            <td style="border:1px solid #000000;"></td>
+                            <td style="border:1px solid #000000;"></td>
+                            <td style="border:1px solid #000000;"></td>
+                            <td style="border:1px solid #000000;"></td>
+                            <td style="border:1px solid #000000;"></td>
+                            <td style="border:1px solid #000000;"></td>
+                            <td style="border:1px solid #000000;"></td>
+                            <td style="border:1px solid #000000;"></td>
+                            <td style="border:1px solid #000000;"></td>
+                            <td style="border:1px solid #000000;"></td>
+                            <td style="border:1px solid #000000;"></td>
+                            <td style="border:1px solid #000000;"></td>
+                            <td style="border:1px solid #000000;"></td>
+                            <td style="border:1px solid #000000;"></td>
+                            <td style="border:1px solid #000000;"></td>
+                            <td style="border:1px solid #000000;"></td>
+                            <td style="border:1px solid #000000;"></td>
+                            <td style="border:1px solid #000000;"></td>
                         </tr>
                     @endforeach
 
                     <?php $total_anggaran = Anggaran::where('kegiatan_id', $v->id)->sum('jumlah'); ?>
                     <tr>
                         <td colspan="3" style="vertical-align: middle; border: 1px solid #000000;"><b>JUMLAH</b></td>
-                        <td style="border: 1px solid #000000;">{{ ($total_anggaran != 0) ? $total_anggaran : '' }}</td>
-                        <td style="border: 1px solid #000000;"></td>
-                        <td style="border: 1px solid #000000;"></td>
-                        <td style="border: 1px solid #000000;"></td>
-                        <td style="border: 1px solid #000000;"></td>
-                        <td style="border: 1px solid #000000;"></td>
-                        <td style="border: 1px solid #000000;"></td>
-                        <td style="border: 1px solid #000000;"></td>
-                        <td style="border: 1px solid #000000;"></td>
-                        <td style="border: 1px solid #000000;"></td>
-                        <td style="border: 1px solid #000000;"></td>
-                        <td style="border: 1px solid #000000;"></td>
-                        <td style="border: 1px solid #000000;"></td>
-                        <td style="border: 1px solid #000000;"></td>
-                        <td style="border: 1px solid #000000;"></td>
-                        <td style="border: 1px solid #000000;"></td>
-                        <td style="border: 1px solid #000000;"></td>
-                        <td style="border: 1px solid #000000;"></td>
-                        <td style="border: 1px solid #000000;"></td>
-                        <td style="border: 1px solid #000000;"></td>
-                        <td style="border: 1px solid #000000;"></td>
-                        <td style="border: 1px solid #000000;"></td>
+                        <td style="border:1px solid #000000;">{{ ($total_anggaran != 0) ? $total_anggaran : '' }}</td>
+                        <td style="border:1px solid #000000;"></td>
+                        <td style="border:1px solid #000000;"></td>
+                        <td style="border:1px solid #000000;"></td>
+                        <td style="border:1px solid #000000;"></td>
+                        <td style="border:1px solid #000000;"></td>
+                        <td style="border:1px solid #000000;"></td>
+                        <td style="border:1px solid #000000;"></td>
+                        <td style="border:1px solid #000000;"></td>
+                        <td style="border:1px solid #000000;"></td>
+                        <td style="border:1px solid #000000;"></td>
+                        <td style="border:1px solid #000000;"></td>
+                        <td style="border:1px solid #000000;"></td>
+                        <td style="border:1px solid #000000;"></td>
+                        <td style="border:1px solid #000000;"></td>
+                        <td style="border:1px solid #000000;"></td>
+                        <td style="border:1px solid #000000;"></td>
+                        <td style="border:1px solid #000000;"></td>
+                        <td style="border:1px solid #000000;"></td>
+                        <td style="border:1px solid #000000;"></td>
+                        <td style="border:1px solid #000000;"></td>
+                        <td style="border:1px solid #000000;"></td>
                     </tr>
                 @endforeach
             @endforeach
