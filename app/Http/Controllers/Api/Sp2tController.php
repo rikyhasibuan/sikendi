@@ -57,8 +57,10 @@ class Sp2tController extends Controller
             $sp2t = Sp2t::find($parent_id);
             $jml = $sp2t->jumlah_transfer;
             $sisa = $sp2t->sisa_pelimpahan;
+            $anggaran = $sp2t->sisa_anggaran;
             $sp2t->jumlah_transfer = $jml - $old_jml;
             $sp2t->sisa_pelimpahan = $sisa + $old_jml;
+            $sp2t->sisa_anggaran = $anggaran + $old_jml;
             $sp2t->save();
             $payload = [
                 'page' => 'SP2T',
