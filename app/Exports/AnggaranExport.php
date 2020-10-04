@@ -15,14 +15,10 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 class AnggaranExport implements FromView, ShouldAutoSize
 {
     protected $dari;
-    protected $sampai;
-    protected $bendahara;
 
     function __construct($dari, $sampai, $bendahara)
     {
         $this->dari = explode('-', $dari);
-        $this->sampai = explode('-', $sampai);
-        $this->bendahara = $bendahara;
     }
 
     public function view(): View
@@ -31,8 +27,7 @@ class AnggaranExport implements FromView, ShouldAutoSize
         $output = [];
         $i = 0;
         $dari = $this->dari;
-        $sampai = $this->sampai;
-        return view('excel', ['bendahara' => $this->bendahara, 'dari' => $dari[1], 'sampai' => $sampai[1], 'tahun' => $sampai[0]]);
-        
+        return view('excel', ['bendahara' => $this->bendahara, 'dari' => $dari[1]]);
+
     }
 }
