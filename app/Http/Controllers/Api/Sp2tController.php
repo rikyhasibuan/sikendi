@@ -98,9 +98,9 @@ class Sp2tController extends Controller
             $jml = $sp2t->jumlah_transfer;
             $sisa = $sp2t->sisa_pelimpahan;
             $anggaran = $sp2t->sisa_anggaran;
-            $sp2t->jumlah_transfer = $jml + $detail->nominal_transfer;
-            $sp2t->sisa_anggaran = $anggaran - $detail->nominal_transfer;
-            $sp2t->sisa_pelimpahan = $sisa - ($jml + $detail->nominal_transfer);
+            $sp2t->jumlah_transfer = $jml + $detail->nominalbruto;
+            $sp2t->sisa_anggaran = $anggaran - $detail->nominalbruto;
+            $sp2t->sisa_pelimpahan = $sisa - ($jml + $detail->nominalbruto);
             $sp2t->save();
 
             $payload = [
@@ -123,7 +123,7 @@ class Sp2tController extends Controller
     {
         $sp2t = Sp2t::find($request['sp2t']);
         $detail = Sp2tDetail::find($request['id']);
-        $old_jml = $detail->nominal_transfer;
+        $old_jml = $detail->nominalbruto;
 
         $tf = 0;
         if ($request->input('ppn') != 0) {
@@ -158,8 +158,8 @@ class Sp2tController extends Controller
         if ($detail->save()) {
             $jml = $sp2t->jumlah_transfer;
             $sisa = $sp2t->sisa_pelimpahan;
-            $sp2t->jumlah_transfer = $jml - $old_jml + $detail->nominal_transfer;
-            $sp2t->sisa_pelimpahan = $sisa + $old_jml - ($jml + $detail->nominal_transfer);
+            $sp2t->jumlah_transfer = $jml - $old_jml + $detail->nominalbruto;
+            $sp2t->sisa_pelimpahan = $sisa + $old_jml - ($jml + $detail->nominalbruto);
             $sp2t->save();
             $payload = [
                 'page' => 'SP2T',
