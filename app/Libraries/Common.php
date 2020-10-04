@@ -93,15 +93,15 @@ class Common
     public function generate_integer_month()
     {
         $month = [];
-        $month['1'] = 'Januari';
-        $month['2'] = 'Februari';
-        $month['3'] = 'Maret';
-        $month['4'] = 'April';
-        $month['5'] = 'Mei';
-        $month['6'] = 'Juni';
-        $month['7'] = 'Juli';
-        $month['8'] = 'Agustus';
-        $month['9'] = 'September';
+        $month['01'] = 'Januari';
+        $month['02'] = 'Februari';
+        $month['03'] = 'Maret';
+        $month['04'] = 'April';
+        $month['05'] = 'Mei';
+        $month['06'] = 'Juni';
+        $month['07'] = 'Juli';
+        $month['08'] = 'Agustus';
+        $month['09'] = 'September';
         $month['10'] = 'Oktober';
         $month['11'] = 'November';
         $month['12'] = 'Desember';

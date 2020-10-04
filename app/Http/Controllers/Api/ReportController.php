@@ -21,7 +21,7 @@ class ReportController extends Controller
             $_bendahara = isset($request['bendahara']) ? $request['bendahara'] : '';
             $count = Kegiatan::searchBendahara($_bendahara)->count();
             if ($count > 0) {
-                return Excel::download(new AnggaranExport($_dari, $_sampai, $_bendahara), 'Laporan Realisasi Anggaran Perjalanan Dinas.xlsx');
+                return Excel::download(new AnggaranExport($_dari, $_sampai, $_bendahara), 'Laporan Data Kendali Keuangan Bendahara Pengeluaran (BP).xlsx');
             } else {
                 return View::make('404');
             }

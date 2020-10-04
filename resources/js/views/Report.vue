@@ -8,17 +8,7 @@
                     <form method="POST" v-on:submit.prevent="onSubmit">
                         <div class="row">
                             <div class="form-group col-md-4">
-                                <label>Bendahara</label>
-                                <select v-model="report.bendahara" class="form-control">
-                                    <option value="">Pilih Bendahara</option>
-                                    <option v-for="v in this.bendahara_data" :value="v.id" :key="v.id">{{ v.nama }}</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="form-group col-md-4">
-                                <label>Dari *</label>
+                                <label>Periode *</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fa fa-calendar"></i></span>
@@ -29,28 +19,8 @@
                                         v-model="report.dari"
                                         :config="options"
                                         class="form-control"
-                                        placeholder="Dari"
+                                        placeholder="Periode"
                                         :class="{ 'is-invalid': validasi.dari }"
-                                        autocomplete="off">
-                                    </date-picker>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-4">
-                                <label>Sampai *</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                                    </div>
-                                    <date-picker
-                                        id="sampai"
-                                        name="sampai"
-                                        v-model="report.sampai"
-                                        :config="options"
-                                        class="form-control"
-                                        placeholder="Sampai"
-                                        :class="{ 'is-invalid': validasi.sampai }"
                                         autocomplete="off">
                                     </date-picker>
                                 </div>
