@@ -114,31 +114,32 @@ $_common = new Common();
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th style="width:20%;vertical-align: middle;text-align:center;font-size: 0.80rem;" rowspan="2">
+                                <th style="width:10%;vertical-align: middle;text-align:center;font-size: 0.80rem;" rowspan="2">
                                     Nama & No. Rek. Penerima
                                 </th>
-                                <th style="width:5%;vertical-align: middle;text-align:center;font-size: 0.80rem;" colspan="3">
+                                <th style="width:10%;vertical-align: middle;text-align:center;font-size: 0.80rem;" colspan="3">
                                     Nominal
                                 </th>
-                                <th style="width:5%;vertical-align: middle;text-align:center;font-size: 0.80rem;" rowspan="2">
+                                <th style="width:10%;vertical-align: middle;text-align:center;font-size: 0.80rem;" rowspan="2">
                                     Keterangan
                                 </th>
                             </tr>
                             <tr>
-                                <th style="width:3%;text-align:center;font-size: 0.80rem;">Bruto</th>
-                                <th style="width:7%;text-align:center;font-size: 0.80rem;">Pajak</th>
-                                <th style="width:3%;text-align:center;font-size: 0.80rem;">Transfer</th>
+                                <th style="width:5%;text-align:center;font-size: 0.80rem;">Bruto</th>
+                                <th style="width:10%;text-align:center;font-size: 0.80rem;">Pajak</th>
+                                <th style="width:5%;text-align:center;font-size: 0.80rem;">Transfer</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
                             $totalbruto = 0;
                             $totalpajak = 0;
+                            $totalnet = 0;
                             ?>
                             @foreach($detail as $v)
                                 <tr>
                                     <td style="font-size: 0.80rem;">
-                                        {!! $v->nomor_penerima_sp2t !!} / {!! $v->nama_penerima_sp2t !!}<br>
+                                        {!! $v->nama_penerima_sp2t !!} / {!! $v->nomor_penerima_sp2t !!}<br>
                                         {!! $v->belanja->kode_belanja !!} Belanja {!! $v->belanja->nama_belanja !!}
                                     </td>
                                     <td style="text-align:right;vertical-align: middle;font-size: 0.80rem;">
@@ -149,16 +150,16 @@ $_common = new Common();
                                             PPN - Rp. {!! $_common->rupiah($v->ppn) !!}<br>
                                         @endif
                                         @if($v->pph22 != 0)
-                                            PPH22 - Rp. {!! $_common->rupiah($v->pph22) !!}<br>
+                                            PPh Pasal 22 - Rp. {!! $_common->rupiah($v->pph22) !!}<br>
                                         @endif
                                         @if($v->pph4 != 0)
-                                            PPH4 - Rp. {!! $_common->rupiah($v->pph4) !!}<br>
+                                            PPh Pasal 4 ayat 2 - Rp. {!! $_common->rupiah($v->pph4) !!}<br>
                                         @endif
                                         @if($v->pph21 != 0)
-                                            PPH21 - Rp. {!! $_common->rupiah($v->pph21) !!}<br>
+                                            PPh Pasal 21 - Rp. {!! $_common->rupiah($v->pph21) !!}<br>
                                         @endif
                                         @if($v->pph23 != 0)
-                                            PPH23 - Rp. {!! $_common->rupiah($v->pph23) !!}<br>
+                                            PPh Pasal 23 - Rp. {!! $_common->rupiah($v->pph23) !!}<br>
                                         @endif
                                     </td>
                                     <td style="text-align:right;vertical-align: middle;font-size: 0.80rem;">
@@ -171,6 +172,7 @@ $_common = new Common();
                                 <?php
                                 $totalbruto += $v->nominalbruto;
                                 $totalpajak += ($v->ppn + $v->pph22 + $v->pph4 + $v->pph21 + $v->pph23);
+                                $totalnet += $totalbruto - $totalpajak;
                                 ?>
                             @endforeach
                             <tr>
@@ -184,7 +186,7 @@ $_common = new Common();
                                     <b>Rp. {!! $_common->rupiah($totalpajak) !!}</b>
                                 </td>
                                 <td style="text-align:right;vertical-align: middle;font-size: 0.80rem;">
-                                    <b>Rp. {!! $_common->rupiah($sp2t->jumlah_transfer) !!}</b>
+                                    <b>Rp. {!! $_common->rupiah($totalnet) !!}</b>
                                 </td>
                                 <td style="text-align: center;vertical-align: middle;font-size: 0.80rem;"></td>
                             </tr>
@@ -193,7 +195,7 @@ $_common = new Common();
                 </div>
                 <p>Demikian atas bantuan dan kerjasamanya yang baik kami sampaikan terima kasih.</p>
                 <div style="margin-bottom:15px;text-align:justify;">
-                    {{-- 
+                    {{--
                     <table width="100%">
                         <tr>
                             <td width="50%"></td>
@@ -217,7 +219,7 @@ $_common = new Common();
                                 </table>
                             </td>
                         </tr>
-                    </table> 
+                    </table>
                     --}}
                     <table width="100%">
                         <tr>
