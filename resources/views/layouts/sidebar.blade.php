@@ -1,6 +1,6 @@
 <aside class="main-sidebar sidebar-light-info elevation-4">
     <a href="#" class="brand-link logo-switch">
-      <img src="{{ asset('img/logo-h.png') }}" class="brand-image-xl logo-xs" style="display:none;">
+      <img src="{{ asset('img/logo-mini.png') }}" class="brand-image-xl logo-xs" style="margin-left: -5px;margin-top: -5px;width: 65%; max-height:none !important;">
       <img src="{{ asset('img/logo-h.png') }}" class="brand-image-xs logo-xl" style="margin-top: -30px;width: 65%; max-height:none !important;">
     </a>
     <div class="sidebar">
