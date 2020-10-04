@@ -102,13 +102,6 @@
                     this.validasi.dari = false;
                 }
 
-                if (this.report.sampai.length === 0) {
-                    this.validasi.sampai = true;
-                    condition++;
-                } else {
-                    this.validasi.sampai = false;
-                }
-
                 if (condition > 0) {
                     return false;
                 } else {
