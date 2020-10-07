@@ -47,7 +47,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="pull-left">
-                                <a v-if="(access.write === 1)" :href="route +'/create?sp2t='+ sp2t.id" class="btn btn-success mb-2 mr-2">
+                                <a v-if="(access.write === 1 && sp2t.status === 0)" :href="route +'/create?sp2t='+ sp2t.id" class="btn btn-success mb-2 mr-2">
                                     <i class="fa fa-plus"></i> Tambah Data
                                 </a>
                                 <span v-if="sp2tdetail.length !== 0 && access.approval === 1 && sp2t.status === 0">

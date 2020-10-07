@@ -13,6 +13,7 @@ use App\Models\Pegawai;
 use App\Models\Penerima;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\DB;
 use Exception;
 
 class Sp2tController extends Controller
@@ -64,8 +65,8 @@ class Sp2tController extends Controller
             $sp2t->sisa_anggaran = $anggaran + $old_jml;
             $sp2t->save();
             $payload = [
-                'page' => 'SP2T',
-                'message' => 'User dengan NIP '.$request->query('nip').' melakukan hapus data pada SP2T'
+            'page' => 'SP2T',
+            'message' => 'User dengan NIP '.$request->query('nip').' melakukan hapus data pada SP2T'
             ];
             $this->_common->generate_log($payload);
             return response()->json(['status' => 'ok'], 200);
@@ -107,8 +108,8 @@ class Sp2tController extends Controller
             $sp2t->save();
 
             $payload = [
-                'page' => 'SP2T',
-                'message' => 'User dengan NIP '.$request->query('nip').' menambahkan data SP2T baru'
+            'page' => 'SP2T',
+            'message' => 'User dengan NIP '.$request->query('nip').' menambahkan data SP2T baru'
             ];
             $this->_common->generate_log($payload);
 
@@ -165,8 +166,8 @@ class Sp2tController extends Controller
             $sp2t->sisa_pelimpahan = $sisa + $old_jml - ($jml + $detail->nominalbruto);
             $sp2t->save();
             $payload = [
-                'page' => 'SP2T',
-                'message' => 'User dengan NIP '.$request->query('nip').' melakukan ubah data pada SP2T'
+            'page' => 'SP2T',
+            'message' => 'User dengan NIP '.$request->query('nip').' melakukan ubah data pada SP2T'
             ];
             $this->_common->generate_log($payload);
 
@@ -191,8 +192,8 @@ class Sp2tController extends Controller
             $parent->jumlah_transfer = $parent->jumlah_transfer - $bruto;
             $parent->save();
             $payload = [
-                'page' => 'SP2T',
-                'message' => 'User dengan NIP '.$request->query('nip').' melakukan hapus data pada SP2T'
+            'page' => 'SP2T',
+            'message' => 'User dengan NIP '.$request->query('nip').' melakukan hapus data pada SP2T'
             ];
             $this->_common->generate_log($payload);
             return response()->json(['status' => 'ok'], 200);
@@ -207,7 +208,26 @@ class Sp2tController extends Controller
             $_id = isset($request['id']) ? $request['id'] : '';
             $sp2t = Sp2t::with('pegawai')->find($_id);
             $detail = Sp2tDetail::with('program', 'kegiatan', 'belanja')->where('sp2t_id', $_id)->get();
-            $view = View::make('sp2t.print', ['sp2t' => $sp2t, 'detail' => $detail]);
+                
+            $output = [];
+            $i = 0;
+            
+            $comp = Sp2tDetail::select(
+                DB::raw("GROUP_CONCAT(`id`) as group_id")
+            )
+            ->where('sp2t_id', $_id)
+            ->groupBy('program_id', 'kegiatan_id')
+            ->get();
+
+           /* foreach ($comp as $c) {
+                $detail = Sp2tDetail::whereIn('id', explode(',', $c->group_id))->get();
+                echo "<pre>";
+                print_r($detail);
+            }
+            exit;*/
+            $total_pages = count($comp);
+            
+            $view = View::make('sp2t.print', ['sp2t' => $sp2t, 'page' => $total_pages, 'comp' => $comp]);
             return $view;
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
@@ -223,7 +243,7 @@ class Sp2tController extends Controller
 
         if ($act == 'revision') {
             $revision = new Sp2tRevisi();
-            $revision->nip = $nip;
+            $revision->nip = $nipi;
             $revision->role = $role;
             $revision->sp2t_id = $id;
             $revision->catatan = $request->input('catatan');
