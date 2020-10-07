@@ -9,7 +9,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body"><p>Anda Akan Menyetujui Data Dinas Ini, Teruskan?</p></div>
+                    <div class="modal-body"><p>Anda Akan Menyetujui Data Ini, Teruskan?</p></div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-success" @click="approveButton">
                             <i class="fa fa-check-circle-o"></i> Ya

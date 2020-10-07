@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\View;
 use App\Http\Controllers\Controller;
 use App\Models\Sp2t;
 use App\Models\Sp2tDetail;
+use App\Models\Sp2tRevisi;
 use App\Models\Anggaran;
+use App\Models\Level;
 use App\Models\Kegiatan;
 use App\Models\Pegawai;
 use App\Models\Program;
@@ -125,8 +127,8 @@ class Sp2tController extends Controller
                 $kegiatan_list[] = $v->id;
             }
             $program = Program::whereIn('id', array_unique($program_list))->get();
-            $kegiatan = Kegiatan::whereIn('program_id',array_unique($program_list))->get();
-            $belanja = Belanja::whereIn('kegiatan_id',array_unique($kegiatan_list))->get();
+            $kegiatan = Kegiatan::whereIn('program_id', array_unique($program_list))->get();
+            $belanja = Belanja::whereIn('kegiatan_id', array_unique($kegiatan_list))->get();
         } else {
             $program = Program::all();
             $kegiatan = [];
@@ -158,11 +160,31 @@ class Sp2tController extends Controller
 
         $sp2t = Sp2t::with('pegawai')->find($request['id']);
         $sp2tdetail = Sp2tDetail::where('sp2t_id', $sp2t->id)->with('kegiatan', 'program', 'belanja')->get();
+        $sp2trevisi = Sp2tRevisi::where('sp2t_id', $sp2t->id)->get();
+
+        $revisi   = ['kassubag' => [] , 'verifikatur' => []];
+        $approval = ['kassubag' => $sp2t->approval_kassubag , 'verifikatur' => $sp2t->approval_verifikatur];
+
+        $level = Level::find(Cookie::get('level'));
+
+        if (count($sp2trevisi) > 0) {
+            foreach ($sp2trevisi as $v) {
+                if ($v->role == 'kassubag') {
+                    array_push($revisi['kassubag'], $v);
+                } elseif ($v->role == 'verifikatur') {
+                    array_push($revisi['verifikatur'], $v);
+                }
+            }
+        }
+
         $data = [];
         $data['title']  = $this->title;
         $data['link'] = $this->link;
         $data['sp2t'] = $sp2t;
         $data['sp2tdetail'] = $sp2tdetail;
+        $data['revisi'] = $revisi;
+        $data['approval'] = $approval;
+        $data['role'] = strtolower($level->nama_level);
         $data['breadcrumb'] = $breadcrumb;
         $data['api'] = url($this->api . '?nip='.$this->_nip);
         $data['send_api'] = url($this->api . '/nominal/send?sp2t='.$sp2t->id.'&nip='.$this->_nip);

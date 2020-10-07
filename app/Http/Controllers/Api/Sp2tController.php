@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Libraries\Common;
 use App\Models\Sp2t;
 use App\Models\Sp2tDetail;
+use App\Models\Sp2tRevisi;
 use App\Models\Pelimpahan;
 use App\Models\PelimpahanDetail;
 use App\Models\Pegawai;
@@ -213,86 +214,44 @@ class Sp2tController extends Controller
         }
     }
 
-    public function put_approval_data(Request $request)
+    public function post_approval_data(Request $request)
     {
-        $act = $request['act'];
-        $type = $request['type'];
-        $tab = $request['tab'];
-        $dinasbop_id = $request['id'];
+        $id   = isset($request['id']) ? $request['id'] : '';
+        $act  = isset($request['act']) ? $request['act'] : '';
+        $role = isset($request['role']) ? $request['role'] : '';
+        $nip  = isset($request['nip']) ? $request['nip'] : '';
 
         if ($act == 'revision') {
-            $approvalbop = DinasBopApproval::where('dinasbop_id', $dinasbop_id)->where('tab', $tab)->first();
-            $column = $approvalbop[$type];
-            array_push($column['catatan'], [
-                'text'=>$request->input('catatan'),
-                'date' => date('Y-m-d H:i:s')
-            ]);
-
-            $primary_id = $approvalbop['id'];
-
-            $dinasboprevision = DinasBopApproval::find($primary_id);
-            $dinasboprevision->{$type} = $column;
-            $dinasboprevision->updated_at = date('Y-m-d H:i:s');
-
-            if ($dinasboprevision->save()) {
+            $revision = new Sp2tRevisi();
+            $revision->nip = $nip;
+            $revision->role = $role;
+            $revision->sp2t_id = $id;
+            $revision->catatan = $request->input('catatan');
+            $revision->created_at = date('Y-m-d H:i:s');
+            if ($revision->save()) {
                 return response()->json(['status'=>'ok'], 200);
             } else {
                 return response()->json(['status'=>'failed'], 500);
             }
         } elseif ($act == 'approve') {
-            $approvalbop = DinasBopApproval::where('dinasbop_id', $dinasbop_id)->where('tab', $tab)->first();
-            $column = $approvalbop[$type];
-            $column['approval'] = 1;
-            $primary_id = $approvalbop['id'];
-
-            $dinasbopapproval = DinasBopApproval::find($primary_id);
-            $dinasbopapproval->{$type} = $column;
-            $dinasbopapproval->updated_at = date('Y-m-d H:i:s');
-            if ($dinasbopapproval->save()) {
-                $dinasboplock = DinasBopApproval::find($primary_id);
-                $i = 0;
-                if ($dinasboplock->inspektur['approval'] == 1) {
-                    $i++;
+            $sp2t = Sp2t::find($id);
+            if ($role == 'verifikatur') {
+                $sp2t->approval_verifikatur = 1;
+            }
+            if ($role == 'kassubag') {
+                $sp2t->approval_kassubag = 1;
+            }
+            $sp2t->updated_at = date('Y-m-d H:i:s');
+            if ($sp2t->save()) {
+                $sp2tapp = Sp2t::find($id);
+                if ($sp2tapp->approval_verifikatur == 1 && $sp2tapp->approval_kassubag == 1) {
+                    $sp2tapp->status = 1;
                 }
-                if ($dinasboplock->sekretaris['approval'] == 1) {
-                    $i++;
-                }
-                if ($dinasboplock->kassubag['approval'] == 1) {
-                    $i++;
-                }
-
-                if ($i == 3) {
-                    $dinasboplock->lock = 1;
-                    if ($dinasboplock->save()) {
-                        $x = 0;
-                        $dinasboplockall = DinasBopApproval::where('dinasbop_id', $dinasbop_id)->get();
-                        foreach ($dinasboplockall as $y) {
-                            if ($y->lock == 1) {
-                                $x++;
-                            }
-                        }
-
-                        if ($x >= 8) {
-                            DinasBop::where('id', $dinasbop_id)->update(['status' => 1]);
-                        }
-                    }
-                }
-
-                return response()->json(['status'=>'ok'], 200);
+                $sp2tapp->save();
+                return response()->json(['status'=> 'ok'], 200);
             } else {
                 return response()->json(['status'=>'failed'], 500);
             }
-        }
-    }
-
-    public function put_lock_data(Request $request)
-    {
-        $dinasbop = DinasBop::find($request['id']);
-        $dinasbop->status = 1;
-        if ($dinasbop->save()) {
-            return response()->json(['status'=>'ok'], 200);
-        } else {
-            return response()->json(['status'=>'failed'], 500);
         }
     }
 }

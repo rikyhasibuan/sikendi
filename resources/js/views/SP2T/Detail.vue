@@ -19,6 +19,27 @@
                                     <td style="width:15%;"><b>Bendahara</b></td>
                                     <td style="width:85%;">{{ sp2t.pegawai.nama }}</td>
                                 </tr>
+                                <tr>
+                                    <td style="width:15%;">
+                                        <b>Status Approval</b>
+                                    </td>
+                                    <td>
+                                        <span 
+                                            v-if="approval.kassubag === 1" 
+                                            class="badge badge-success" 
+                                            style="padding:0.75em 0.75em !important;"
+                                        >
+                                            KASSUBAG SUDAH MENYETUJUI
+                                        </span>
+                                        <span 
+                                            v-if="approval.verifikatur === 1"
+                                            class="badge badge-success"
+                                            style="padding:0.75em 0.75em !important;"
+                                        >
+                                            VERIFIKATUR SUDAH MENYETUJUI
+                                        </span>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </transition>
@@ -29,26 +50,40 @@
                                 <a v-if="(access.write === 1)" :href="route +'/create?sp2t='+ sp2t.id" class="btn btn-success mb-2 mr-2">
                                     <i class="fa fa-plus"></i> Tambah Data
                                 </a>
-                                <!-- <span v-if="pelim.length !== 0 && access.approval === 1 && dinasbop.status === 0">
-                                    <a v-if="(approval_type === 'kassubag' || approval_type === 'administrator') && (approval_tab.kassubag.approval === 0)" class="btn btn-warning mb-2 mr-2" href="#" @click="toggleRevisiModal('kassubag')">
+                                <span v-if="sp2tdetail.length !== 0 && access.approval === 1 && sp2t.status === 0">
+                                    <a
+                                        v-if="(role === 'kassubag' || role === 'administrator') && (approval.kassubag === 0)"
+                                        class="btn btn-warning mb-2 mr-2"
+                                        href="#"
+                                        @click="toggleRevisiModal('kassubag')"
+                                    >
                                         <i class="fa fa-edit"></i> Form Revisi Kassubag
                                     </a>
-                                    <a v-if="(approval_type === 'kassubag' || approval_type === 'administrator') && (approval_tab.kassubag.approval === 0)" class="btn btn-success mb-2 mr-2" href="#" @click="toggleApprovalModal('kassubag')">
+                                    <a
+                                        v-if="(role === 'kassubag' || role === 'administrator') && (approval.kassubag === 0)"
+                                        class="btn btn-success mb-2 mr-2"
+                                        href="#"
+                                        @click="toggleApprovalModal('kassubag')"
+                                    >
                                         <i class="fa fa-check"></i> Approval Kassubag
                                     </a>
-                                    <a v-if="(approval_type === 'sekretaris' || approval_type === 'administrator') && (approval_tab.sekretaris.approval === 0)" class="btn btn-warning mb-2 mr-2" href="#" @click="toggleRevisiModal('sekretaris')">
-                                        <i class="fa fa-edit"></i> Form Revisi Sekretaris
+                                    <a
+                                        v-if="(role === 'verifikasi' || role === 'administrator') && (approval.verifikatur === 0)"
+                                        class="btn btn-warning mb-2 mr-2"
+                                        href="#"
+                                        @click="toggleRevisiModal('verifikatur')"
+                                    >
+                                        <i class="fa fa-edit"></i> Form Revisi Verifikatur
                                     </a>
-                                    <a v-if="(approval_type === 'sekretaris' || approval_type === 'administrator') && (approval_tab.sekretaris.approval === 0)" class="btn btn-success mb-2 mr-2" href="#" @click="toggleApprovalModal('sekretaris')">
-                                        <i class="fa fa-check"></i> Approval Sekretaris
+                                    <a
+                                        v-if="(role === 'verifikasi' || role === 'administrator') && (approval.verifikatur === 0)"
+                                        class="btn btn-success mb-2 mr-2"
+                                        href="#"
+                                        @click="toggleApprovalModal('verifikatur')"
+                                    >
+                                        <i class="fa fa-check"></i> Approval Verifikatur
                                     </a>
-                                    <a v-if="(approval_type === 'inspektur' || approval_type === 'administrator') && (approval_tab.inspektur.approval === 0)" class="btn btn-warning mb-2 mr-2" href="#" @click="toggleRevisiModal('inspektur')">
-                                        <i class="fa fa-edit"></i> Form Revisi Inspektur
-                                    </a>
-                                    <a v-if="(approval_type === 'inspektur' || approval_type === 'administrator') && (approval_tab.inspektur.approval === 0)" class="btn btn-success mb-2 mr-2" href="#" @click="toggleApprovalModal('inspektur')">
-                                        <i class="fa fa-check"></i> Approval Inspektur
-                                    </a>
-                                </span> -->
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -160,16 +195,28 @@
                                 <v-delete :element="'sp2tdetail_delete_modal'" :id="id" @delete="deleteData"></v-delete>
                             </transition>
                         </div>
-                        <!-- <div class="col-md-12 col-xs-12" v-if="pelimpahandetail.length !== 0">
+                        <div class="col-md-12 col-xs-12" v-if="sp2tdetail.length !== 0">
                             <hr>
-                            <transition name="fade"><v-revision-log :element="element" :revision="approval_tab"></v-revision-log></transition>
-                            <transition name="fade"><v-revision :role="approval_role" :element="'driver_revision_modal'" @revision="createRevision"></v-revision></transition>
-                            <transition name="fade"><v-approval :role="approval_role" :element="'driver_approval_modal'" @approve="createApproval"></v-approval></transition>
-                        </div> -->
+                            <transition name="fade">
+                                <v-revision-log :revisi="revisi" :approval="approval"></v-revision-log>
+                            </transition>
+                            <transition name="fade">
+                                <v-revision :role="sp2t_role" :element="'revisi_modal'" @revision="createRevision"></v-revision>
+                            </transition>
+                            <transition name="fade">
+                                <v-approval :role="sp2t_role" :element="'approval_modal'" @approve="createApproval"></v-approval>
+                            </transition>
+                        </div>
                     </div>
                     <a :href="route" class="btn btn-danger"><i class="fa fa-arrow-left"></i> Kembali</a>
                     &nbsp;&nbsp;
-                    <a v-if="showTable === true" href="#" class="btn btn-success" @click="cetakSp2t(sp2t.id)"><i class="fa fa-print"></i> Cetak Data</a>
+                    <a 
+                        v-if="sp2t.status === 1" 
+                        href="#" class="btn btn-success" 
+                        @click="cetakSp2t(sp2t.id)"
+                    >
+                        <i class="fa fa-print"></i> Cetak Data
+                    </a>
                 </div>
             </div>
         </div>
@@ -193,12 +240,17 @@
                 totaltransfer:0,
                 saldo: 0,
                 showForm: false,
-                showTable: false
+                showTable: false,
+                usernip: '',
+                sp2t_role: ''
             }
         },
         props: [
             'sp2t',
             'sp2tdetail',
+            'revisi',
+            'approval',
+            'role',
             'lock',
             'route',
             'print_api',
@@ -234,6 +286,54 @@
                 let newWindow = window.open();
                 newWindow.location = this.print_api;
             },
+            toggleRevisiModal(role) {
+                this.sp2t_role = role;
+                $("#revisi_modal").modal('show');
+            },
+            toggleApprovalModal(role) {
+                this.sp2t_role = role;
+                $("#approval_modal").modal('show');
+            },
+            createRevision(callback) {
+                service.postData(
+                    '../api/sp2t/approval?nip='+ this.usernip +'&act=revision&role='+ this.sp2t_role +'&id=' + this.sp2t.id, 
+                    { catatan: callback.catatan}
+                )
+                .then(response => {
+                    if(response.status === 'ok') {
+                        this.alert.delete = true;
+                        $('#revisi_modal').modal('hide');
+                        window.scroll({ top: 0, left: 0, behavior: 'smooth' });
+                        alert('CATATAN REVISI BERHASIL DIBUAT');
+                        location.reload();
+                    }
+                }).catch(error => {
+                    this.alert.delete = false;
+                    this.alert.error = true;
+                    $('#revisi_modal').modal('hide');
+                    alert('TERJADI KESALAHAN PADA SISTEM!');
+                    window.scroll({ top: 0, left: 0, behavior: 'smooth' });
+                    console.log(error);
+                });
+            },
+            createApproval(role) {
+                service.postData(
+                    '../api/sp2t/approval?nip='+ this.usernip +'&act=approve&role='+ this.sp2t_role +'&id='+ this.sp2t.id
+                )
+                .then(response => {
+                    if(response.status === 'ok') {
+                        $('#approval_modal').modal('hide');
+                        window.scroll({ top: 0, left: 0, behavior: 'smooth' });
+                        alert('PROSES APPROVAL BERHASIL');
+                        location.reload();
+                    }
+                }).catch(error => {
+                    $('#approval_modal').modal('hide');
+                    window.scroll({ top: 0, left: 0, behavior: 'smooth' });
+                    alert('TERJADI KESALAHAN PADA SISTEM!');
+                    console.log(error);
+                });
+            },
         },
         computed: {
             total(v) {
@@ -258,9 +358,11 @@
                 this.totaltransfer = sumbruto - sumpajak;
             }
             this.saldo = this.sp2d
+            this.usernip = this.$cookies.get('nip');
         },
         mounted() {
             this.isLoading = false;
+            console.log(this.sp2t);
         }
     };
 </script>
