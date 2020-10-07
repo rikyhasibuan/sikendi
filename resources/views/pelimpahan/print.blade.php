@@ -101,30 +101,35 @@ $sp2d = Sp2d::where('nomor_sp2d' , $pelimpahan->nomor_sp2d)->first();
                             <td style="border-top: 0px;">
                                 Saldo Bank BP tanggal {!! $sp2d['tgl_sp2d']->formatLocalized('%d %B %Y'); !!}
                             </td>
-                            <td style="border-top: 0px; text-align:right;">Rp. {!! $_common->rupiah($pelimpahan->jumlah_sp2d) !!}</td>
+                            <td style="border-top: 0px;">Rp.</td>
+                            <td style="border-top: 0px; text-align:right;">{!! $_common->rupiah($pelimpahan->jumlah_sp2d) !!}</td>
                         </tr>
                         <?php $i = 0; ?>
                         @foreach ($detail as $v)
                             @if ($i == 0)
                                 <tr>
                                     <td>Pelimpahan Uang Persediaan ({!! $v->jenis_pelimpahan !!}) dari BP kepada BPP Inspektorat tanggal {!! $pelimpahan->tgl_nota_dinas->formatLocalized('%d %B %Y'); !!} melalui IBC</td>
-                                    <td style="text-align:right;">Rp. {!! $_common->rupiah($v->jumlah_pelimpahan) !!}</td>
+                                    <td>Rp.</td>
+                                    <td style="text-align:right;">{!! $_common->rupiah($v->jumlah_pelimpahan) !!}</td>
                                 </tr>
                             @else
                                 <tr>
                                     <td>Pelimpahan Uang Persediaan ({!! $v->jenis_pelimpahan !!}) dari BP kepada BPP Inspektorat tanggal {!! $pelimpahan->tgl_nota_dinas->formatLocalized('%d %B %Y'); !!} melalui IBC</td>
-                                    <td style="border-top: 0px; text-align:right;">Rp. {!! $_common->rupiah($v->jumlah_pelimpahan) !!}</td>
+                                    <td>Rp.</td>
+                                    <td style="text-align:right;">{!! $_common->rupiah($v->jumlah_pelimpahan) !!}</td>
                                 </tr>
                             @endif
                             <?php $i++; ?>
                         @endforeach
                         <tr>
                             <td>Total Pelimpahan Uang dari BP ke BPP tanggal {!! $pelimpahan->tgl_nota_dinas->formatLocalized('%d %B %Y'); !!}</td>
-                            <td style="text-align:right;">Rp. {!! $_common->rupiah($pelimpahan->jumlah_pelimpahan) !!}</td>
+                            <td>Rp.</td>
+                            <td style="text-align:right;">{!! $_common->rupiah($pelimpahan->jumlah_pelimpahan) !!}</td>
                         </tr>
                         <tr>
                             <td>Saldo Bank BP tanggal {!! $pelimpahan->tgl_nota_dinas->formatLocalized('%d %B %Y'); !!} setelah pelimpahan IBC</td>
-                            <td style="text-align:right;">Rp.{!! $_common->rupiah($pelimpahan->sisa_sp2d) !!}</td>
+                            <td>Rp.</td>
+                            <td style="text-align:right;">{!! $_common->rupiah($pelimpahan->sisa_sp2d) !!}</td>
                         </tr>
                     </table>
                 </div>

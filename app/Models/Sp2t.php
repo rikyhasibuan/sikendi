@@ -14,9 +14,12 @@ class Sp2t extends Model
         'bendahara',
         'jumlah_pelimpahan',
         'sisa_pelimpahan',
-        'sisa_anggaran',
+        'pra_anggaran',
+        'pasca_anggaran',
         'jumlah_transfer',
-        'status'
+        'status',
+        'approval_kassubag',
+        'approval_verifikatur'
     ];
 
     public function detail()

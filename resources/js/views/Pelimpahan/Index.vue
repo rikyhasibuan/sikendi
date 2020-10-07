@@ -77,7 +77,7 @@
                                             <th style="width:10%;text-align:center;vertical-align:middle;" colspan="4">Nilai Pelimpahan Uang</th>
                                             <th style="width:10%;text-align:center;vertical-align:middle;" rowspan="2">Jumlah Pelimpahan Uang</th>
                                             <th style="width:10%;text-align:center;vertical-align:middle;" rowspan="2">Sisa Anggaran di Bank BP</th>
-                                            <th style="width:12%;text-align:center;vertical-align:middle;" rowspan="2">Action</th>
+                                            <th style="width:13%;text-align:center;vertical-align:middle;" rowspan="2">Action</th>
                                         </tr>
                                         <tr>
                                             <th style="width:10%;text-align:center;vertical-align:middle;">UP</th>
@@ -113,17 +113,17 @@
                                                 Rp.{{ v.sisa_sp2d | rupiah }}
                                             <td style="text-align: center;vertical-align: middle;">
                                                 <div>
-                                                    <a v-if="(v.status == 0 && access.update === 1)" :href="route + '/edit?id=' + v.id" class="btn btn-sm btn-warning mr-sm-1">
+                                                    <a v-if="(v.status == 0 && access.update === 1)" :href="route + '/edit?id=' + v.id" class="btn btn-xs btn-warning mr-sm-1">
                                                         <i class="fa fa-wrench"></i> Ubah
                                                     </a>
-                                                    <button v-else class="btn btn-sm btn-warning disabled mr-sm-1">
+                                                    <button v-else class="btn btn-xs btn-warning disabled mr-sm-1">
                                                         <i class="fa fa-wrench"></i> Ubah
                                                     </button>
                                                     <a v-if="(v.status == 0 && access.delete === 1)" href="#" @click="toggleModal(v.id)"
-                                                        class="btn btn-sm btn-danger">
+                                                        class="btn btn-xs btn-danger">
                                                         <i class="fa fa-trash-o"></i> Hapus
                                                     </a>
-                                                    <button v-else class="btn btn-sm btn-danger disabled">
+                                                    <button v-else class="btn btn-xs btn-danger disabled">
                                                         <i class="fa fa-trash-o"></i> Hapus
                                                     </button>
                                                 </div>

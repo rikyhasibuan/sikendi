@@ -75,7 +75,7 @@ class AjaxController extends Controller
         $tahun = $common->generate_year_from_date($request->input('tahun'));
         $belanja = $request->input('belanja');
         $totalanggaran = $anggaran->show_total_anggaran($tahun, $belanja);
-        return response()->json(['total_anggaran'=>$totalanggaran], 200);
+        return response()->json(['total_anggaran' => $totalanggaran], 200);
     }
 
     public function show_sisa_anggaran(Request $request)

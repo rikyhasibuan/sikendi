@@ -78,8 +78,12 @@
                                     </thead>
                                     <tbody>
                                         <tr v-for="v in sp2t" :key="v.id">
-                                            <td style="vertical-align: middle;"><a :href="route + '/detail?id=' + v.id">{{ v.nota_dinas }}</a></td>
-                                            <td style="text-align:center;vertical-align: middle;">{{ v.tgl_nota_dinas | moment }}</td>
+                                            <td style="vertical-align: middle;">
+                                                <a :href="route + '/detail?id=' + v.id">{{ v.nota_dinas }}</a>
+                                            </td>
+                                            <td style="text-align:center;vertical-align: middle;">
+                                                {{ v.tgl_nota_dinas | moment }}
+                                            </td>
                                             <td style="vertical-align: middle;">
                                                 {{ v.pegawai.nama }}
                                             </td>
@@ -90,9 +94,10 @@
                                                 Rp.{{ v.jumlah_transfer | rupiah }}
                                             </td>
                                             <td style="text-align:right;vertical-align: middle;">
-                                                <span>Rp.{{ v.sisa_anggaran | rupiah }}</span>
+                                                <span>Rp.{{ v.pasca_anggaran | rupiah }}</span>
                                             </td>
-                                            <!-- <td style="text-align: center;vertical-align: middle;">
+                                            <!-- 
+                                            <td style="text-align: center;vertical-align: middle;">
                                                 <div>
                                                     <a v-if="(access.update === 1)" :href="route + '/edit?id=' + v.id" class="btn btn-sm btn-warning mr-sm-1">
                                                         <i class="fa fa-wrench"></i> Ubah
@@ -104,7 +109,8 @@
                                                     </a>
                                                     <button v-else class="btn btn-sm btn-danger disabled"><i class="fa fa-trash-o"></i> Hapus</button>
                                                 </div>
-                                            </td> -->
+                                            </td> 
+                                            -->
                                         </tr>
                                     </tbody>
                                 </table>

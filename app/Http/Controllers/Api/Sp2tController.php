@@ -59,14 +59,14 @@ class Sp2tController extends Controller
             $sp2t = Sp2t::find($parent_id);
             $jml = $sp2t->jumlah_transfer;
             $sisa = $sp2t->sisa_pelimpahan;
-            $anggaran = $sp2t->sisa_anggaran;
+            $anggaran = $sp2t->pasca_anggaran;
             $sp2t->jumlah_transfer = $jml - $old_jml;
             $sp2t->sisa_pelimpahan = $sisa + $old_jml;
-            $sp2t->sisa_anggaran = $anggaran + $old_jml;
+            $sp2t->pasca_anggaran = $anggaran + $old_jml;
             $sp2t->save();
             $payload = [
-            'page' => 'SP2T',
-            'message' => 'User dengan NIP '.$request->query('nip').' melakukan hapus data pada SP2T'
+                'page' => 'SP2T',
+                'message' => 'User dengan NIP '.$request->query('nip').' melakukan hapus data pada SP2T'
             ];
             $this->_common->generate_log($payload);
             return response()->json(['status' => 'ok'], 200);
@@ -101,16 +101,17 @@ class Sp2tController extends Controller
         if ($detail->save()) {
             $jml = $sp2t->jumlah_transfer;
             $sisa = $sp2t->sisa_pelimpahan;
-            $anggaran = $sp2t->sisa_anggaran;
+            $anggaran = $sp2t->pra_anggaran;
             $sp2t->jumlah_transfer = $jml + $detail->nominalbruto;
-            $sp2t->sisa_anggaran = $anggaran - $detail->nominalbruto;
+            $sp2t->pasca_anggaran = $anggaran - $detail->nominalbruto;
             $sp2t->sisa_pelimpahan = $sisa - ($jml + $detail->nominalbruto);
             $sp2t->save();
 
             $payload = [
-            'page' => 'SP2T',
-            'message' => 'User dengan NIP '.$request->query('nip').' menambahkan data SP2T baru'
+                'page' => 'SP2T',
+                'message' => 'User dengan NIP '.$request->query('nip').' menambahkan data SP2T baru'
             ];
+
             $this->_common->generate_log($payload);
 
             $penerima = new Penerima();
@@ -162,13 +163,15 @@ class Sp2tController extends Controller
         if ($detail->save()) {
             $jml = $sp2t->jumlah_transfer;
             $sisa = $sp2t->sisa_pelimpahan;
+
             $sp2t->jumlah_transfer = $jml - $old_jml + $detail->nominalbruto;
             $sp2t->sisa_pelimpahan = $sisa + $old_jml - ($jml + $detail->nominalbruto);
             $sp2t->save();
             $payload = [
-            'page' => 'SP2T',
-            'message' => 'User dengan NIP '.$request->query('nip').' melakukan ubah data pada SP2T'
+                'page' => 'SP2T',
+                'message' => 'User dengan NIP '.$request->query('nip').' melakukan ubah data pada SP2T'
             ];
+
             $this->_common->generate_log($payload);
 
             Penerima::updateOrCreate(
@@ -192,8 +195,8 @@ class Sp2tController extends Controller
             $parent->jumlah_transfer = $parent->jumlah_transfer - $bruto;
             $parent->save();
             $payload = [
-            'page' => 'SP2T',
-            'message' => 'User dengan NIP '.$request->query('nip').' melakukan hapus data pada SP2T'
+                'page' => 'SP2T',
+                'message' => 'User dengan NIP '.$request->query('nip').' melakukan hapus data pada SP2T'
             ];
             $this->_common->generate_log($payload);
             return response()->json(['status' => 'ok'], 200);
@@ -212,19 +215,10 @@ class Sp2tController extends Controller
             $output = [];
             $i = 0;
             
-            $comp = Sp2tDetail::select(
-                DB::raw("GROUP_CONCAT(`id`) as group_id")
-            )
-            ->where('sp2t_id', $_id)
-            ->groupBy('program_id', 'kegiatan_id')
+            $comp = Sp2tDetail::select(DB::raw("GROUP_CONCAT(`id`) as group_id"))
+            ->where('sp2t_id', $_id)->groupBy('program_id', 'kegiatan_id')
             ->get();
 
-           /* foreach ($comp as $c) {
-                $detail = Sp2tDetail::whereIn('id', explode(',', $c->group_id))->get();
-                echo "<pre>";
-                print_r($detail);
-            }
-            exit;*/
             $total_pages = count($comp);
             
             $view = View::make('sp2t.print', ['sp2t' => $sp2t, 'page' => $total_pages, 'comp' => $comp]);

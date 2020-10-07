@@ -19,20 +19,16 @@ $_common = new Common();
         body {
             margin: 0px;
         }
-
         * {
             font-family: 'Times New Roman', Times, serif;
             font-size: 1rem;
         }
-
         h4 {
             font-size: 14pt;
         }
-
         @media all {
             .page-break { display: none; }
         }
-
         @media print {
             .page-break { display: block; page-break-before: always; }
         }
@@ -99,9 +95,7 @@ $_common = new Common();
                                 <td width="1%">:</td>
                                 <td>
                                     <?php $bruto = 0; ?>
-                                    @foreach($detail as $d)
-                                        <?php $bruto += $d->nominalbruto; ?>
-                                    @endforeach
+                                    @foreach($detail as $d) <?php $bruto += $d->nominalbruto; ?> @endforeach
                                     Rp.{!! $_common->rupiah($bruto) !!}
                                 </td>
                             </tr>

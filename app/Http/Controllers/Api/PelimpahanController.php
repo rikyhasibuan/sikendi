@@ -124,8 +124,8 @@ class PelimpahanController extends Controller
         if ($pelimpahan->delete()) {
             PelimpahanDetail::where('pelimpahan_id', $request['id'])->delete();
             $payload = [
-            'page' => 'Pelimpahan',
-            'message' => 'User dengan NIP '.$request->query('nip').' melakukan hapus data pada Pelimpahan'
+                'page' => 'Pelimpahan',
+                'message' => 'User dengan NIP '.$request->query('nip').' melakukan hapus data pada Pelimpahan'
             ];
             $this->_common->generate_log($payload);
             return response()->json(['status' => 'ok'], 200);
@@ -273,7 +273,7 @@ class PelimpahanController extends Controller
 
             $pdetail = PelimpahanDetail::where('bendahara', $v->bendahara)->sum('jumlah_pelimpahan');
             $anggaran = Anggaran::whereIn('kegiatan_id', $kegiatan_list)->sum('jumlah');
-            $total_anggaran = $anggaran - $pdetail;
+            $total_anggaran = $anggaran;
 
             Sp2t::updateOrCreate(
                 [
@@ -287,8 +287,11 @@ class PelimpahanController extends Controller
                     'jumlah_transfer' => 0,
                     'jumlah_pelimpahan' => $v->jumlah_pelimpahan,
                     'sisa_pelimpahan' => $v->jumlah_pelimpahan,
-                    'sisa_anggaran' => $total_anggaran,
-                    'status' => 0
+                    'pra_anggaran' => $total_anggaran,
+                    'pasca_anggaran' => $total_anggaran,
+                    'status' => 0,
+                    'approval_kassubag' => 0,
+                    'approval_verifikatur' => 0
                 ]
             );
         }
@@ -308,78 +311,6 @@ class PelimpahanController extends Controller
             return $view;
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
-        }
-    }
-
-    public function put_approval_data(Request $request)
-    {
-        $act = $request['act'];
-        $type = $request['type'];
-        $tab = $request['tab'];
-        $dinasbop_id = $request['id'];
-
-        if ($act == 'revision') {
-            $approvalbop = DinasBopApproval::where('dinasbop_id', $dinasbop_id)->where('tab', $tab)->first();
-            $column = $approvalbop[$type];
-            array_push($column['catatan'], [
-                'text'=>$request->input('catatan'),
-                'date' => date('Y-m-d H:i:s')
-            ]);
-
-            $primary_id = $approvalbop['id'];
-
-            $dinasboprevision = DinasBopApproval::find($primary_id);
-            $dinasboprevision->{$type} = $column;
-            $dinasboprevision->updated_at = date('Y-m-d H:i:s');
-
-            if ($dinasboprevision->save()) {
-                return response()->json(['status'=>'ok'], 200);
-            } else {
-                return response()->json(['status'=>'failed'], 500);
-            }
-        } elseif ($act == 'approve') {
-            $approvalbop = DinasBopApproval::where('dinasbop_id', $dinasbop_id)->where('tab', $tab)->first();
-            $column = $approvalbop[$type];
-            $column['approval'] = 1;
-            $primary_id = $approvalbop['id'];
-
-            $dinasbopapproval = DinasBopApproval::find($primary_id);
-            $dinasbopapproval->{$type} = $column;
-            $dinasbopapproval->updated_at = date('Y-m-d H:i:s');
-            if ($dinasbopapproval->save()) {
-                $dinasboplock = DinasBopApproval::find($primary_id);
-                $i = 0;
-                if ($dinasboplock->inspektur['approval'] == 1) {
-                    $i++;
-                }
-                if ($dinasboplock->sekretaris['approval'] == 1) {
-                    $i++;
-                }
-                if ($dinasboplock->kassubag['approval'] == 1) {
-                    $i++;
-                }
-
-                if ($i == 3) {
-                    $dinasboplock->lock = 1;
-                    if ($dinasboplock->save()) {
-                        $x = 0;
-                        $dinasboplockall = DinasBopApproval::where('dinasbop_id', $dinasbop_id)->get();
-                        foreach ($dinasboplockall as $y) {
-                            if ($y->lock == 1) {
-                                $x++;
-                            }
-                        }
-
-                        if ($x >= 8) {
-                            DinasBop::where('id', $dinasbop_id)->update(['status' => 1]);
-                        }
-                    }
-                }
-
-                return response()->json(['status'=>'ok'], 200);
-            } else {
-                return response()->json(['status'=>'failed'], 500);
-            }
         }
     }
 
