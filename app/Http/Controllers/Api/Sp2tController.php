@@ -211,16 +211,16 @@ class Sp2tController extends Controller
             $_id = isset($request['id']) ? $request['id'] : '';
             $sp2t = Sp2t::with('pegawai')->find($_id);
             $detail = Sp2tDetail::with('program', 'kegiatan', 'belanja')->where('sp2t_id', $_id)->get();
-                
+
             $output = [];
             $i = 0;
-            
+
             $comp = Sp2tDetail::select(DB::raw("GROUP_CONCAT(`id`) as group_id"))
             ->where('sp2t_id', $_id)->groupBy('program_id', 'kegiatan_id')
             ->get();
 
             $total_pages = count($comp);
-            
+
             $view = View::make('sp2t.print', ['sp2t' => $sp2t, 'page' => $total_pages, 'comp' => $comp]);
             return $view;
         } catch (Exception $e) {
@@ -237,7 +237,7 @@ class Sp2tController extends Controller
 
         if ($act == 'revision') {
             $revision = new Sp2tRevisi();
-            $revision->nip = $nipi;
+            $revision->nip = $nip;
             $revision->role = $role;
             $revision->sp2t_id = $id;
             $revision->catatan = $request->input('catatan');
@@ -266,6 +266,28 @@ class Sp2tController extends Controller
             } else {
                 return response()->json(['status'=>'failed'], 500);
             }
+        }
+    }
+
+    public function post_restore_fund_data(Request $request)
+    {
+        $id = isset($request['id']) ? $request['id'] : '';
+        $sp2t = Sp2t::find($id);
+        $jumlah_pelimpahan = $sp2t->jumlah_pelimpahan;
+        $jumlah_transfer = $sp2t->jumlah_transfer;
+
+        $sisa = $jumlah_pelimpahan - $jumlah_transfer;
+
+        $pelimpahan = Pelimpahan::where('nota_dinas', $sp2t->nota_dinas)->first();
+        $sp2d = Sp2d::where('nomor_sp2d', $pelimpahan['nomor_sp2d'])->first();
+
+        $q_sp2d = Sp2d::find($sp2d['id']);
+        $old_jumlah_sp2d = $q_sp2d->jumlah_sp2d;
+        $q_sq2d->jumlah_sp2d = $old_jumlah_sp2d + $sisa;
+        if ($q_sq2d->save()) {
+            return response()->json(['status'=> 'ok'], 200);
+        } else {
+            return response()->json(['status'=>'failed'], 500);
         }
     }
 }
