@@ -19,14 +19,21 @@ class ReportController extends Controller
             $_dari = isset($request['dari']) ? $request['dari'] : '';
             $_sampai = isset($request['sampai']) ? $request['sampai'] : '';
             $_bendahara = isset($request['bendahara']) ? $request['bendahara'] : '';
+            $_jenis = isset($request['jenis']) ? $request['jenis'] : '';
             $count = Kegiatan::searchBendahara($_bendahara)->count();
+            $view = '';
             if ($count > 0) {
-                return Excel::download(new AnggaranExport($_dari, $_sampai, $_bendahara), 'Laporan Data Kendali Keuangan Bendahara Pengeluaran (BP).xlsx');
+                if ($_jenis == 'excel') {
+                    return Excel::download(new AnggaranExport($_dari), 'Laporan Data Kendali Keuangan Bendahara Pengeluaran (BP).xlsx');
+                } elseif ($_jenis == 'pdf') {
+                    $dari = explode('-', $_dari);
+                    return View::make('pdf', ['dari' => $dari[1], 'tahun' => $dari[0]]);
+                };
             } else {
                 return View::make('404');
             }
         } catch (Exception $e) {
-
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 }

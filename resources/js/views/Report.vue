@@ -28,6 +28,18 @@
                         </div>
 
                         <div class="row">
+                            <div class="form-group col-md-4">
+                                <label>Jenis Laporan *</label>
+                                <div class="input-group">
+                                    <select v-model="report.jenis" class="form-control">
+                                        <option value="excel" selected>Excel</option>
+                                        <option value="pdf">PDF</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
                             <div class="form-group col-md-12">
                                 <button type="submit" class="btn btn-success"><i class="fa fa-file-excel"></i> Cetak Laporan</button>
                             </div>
@@ -58,7 +70,8 @@
                 report: {
                     dari:'',
                     sampai:'',
-                    bendahara:''
+                    bendahara:'',
+                    jenis:'excel'
                 },
                 validasi: {
                     'dari': '',
@@ -86,7 +99,7 @@
                 let validasi = this.validate();
                 if (validasi === true) {
                     let newWindow = window.open();
-                    newWindow.location = this.api + '?bendahara=' + this.report.bendahara + '&dari=' + this.report.dari + '&sampai=' + this.report.sampai;
+                    newWindow.location = this.api + '?jenis=' + this.report.jenis + '&dari=' + this.report.dari;
                 } else {
                     this.alert.validate = true;
                     setTimeout(() => this.alert.validate = false, 3000);

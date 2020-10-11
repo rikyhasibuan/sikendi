@@ -2,12 +2,6 @@
 
 namespace App\Exports;
 
-use App\Models\Anggaran;
-use App\Models\Kegiatan;
-use App\Models\Belanja;
-use App\Models\Sp2d;
-use App\Models\Pelimpahan;
-use App\Models\Sp2t;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
