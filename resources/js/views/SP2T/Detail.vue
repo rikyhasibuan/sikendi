@@ -185,6 +185,20 @@
                                                     <td style="text-align: center;vertical-align: middle;"></td>
                                                     <td style="text-align: center;vertical-align: middle;"></td>
                                                 </tr>
+                                                <tr v-if="sp2t.sisa_pelimpahan > sp2t.jumlah_transfer && sp2t.status == 2">
+                                                    <td colspan="2" style="text-align: right;vertical-align: middle;">
+                                                        <b>Sisa Dana Dikembalikan</b>
+                                                    </td>
+                                                    <td style="text-align:right;vertical-align: middle;">
+                                                        <b>Rp.{{ sp2t.sisa_pelimpahan | rupiah }}</b>
+                                                    </td>
+                                                    <td style="text-align: right;vertical-align: middle;">
+                                                    </td>
+                                                    <td style="text-align: right;vertical-align: middle;">
+                                                    </td>
+                                                    <td style="text-align: center;vertical-align: middle;"></td>
+                                                    <td style="text-align: center;vertical-align: middle;"></td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                         </div>
@@ -206,16 +220,26 @@
                             <transition name="fade">
                                 <v-approval :role="sp2t_role" :element="'approval_modal'" @approve="createApproval"></v-approval>
                             </transition>
+                            <transition name="fade">
+                                <v-restore :id="sp2t.id" :element="'restore_modal'" @restorefund="restoreFund"></v-restore>
+                            </transition>
                         </div>
                     </div>
                     <a :href="route" class="btn btn-danger"><i class="fa fa-arrow-left"></i> Kembali</a>
                     &nbsp;&nbsp;
                     <a 
-                        v-if="sp2t.status === 1" 
+                        v-if="sp2t.status > 0" 
                         href="#" class="btn btn-success" 
                         @click="cetakSp2t(sp2t.id)"
                     >
                         <i class="fa fa-print"></i> Cetak Data
+                    </a>
+                    <a 
+                        v-if="sp2t.sisa_pelimpahan > sp2t.jumlah_transfer && sp2t.status == 1" 
+                        href="#" class="btn btn-warning" 
+                        @click="toggleRestoreModal(sp2t.id)"
+                    >
+                        <i class="fa fa-refresh"></i> Pengembalian Dana
                     </a>
                 </div>
             </div>
@@ -294,6 +318,9 @@
                 this.sp2t_role = role;
                 $("#approval_modal").modal('show');
             },
+            toggleRestoreModal(id) {
+                $("#restore_modal").modal('show');
+            },
             createRevision(callback) {
                 service.postData(
                     '../api/sp2t/approval?nip='+ this.usernip +'&act=revision&role='+ this.sp2t_role +'&id=' + this.sp2t.id, 
@@ -329,6 +356,24 @@
                     }
                 }).catch(error => {
                     $('#approval_modal').modal('hide');
+                    window.scroll({ top: 0, left: 0, behavior: 'smooth' });
+                    alert('TERJADI KESALAHAN PADA SISTEM!');
+                    console.log(error);
+                });
+            },
+            restoreFund(id) {
+                service.postData(
+                    '../api/sp2t/restore?nip='+ this.usernip +'&id='+ this.sp2t.id
+                )
+                .then(response => {
+                    if(response.status === 'ok') {
+                        $('#restore_modal').modal('hide');
+                        window.scroll({ top: 0, left: 0, behavior: 'smooth' });
+                        alert('PROSES PENGEMBALIAN DANA BERHASIL');
+                        location.reload();
+                    }
+                }).catch(error => {
+                    $('#restore_modal').modal('hide');
                     window.scroll({ top: 0, left: 0, behavior: 'smooth' });
                     alert('TERJADI KESALAHAN PADA SISTEM!');
                     console.log(error);

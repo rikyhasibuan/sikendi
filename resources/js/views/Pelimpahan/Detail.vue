@@ -23,26 +23,6 @@
                         <div class="col-md-12">
                             <div class="pull-left">
                                 <a v-if="(pelimpahan.status == 0) && (access.write === 1)" :href="route + '/nominal/create?pelimpahan=' + pelimpahan.id" class="btn btn-success mb-2 mr-2"><i class="fa fa-plus"></i> Tambah Data</a>
-                                <!-- <span v-if="pelim.length !== 0 && access.approval === 1 && dinasbop.status === 0">
-                                    <a v-if="(approval_type === 'kassubag' || approval_type === 'administrator') && (approval_tab.kassubag.approval === 0)" class="btn btn-warning mb-2 mr-2" href="#" @click="toggleRevisiModal('kassubag')">
-                                        <i class="fa fa-edit"></i> Form Revisi Kassubag
-                                    </a>
-                                    <a v-if="(approval_type === 'kassubag' || approval_type === 'administrator') && (approval_tab.kassubag.approval === 0)" class="btn btn-success mb-2 mr-2" href="#" @click="toggleApprovalModal('kassubag')">
-                                        <i class="fa fa-check"></i> Approval Kassubag
-                                    </a>
-                                    <a v-if="(approval_type === 'sekretaris' || approval_type === 'administrator') && (approval_tab.sekretaris.approval === 0)" class="btn btn-warning mb-2 mr-2" href="#" @click="toggleRevisiModal('sekretaris')">
-                                        <i class="fa fa-edit"></i> Form Revisi Sekretaris
-                                    </a>
-                                    <a v-if="(approval_type === 'sekretaris' || approval_type === 'administrator') && (approval_tab.sekretaris.approval === 0)" class="btn btn-success mb-2 mr-2" href="#" @click="toggleApprovalModal('sekretaris')">
-                                        <i class="fa fa-check"></i> Approval Sekretaris
-                                    </a>
-                                    <a v-if="(approval_type === 'inspektur' || approval_type === 'administrator') && (approval_tab.inspektur.approval === 0)" class="btn btn-warning mb-2 mr-2" href="#" @click="toggleRevisiModal('inspektur')">
-                                        <i class="fa fa-edit"></i> Form Revisi Inspektur
-                                    </a>
-                                    <a v-if="(approval_type === 'inspektur' || approval_type === 'administrator') && (approval_tab.inspektur.approval === 0)" class="btn btn-success mb-2 mr-2" href="#" @click="toggleApprovalModal('inspektur')">
-                                        <i class="fa fa-check"></i> Approval Inspektur
-                                    </a>
-                                </span> -->
                             </div>
                         </div>
                     </div>
@@ -126,6 +106,15 @@
                                                 </td>
                                                 <td style="text-align: center;vertical-align: middle;"></td>
                                             </tr>
+                                            <tr v-if="sisa > 0">
+                                                <td colspan="5" style="text-align: right;vertical-align: middle;">
+                                                    <b>Dana Yang Dikembalikan ke Saldo Bank Bendahara Pengeluaran</b>
+                                                </td>
+                                                <td style="text-align:right;vertical-align: middle;">
+                                                    <b>Rp.{{ sisa | rupiah }}</b>
+                                                </td>
+                                                <td style="text-align: center;vertical-align: middle;"></td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -134,12 +123,6 @@
                                 <v-delete :element="'pelimpahandetail_delete_modal'" :id="id" @delete="deleteData"></v-delete>
                             </transition>
                         </div>
-                        <!-- <div class="col-md-12 col-xs-12" v-if="pelimpahandetail.length !== 0">
-                            <hr>
-                            <transition name="fade"><v-revision-log :element="element" :revision="approval_tab"></v-revision-log></transition>
-                            <transition name="fade"><v-revision :role="approval_role" :element="'driver_revision_modal'" @revision="createRevision"></v-revision></transition>
-                            <transition name="fade"><v-approval :role="approval_role" :element="'driver_approval_modal'" @approve="createApproval"></v-approval></transition>
-                        </div> -->
                     </div>
                     <a :href="route" class="btn btn-danger"><i class="fa fa-arrow-left"></i> Kembali</a>
                     &nbsp;&nbsp;
@@ -170,6 +153,7 @@
             }
         },
         props: [
+            'sisa',
             'pelimpahan',
             'pelimpahandetail',
             'sp2d',
@@ -187,14 +171,8 @@
                     service.postData(this.send_api)
                     .then(response => {
                         if(response.status === 'ok') {
-                            /*this.alert.delete = true;*/
                             alert('Pengiriman Data Pada BPP Berhasil!');
                             location.reload();
-                           /* window.scroll({ top: 0, left: 0, behavior: 'smooth' });
-                            setTimeout(function() {
-                                this.alert.delete=false;
-                                location.reload();
-                            }, 1000);*/
                         } else {
                             alert('error');
                         }
@@ -239,9 +217,9 @@
             },
         },
         computed: {
-          total(v) {
-            return this.saldo - v;
-          }
+            total(v) {
+                return this.saldo - v;
+            }
         },
         created() {
             this.isLoading = true;

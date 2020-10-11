@@ -273,18 +273,13 @@ class Sp2tController extends Controller
     {
         $id = isset($request['id']) ? $request['id'] : '';
         $sp2t = Sp2t::find($id);
-        $jumlah_pelimpahan = $sp2t->jumlah_pelimpahan;
-        $jumlah_transfer = $sp2t->jumlah_transfer;
-
-        $sisa = $jumlah_pelimpahan - $jumlah_transfer;
-
         $pelimpahan = Pelimpahan::where('nota_dinas', $sp2t->nota_dinas)->first();
-        $sp2d = Sp2d::where('nomor_sp2d', $pelimpahan['nomor_sp2d'])->first();
-
-        $q_sp2d = Sp2d::find($sp2d['id']);
-        $old_jumlah_sp2d = $q_sp2d->jumlah_sp2d;
-        $q_sq2d->jumlah_sp2d = $old_jumlah_sp2d + $sisa;
-        if ($q_sq2d->save()) {
+        $sisa_sp2d = $pelimpahan['sisa_sp2d'];
+        $q_pelimpahan = Pelimpahan::find($pelimpahan['id']);
+        $q_pelimpahan->sisa_sp2d = $sisa_sp2d + $sp2t->sisa_pelimpahan;
+        if ($q_pelimpahan->save()) {
+            $sp2t->status = 2;
+            $sp2t->save();
             return response()->json(['status'=> 'ok'], 200);
         } else {
             return response()->json(['status'=>'failed'], 500);

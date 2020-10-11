@@ -132,6 +132,7 @@ Vue.component('v-pagination', require('./components/Pagination.vue'));
 Vue.component('v-delete', require('./components/Delete.vue'));
 Vue.component('v-revision', require('./components/Revision.vue'));
 Vue.component('v-approval', require('./components/Approval.vue'));
+Vue.component('v-restore', require('./components/RestoreFund.vue'));
 Vue.component('v-revision-log', require('./components/RevisionLog.vue'));
 Vue.component('vue-typeahead-bootstrap', VueTypeaheadBootstrap)
 Vue.component('loading', Loading);

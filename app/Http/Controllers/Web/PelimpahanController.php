@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\View;
 use App\Http\Controllers\Controller;
 use App\Models\Sp2d;
+use App\Models\Sp2t;
 use App\Models\Anggaran;
 use App\Models\Kegiatan;
 use App\Models\Pelimpahan;
@@ -110,11 +111,13 @@ class PelimpahanController extends Controller
         $pelimpahandetail = PelimpahanDetail::where('pelimpahan_id', $pelimpahan->id)->with('pegawai')->get();
         $bendahara = Kegiatan::with('pegawai')->groupBy('bendahara')->select('bendahara')->get();
 
+        $sisa = Sp2t::where('nota_dinas', $pelimpahan->nota_dinas)->where('sisa_pelimpahan','>', 0)->where('status', 2)->sum('sisa_pelimpahan');
         $data = [];
         $data['title']  = $this->title;
         $data['link'] = $this->link;
         $data['pelimpahan'] = $pelimpahan;
         $data['pelimpahandetail'] = $pelimpahandetail;
+        $data['sisa'] = $sisa;
         $data['bendahara'] = $bendahara;
         $data['breadcrumb'] = $breadcrumb;
         $data['api'] = url($this->api . '/nominal?nip='.$this->_nip);

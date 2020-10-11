@@ -6,6 +6,7 @@
       :pelimpahandetail='{!! json_encode($pelimpahandetail) !!}'
       :route='{!! json_encode($route) !!}'
       :api='{!! json_encode($api) !!}'
+      :sisa='{!! json_encode($sisa) !!}'
       :send_api='{!! json_encode($send_api) !!}'
       :print_api='{!! json_encode($print_api) !!}'
       :access='{!! json_encode($access) !!}'>

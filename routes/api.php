@@ -96,6 +96,7 @@ Route::put('sp2t/nominal', 'Api\Sp2tController@put_nominal_data');
 Route::delete('sp2t/nominal', 'Api\Sp2tController@delete_nominal_data');
 Route::get('sp2t/print', 'Api\Sp2tController@get_print');
 Route::post('sp2t/approval', 'Api\Sp2tController@post_approval_data');
+Route::post('sp2t/restore', 'Api\Sp2tController@post_restore_fund_data');
 
 // Rekening Penerima
 Route::get('penerima', 'Api\PenerimaController@get_data');
