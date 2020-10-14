@@ -10,7 +10,7 @@ use Closure;
 
 class LogActivityController extends Controller
 {
-    protected $title = 'Log Aktifitas';
+    protected $title = 'Log Aktivitas';
     protected $link  = 'logaktifitas';
     protected $api   = 'api/logaktifitas';
     protected $route = 'logaktifitas';

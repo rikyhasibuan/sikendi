@@ -7,6 +7,8 @@ use App\Models\Anggaran;
 use App\Models\Kegiatan;
 use App\Models\Belanja;
 use App\Models\PelimpahanDetail;
+use App\Models\Sp2t;
+use App\Models\Sp2tDetail;
 use App\Models\Penerima;
 use App\Models\Pegawai;
 use App\Libraries\Common;
@@ -27,18 +29,18 @@ class AjaxController extends Controller
             $kegiatan_list[] = $v->id;
         }
 
-        $pelimpahan = PelimpahanDetail::where('bendahara', $request['bendahara'])->sum('jumlah_pelimpahan');
+        $sp2t = Sp2t::where('bendahara', $request['bendahara'])->sum('jumlah_transfer');
         $anggaran = Anggaran::whereIn('kegiatan_id', $kegiatan_list)->sum('jumlah');
-        $total_anggaran = $anggaran - $pelimpahan;
+        $total_anggaran = $anggaran - $sp2t;
         return $total_anggaran;
     }
 
     public function show_anggaran_by_belanja_bendahara(Request $request)
     {
         $bendahara  = Pegawai::where('nip', $request['bendahara'])->first();
-        $pelimpahan = PelimpahanDetail::where('bendahara', $bendahara['id'])->sum('jumlah_pelimpahan');
+        $sp2t = Sp2t::where('bendahara', $request['bendahara'])->sum('jumlah_transfer');
         $anggaran   = Anggaran::where('belanja_id', $request['belanja'])->sum('jumlah');
-        $total_anggaran = $anggaran - $pelimpahan;
+        $total_anggaran = $anggaran - $sp2t;
         return $total_anggaran;
     }
 

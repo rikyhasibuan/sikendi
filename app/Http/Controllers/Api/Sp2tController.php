@@ -114,10 +114,10 @@ class Sp2tController extends Controller
 
             $this->_common->generate_log($payload);
 
-            $penerima = new Penerima();
-            $penerima->nama_penerima = $request->input('nama_penerima_sp2t');
-            $penerima->norek = $request->input('nomor_penerima_sp2t');
-            $penerima->save();
+            Penerima::updateOrCreate(
+                ['nama_penerima_sp2t' => $request->input('nama_penerima_sp2t'), 'nomor_penerima_sp2t' => $request->input('nama_penerima_sp2t')],
+                ['nama_penerima_sp2t' => $request->input('nama_penerima_sp2t'), 'nomor_penerima_sp2t' => $request->input('nama_penerima_sp2t')]
+            );
             return response()->json(['status'=>'ok'], 200);
         } else {
             return response()->json(['status'=>'failed'], 500);

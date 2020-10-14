@@ -161,7 +161,7 @@
                                                             <button
                                                                 v-else class="btn btn-sm btn-warning disabled mr-sm-1">
                                                                 <i class="fa fa-wrench"></i> Ubah</button> -->
-                                                            <a v-if="(access.delete === 1)" href="#" @click="toggleModal(v.id)"
+                                                            <a v-if="(access.delete === 1 && sp2t.status === 0)" href="#" @click="toggleModal(v.id)"
                                                                 class="btn btn-sm btn-danger">
                                                                 <i class="fa fa-trash-o"></i> Hapus
                                                             </a>

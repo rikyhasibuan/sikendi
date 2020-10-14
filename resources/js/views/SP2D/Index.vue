@@ -96,15 +96,19 @@
                                             </td>
                                             <td style="text-align:right;vertical-align: middle;">
                                                 <span v-if="v.jenis_sp2d === 'UP'">Rp.{{ v.jumlah_sp2d | rupiah }}</span>
+                                                <span v-else>Rp.{{ 0 | rupiah }}</span>
                                             </td>
                                             <td style="text-align:right;vertical-align: middle;">
                                                 <span v-if="v.jenis_sp2d === 'GU'">Rp.{{ v.jumlah_sp2d | rupiah }}</span>
+                                                <span v-else>Rp.{{ 0 | rupiah }}</span>
                                             </td>
                                             <td style="text-align:right;vertical-align: middle;">
                                                 <span v-if="v.jenis_sp2d === 'TU'">Rp.{{ v.jumlah_sp2d | rupiah }}</span>
+                                                <span v-else>Rp.{{ 0 | rupiah }}</span>
                                             </td>
                                             <td style="text-align:right;vertical-align: middle;">
                                                 <span v-if="v.jenis_sp2d === 'LS'">Rp.{{ v.jumlah_sp2d | rupiah }}</span>
+                                                <span v-else>Rp.{{ 0 | rupiah }}</span>
                                             </td>
                                             <td style="text-align:right;vertical-align: middle;">
                                                 <span>Rp.{{ v.jumlah_sp2d | rupiah }}</span>

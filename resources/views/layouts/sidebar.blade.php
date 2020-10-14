@@ -112,7 +112,7 @@
                 <li class="nav-item">
                     <a @if($link=='logaktifitas' ) class="nav-link active" @else class="nav-link" @endif href="{!! url('logaktifitas') !!}">
                         <i class="nav-icon fa fa-file-text-o"></i>
-                        <p>Log Aktifitas</p>
+                        <p>Log Aktivitas</p>
                     </a>
                 </li>
 
