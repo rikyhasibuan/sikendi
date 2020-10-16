@@ -24,14 +24,14 @@
                                         <b>Status Approval</b>
                                     </td>
                                     <td>
-                                        <span 
-                                            v-if="approval.kassubag === 1" 
-                                            class="badge badge-success" 
+                                        <span
+                                            v-if="approval.kassubag === 1"
+                                            class="badge badge-success"
                                             style="padding:0.75em 0.75em !important;"
                                         >
                                             KASSUBAG SUDAH MENYETUJUI
                                         </span>
-                                        <span 
+                                        <span
                                             v-if="approval.verifikatur === 1"
                                             class="badge badge-success"
                                             style="padding:0.75em 0.75em !important;"
@@ -47,7 +47,10 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="pull-left">
-                                <a v-if="(access.write === 1 && sp2t.status === 0)" :href="route +'/create?sp2t='+ sp2t.id" class="btn btn-success mb-2 mr-2">
+                                <a
+                                    v-if="(access.write === 1 && sp2t.status === 0 ) || (userlevel !== 2)"
+                                    :href="route +'/create?sp2t='+ sp2t.id"
+                                    class="btn btn-success mb-2 mr-2">
                                     <i class="fa fa-plus"></i> Tambah Data
                                 </a>
                                 <span v-if="sp2tdetail.length !== 0 && access.approval === 1 && sp2t.status === 0">
@@ -161,11 +164,17 @@
                                                             <button
                                                                 v-else class="btn btn-sm btn-warning disabled mr-sm-1">
                                                                 <i class="fa fa-wrench"></i> Ubah</button> -->
-                                                            <a v-if="(access.delete === 1 && sp2t.status === 0)" href="#" @click="toggleModal(v.id)"
+                                                            <a
+                                                                v-if="(access.delete === 1 && sp2t.status === 0) || (userlevel !== 2)"
+                                                                href="#"
+                                                                @click="toggleModal(v.id)"
                                                                 class="btn btn-sm btn-danger">
                                                                 <i class="fa fa-trash-o"></i> Hapus
                                                             </a>
-                                                            <button v-else class="btn btn-sm btn-danger disabled"><i class="fa fa-trash-o"></i> Hapus</button>
+                                                            <button
+                                                                v-else class="btn btn-sm btn-danger disabled">
+                                                                <i class="fa fa-trash-o"></i> Hapus
+                                                            </button>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -227,16 +236,16 @@
                     </div>
                     <a :href="route" class="btn btn-danger"><i class="fa fa-arrow-left"></i> Kembali</a>
                     &nbsp;&nbsp;
-                    <a 
-                        v-if="sp2t.status > 0" 
-                        href="#" class="btn btn-success" 
+                    <a
+                        v-if="sp2t.status > 0"
+                        href="#" class="btn btn-success"
                         @click="cetakSp2t(sp2t.id)"
                     >
                         <i class="fa fa-print"></i> Cetak Data
                     </a>
-                    <a 
-                        v-if="sp2t.sisa_pelimpahan > sp2t.jumlah_transfer && sp2t.status == 1" 
-                        href="#" class="btn btn-warning" 
+                    <a
+                        v-if="sp2t.sisa_pelimpahan > sp2t.jumlah_transfer && sp2t.status == 1"
+                        href="#" class="btn btn-warning"
                         @click="toggleRestoreModal(sp2t.id)"
                     >
                         <i class="fa fa-refresh"></i> Pengembalian Dana
@@ -266,6 +275,7 @@
                 showForm: false,
                 showTable: false,
                 usernip: '',
+                userlevel:'',
                 sp2t_role: ''
             }
         },
@@ -323,7 +333,7 @@
             },
             createRevision(callback) {
                 service.postData(
-                    '../api/sp2t/approval?nip='+ this.usernip +'&act=revision&role='+ this.sp2t_role +'&id=' + this.sp2t.id, 
+                    '../api/sp2t/approval?nip='+ this.usernip +'&act=revision&role='+ this.sp2t_role +'&id=' + this.sp2t.id,
                     { catatan: callback.catatan}
                 )
                 .then(response => {
@@ -404,6 +414,7 @@
             }
             this.saldo = this.sp2d
             this.usernip = this.$cookies.get('nip');
+            this.userlevel = this.$cookies.get('level');
         },
         mounted() {
             this.isLoading = false;

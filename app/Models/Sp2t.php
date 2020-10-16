@@ -52,4 +52,11 @@ class Sp2t extends Model
             return $query->whereDate('tgl_nota_dinas', '<=', $end_date);
         }
     }
+
+    public function scopeSearchBendahara($query, $bpp)
+    {
+        if ($bpp != '') {
+            return $query->where('bendahara', $bpp);
+        }
+    }
 }

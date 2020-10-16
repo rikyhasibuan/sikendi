@@ -8,6 +8,10 @@ class Penerima extends Model
 {
   protected $table = 'penerima';
   protected $dates = ['created_at', 'updated_at'];
+  protected $fillable = [
+        'nama_penerima',
+        'norek'
+    ];
 
   public function scopeSearchPenerima($query, $q)
   {

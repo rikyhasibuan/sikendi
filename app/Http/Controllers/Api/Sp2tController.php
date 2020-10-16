@@ -31,9 +31,20 @@ class Sp2tController extends Controller
             $_q = ($request['q'] !== '') ? $request['q'] : '';
             $_start = ($request['start'] !== '') ? $request['start'] : '';
             $_end = ($request['end'] !== '') ? $request['end'] : '';
+            $_bpp = ($request['bpp'] !== 'admin' || $request['bpp'] !== '198710182011012002') ? $request['bpp'] : '';
+
+            $bendahara = '';
+            if ($_bpp != '') {
+                $pegawai = Pegawai::where('nip', $_bpp)->first();
+                $bendahara = $pegawai['id'];
+            } else {
+                $bendahara = '';
+            }
+
             $sp2t = Sp2t::searchNotaDinas($_q)
             ->searchAwalPeriode($_start)
             ->searchAkhirPeriode($_end)
+            ->searchBendahara($bendahara)
             ->orderBy('id', 'DESC')
             ->with('pegawai')
             ->orderBy('id', 'DESC')
@@ -115,8 +126,8 @@ class Sp2tController extends Controller
             $this->_common->generate_log($payload);
 
             Penerima::updateOrCreate(
-                ['nama_penerima_sp2t' => $request->input('nama_penerima_sp2t'), 'nomor_penerima_sp2t' => $request->input('nama_penerima_sp2t')],
-                ['nama_penerima_sp2t' => $request->input('nama_penerima_sp2t'), 'nomor_penerima_sp2t' => $request->input('nama_penerima_sp2t')]
+                ['nama_penerima' => $request->input('nama_penerima_sp2t'), 'norek' => $request->input('nama_penerima_sp2t')],
+                ['nama_penerima' => $request->input('nama_penerima_sp2t'), 'norek' => $request->input('nama_penerima_sp2t')]
             );
             return response()->json(['status'=>'ok'], 200);
         } else {
@@ -175,8 +186,8 @@ class Sp2tController extends Controller
             $this->_common->generate_log($payload);
 
             Penerima::updateOrCreate(
-                ['nama_penerima_sp2t' => $request->input('nama_penerima_sp2t'), 'nomor_penerima_sp2t' => $request->input('nama_penerima_sp2t')],
-                ['nama_penerima_sp2t' => $request->input('nama_penerima_sp2t'), 'nomor_penerima_sp2t' => $request->input('nama_penerima_sp2t')]
+                ['nama_penerima' => $request->input('nama_penerima_sp2t'), 'norek' => $request->input('nama_penerima_sp2t')],
+                ['nama_penerima' => $request->input('nama_penerima_sp2t'), 'norek' => $request->input('nama_penerima_sp2t')]
             );
             return response()->json(['status'=>'ok'], 200);
         } else {

@@ -143,11 +143,12 @@ export default {
     data: function() {
         return {
             sp2t: {},
-            total_penyerapan:0,
+            total_penyerapan: 0,
             search: {
                 q:'',
                 start:'',
-                end:''
+                end:'',
+                bpp: ''
             },
             options: {
                 format: 'YYYY-MM-DD',
@@ -260,8 +261,9 @@ export default {
     },
     created() {
         this.isLoading = true;
-        this.fetchData();
+        this.search.bpp = this.$cookies.get('nip');
         this.usernip = this.$cookies.get('nip');
+        this.fetchData();
     }
 };
 </script>
