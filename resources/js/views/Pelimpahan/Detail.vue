@@ -126,8 +126,9 @@
                     </div>
                     <a :href="route" class="btn btn-danger"><i class="fa fa-arrow-left"></i> Kembali</a>
                     &nbsp;&nbsp;
-                    <a v-if="(pelimpahan.status === 0)" href="#" class="btn btn-warning" @click="sendPelimpahan()"><i class="fa fa-envelope"></i> Kirim Data</a>
-                    <a  v-if="(pelimpahan.status === 1)" href="#" class="btn btn-success" @click="cetakPelimpahan(pelimpahan.id)"><i class="fa fa-print"></i> Cetak Data</a>
+                    <a v-if="(pelimpahan.status == 0 && pelimpahandetail.length > 0)" href="#" class="btn btn-warning" @click="sendPelimpahan()"><i class="fa fa-envelope"></i> Kirim Data</a>
+                    <a v-if="(pelimpahan.status == 1)" href="#" class="btn btn-success" @click="cetakPelimpahan(pelimpahan.id)">
+                        <i class="fa fa-print"></i> Cetak Data</a>
                 </div>
             </div>
         </div>
