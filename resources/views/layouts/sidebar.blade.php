@@ -20,18 +20,20 @@
                         <p>Data Kendali Keuangan <i class="fa fa-angle-left right"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{!! url('sp2d') !!}">
-                                <i class="nav-icon fa fa-circle-o"></i>
-                                <p>SP2D</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{!! url('pelimpahan') !!}">
-                                <i class="nav-icon fa fa-circle-o"></i>
-                                <p>Pelimpahan Uang</p>
-                            </a>
-                        </li>
+                        @if (Cookie::get('level') != 3 && Cookie::get('level') != 4)
+                            <li class="nav-item">
+                                <a class="nav-link" href="{!! url('sp2d') !!}">
+                                    <i class="nav-icon fa fa-circle-o"></i>
+                                    <p>SP2D</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{!! url('pelimpahan') !!}">
+                                    <i class="nav-icon fa fa-circle-o"></i>
+                                    <p>Pelimpahan Uang</p>
+                                </a>
+                            </li>
+                        @endif
                         <li class="nav-item">
                             <a class="nav-link" href="{!! url('sp2t') !!}">
                                 <i class="nav-icon fa fa-circle-o"></i>
@@ -57,7 +59,7 @@
                         'penerima'
                     ];
                 ?>
-                @if (in_array(Cookie::get('level'), ['1','2']))
+                @if (Cookie::get('level') == 1)
                     <li @if (in_array($link, $routes_master)) class="nav-item has-treeview" @else class="nav-item has-treeview" @endif>
                         <a class="nav-link" href="#"><i class="nav-icon fa fa-database"></i>
                             <p>Data Master <i class="fa fa-angle-left right"></i></p>
@@ -109,12 +111,14 @@
                     </li>
                 @endif
 
-                <li class="nav-item">
-                    <a @if($link=='logaktifitas' ) class="nav-link active" @else class="nav-link" @endif href="{!! url('logaktifitas') !!}">
-                        <i class="nav-icon fa fa-file-text-o"></i>
-                        <p>Log Aktivitas</p>
-                    </a>
-                </li>
+                @if (Cookie::get('level') == 1)
+                    <li class="nav-item">
+                        <a @if($link=='logaktifitas' ) class="nav-link active" @else class="nav-link" @endif href="{!! url('logaktifitas') !!}">
+                            <i class="nav-icon fa fa-file-text-o"></i>
+                            <p>Log Aktivitas</p>
+                        </a>
+                    </li>
+                @endif
 
                 <li class="nav-item">
                     <a @if($link=='profile' ) class="nav-link active" @else class="nav-link" @endif
