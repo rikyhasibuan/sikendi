@@ -48,12 +48,12 @@
                         <div class="col-md-12">
                             <div class="pull-left">
                                 <a
-                                    v-if="(access.write === 1 && sp2t.status === 0 && userlevel === 3)"
+                                    v-if="(access.write === 1 && sp2t.status === 0 && userlevel != 2 && userlevel != 4 && userlevel != 5)"
                                     :href="route +'/create?sp2t='+ sp2t.id"
                                     class="btn btn-success mb-2 mr-2">
                                     <i class="fa fa-plus"></i> Tambah Data
                                 </a>
-                                <span v-if="sp2tdetail.length !== 0 && access.approval === 1 && sp2t.status === 0">
+                                <span v-if="sp2tdetail.length !== 0 && access.approval === 1 && userlevel != 2 && userlevel != 4 && userlevel != 5">
                                     <a
                                         v-if="(role === 'kassubag' || role === 'administrator') && (approval.kassubag === 0)"
                                         class="btn btn-warning mb-2 mr-2"
@@ -165,7 +165,7 @@
                                                                 v-else class="btn btn-sm btn-warning disabled mr-sm-1">
                                                                 <i class="fa fa-wrench"></i> Ubah</button> -->
                                                             <a
-                                                                v-if="(access.delete === 1 && sp2t.status === 0 && userlevel === 3)"
+                                                                v-if="(access.delete === 1 && sp2t.status === 0 && userlevel != 2 && userlevel != 4 && userlevel != 5)"
                                                                 href="#"
                                                                 @click="toggleModal(v.id)"
                                                                 class="btn btn-sm btn-danger">
