@@ -53,7 +53,7 @@
                                     class="btn btn-success mb-2 mr-2">
                                     <i class="fa fa-plus"></i> Tambah Data
                                 </a>
-                                <span v-if="sp2tdetail.length !== 0 && access.approval === 1 && ['1','5'].includes(userlevel)">
+                                <span v-if="sp2tdetail.length !== 0 && access.approval === 1 && ['1','4','5'].includes(userlevel)">
                                     <a
                                         v-if="(role === 'kassubag' || role === 'administrator') && (approval.kassubag === 0)"
                                         class="btn btn-warning mb-2 mr-2"
