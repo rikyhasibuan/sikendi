@@ -20,7 +20,7 @@
                         <p>Data Kendali Keuangan <i class="fa fa-angle-left right"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
-                        @if (Cookie::get('level') != 3 && Cookie::get('level') != 4)
+                        @if (Cookie::get('level') != 3)
                             <li class="nav-item">
                                 <a class="nav-link" href="{!! url('sp2d') !!}">
                                     <i class="nav-icon fa fa-circle-o"></i>

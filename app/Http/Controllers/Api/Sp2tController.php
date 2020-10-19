@@ -35,9 +35,14 @@ class Sp2tController extends Controller
             $_bpp = ($request['bpp'] !== '') ? $request['bpp'] : '';
 
             $bendahara = '';
-            $pegawai = User::where('nip', $_bpp)->first();
-            if ($pegawai['level_id'] == 3) {
-                $bendahara = $pegawai['id'];
+            $user = User::where('nip', $_bpp)->first();
+            if ($user != '') {
+                if ($user['level_id'] == 3) {
+                    $pegawai = Pegawai::where('nip', $_bpp)->first();
+                    $bendahara = $pegawai['id'];
+                } else {
+                    $bendahara = '';
+                }
             } else {
                 $bendahara = '';
             }
@@ -50,7 +55,7 @@ class Sp2tController extends Controller
             ->with('pegawai')
             ->orderBy('id', 'DESC')
             ->paginate(10);
-
+            
             return response()->json($sp2t, 200);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
