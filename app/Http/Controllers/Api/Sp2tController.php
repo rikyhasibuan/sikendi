@@ -10,6 +10,7 @@ use App\Models\Sp2tRevisi;
 use App\Models\Pelimpahan;
 use App\Models\PelimpahanDetail;
 use App\Models\Pegawai;
+use App\Models\User;
 use App\Models\Penerima;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
@@ -31,11 +32,11 @@ class Sp2tController extends Controller
             $_q = ($request['q'] !== '') ? $request['q'] : '';
             $_start = ($request['start'] !== '') ? $request['start'] : '';
             $_end = ($request['end'] !== '') ? $request['end'] : '';
-            $_bpp = ($request['bpp'] !== 'admin' || $request['bpp'] !== '198710182011012002') ? $request['bpp'] : '';
+            $_bpp = ($request['bpp'] !== '') ? $request['bpp'] : '';
 
             $bendahara = '';
-            if ($_bpp != '') {
-                $pegawai = Pegawai::where('nip', $_bpp)->first();
+            $pegawai = User::where('nip', $_bpp)->first();
+            if ($pegawai['level_id'] == 3) {
                 $bendahara = $pegawai['id'];
             } else {
                 $bendahara = '';
